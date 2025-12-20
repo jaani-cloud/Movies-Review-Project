@@ -1,8 +1,26 @@
-import { useState} from "react";
+import { useEffect, useState} from "react";
+import {movies} from "../data/Movies";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [previousIndex, setPreviousIndex] = useState(null);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setPreviousIndex(currentIndex);
+
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * movies.length);
+            } while (randomIndex === currentIndex && movies.length > 1);
+            
+            setCurrentIndex(randomIndex);
+        }, 3000);
+        return () => clearInterval(timer);
+    }, [currentIndex]);
     return (
         // full div screen...
 
@@ -18,9 +36,22 @@ export default function Login() {
 
                     {/* movie animation box */}
 
-                    <div>
-                        <img className="object-cover w-full h-[600px] rounded-2x relative max-w-md"
-                        src="https://i.pinimg.com/1200x/1c/39/1a/1c391a10d6cc573da460758d31821602.jpg" alt="" />
+                    <div className="relative w-full max-w-md h-[600px]">
+                        {movies.map((movie, index) => (
+                            <div key={movie.id} className={`absolute inset-0 transition-all duration-1000 ${
+                                index === currentIndex ?
+                                "opacity-100 translate-y-0" :
+                                index === previousIndex ?
+                                "opacity-0 -translate-y-full":
+                                "opacity-0 translate-y-full"
+                            }`}>
+                                <img src={movie.poster} alt=""
+                                className="object-cover w-full h-full rounded-2xl" />
+                                <div className="absolute bottom-0 left-0 right-0 px-6 py-4 rounded-b-2xl bg-gradient-to-t from-black to-transparent">
+                                    <h3 className="text-2xl font-bold text-white">{movie.name}</h3>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
