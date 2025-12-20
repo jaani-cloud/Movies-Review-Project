@@ -4,7 +4,7 @@ import Signup from "./pages/Signup";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/Movies-Review-Project">
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
