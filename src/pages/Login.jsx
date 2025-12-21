@@ -115,13 +115,13 @@ export default function Login() {
                             <h1 className="mb-4 text-4xl font-bold text-white">Create Account</h1>
                             <p className="mb-8 text-sm text-slate-400">Signing up to start reviewing movies</p>
 
-                            <input className="w-full p-3 mb-4 border rounded-lg border-slate-700 bg-slate-900"
+                            <input className="w-full p-3 mb-4 text-white border rounded-lg border-slate-700 bg-slate-900"
                                 type="text" placeholder="Enter your name here..." />
 
-                            <input className="w-full p-3 mb-4 border rounded-lg border-slate-700 bg-slate-900"
+                            <input className="w-full p-3 mb-4 text-white border rounded-lg border-slate-700 bg-slate-900"
                                 type="email" placeholder="Enter your email here..." />
 
-                            <input className="w-full p-3 mb-4 border rounded-lg border-slate-700 bg-slate-900"
+                            <input className="w-full p-3 mb-4 text-white border rounded-lg border-slate-700 bg-slate-900"
                                 type="password" placeholder="Create password..." />
 
                             <button className="w-full py-3 mb-6 font-semibold text-white transition-all duration-200 transform bg-blue-600 rounded-lg hover:bg-blue-700 hover:scale-105">Sign Up</button>
