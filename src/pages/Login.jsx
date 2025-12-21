@@ -91,12 +91,17 @@ export default function Login() {
                     <input className="w-full p-3 mb-4 text-white border rounded-lg bg-slate-900 border-slate-700"
                     type="password" placeholder="Enter your password here...."
                     onChange={(e) => setPassword(e.target.value)} value={password} />
+                    <div className="flex justify-end mb-4">
+                        <a href="" className="text-sm text-blue-400 transition-colors hover:text-blue-300">Forget Password?</a>
+                    </div>
 
                     <button
                     className="w-full py-3 mb-6 font-semibold text-white transition-all duration-200 transform bg-blue-600 rounded-lg hover:bg-blue-700 hover:scale-105">
                         Login
                     </button>
-                    <p className="text-sm text-center text-slate-400">Don't have an account? Signup</p>
+                    <p className="text-sm text-center text-slate-400">Don't have an account?{" "}
+                        <a href="" className="font-semibold text-blue-400 transition-colors hover:text-blue-300">Signup for free</a>
+                    </p>
                 </div>
             </div>
         </div>
