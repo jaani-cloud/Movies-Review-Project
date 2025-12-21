@@ -83,11 +83,13 @@ export default function Login() {
             <div className="w-[50%] bg-black flex items-center justify-center">
 
                 {/* right login box */}
-                <div className="w-full max-w-md">
-                    {currentForm === "login" && (
-                        <>
-                            {/* Login page */}
+                <div className="relative w-full max-w-md overflow-hidden min-h-[500px]">
 
+                    <div className={`form-animate ${currentForm === "login" ? "form-animate-in" : "form-animate-out"}`}>
+
+                        {/* Login page */}
+
+                        <div className="w-full max-w-md p-8">
                             <h1 className="form-h1">Welcome Back!</h1>
                             <p className="form-p1">Login to continue to review movies</p>
 
@@ -112,13 +114,14 @@ export default function Login() {
                                     className="form-a">
                                     Signup for free</a>
                             </p>
-                        </>
-                    )}
+                        </div>
+                    </div>
 
                     {/* Signup form */}
 
-                    {currentForm === "signup" && (
-                        <>
+                    <div className={`form-animate ${currentForm === "signup" ? "form-animate-in" : "form-animate-out"}`}>
+
+                        <div className="w-full max-w-md p-8">
                             <h1 className="form-h1">Create Account</h1>
                             <p className="form-p1">Signing up to start reviewing movies</p>
 
@@ -138,13 +141,14 @@ export default function Login() {
                                     className="form-a">
                                     Login</a>
                             </p>
-                        </>
-                    )}
+                        </div>
+                    </div>
 
                     {/* forgot form */}
 
-                    {currentForm === "forgot" && (
-                        <>
+                    <div className={`form-animate ${currentForm === "forgot" ? "form-animate-in" : "form-animate-out"}`}>
+
+                        <div className="w-full max-w-md p-8">
                             <h1 className="form-h1">Forgot Password?</h1>
                             <p className="form-p1">Enter your email to reset password</p>
 
@@ -157,8 +161,8 @@ export default function Login() {
                                 <a href="#" onClick={() => setCurrentForm("login")}
                                     className="form-a">Back to Login</a>
                             </p>
-                        </>
-                    )}
+                        </div>
+                    </div>
 
                 </div>
             </div>

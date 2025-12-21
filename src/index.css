@@ -26,4 +26,16 @@
     .form-a {
         @apply font-semibold text-blue-400 transition-colors hover:text-blue-300;
     }
+
+    .form-animate{
+        @apply absolute inset-0 flex flex-col items-center justify-center transition-all duration-500 ease-in-out bg-black;
+    }
+
+    .form-animate-in{
+        @apply translate-y-0 opacity-100 pointer-events-auto;
+    }
+
+    .form-animate-out{
+        @apply translate-y-full opacity-0 pointer-events-none;
+    }
 }
