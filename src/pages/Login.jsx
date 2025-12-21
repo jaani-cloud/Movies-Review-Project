@@ -8,7 +8,7 @@ export default function Login() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [previousIndex, setPreviousIndex] = useState(null);
 
-    const [currentForm, setCurrentForm] = useState("signup");
+    const [currentForm, setCurrentForm] = useState("login");
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -97,18 +97,24 @@ export default function Login() {
                                 type="password" placeholder="Enter your password here...."
                                 onChange={(e) => setPassword(e.target.value)} value={password} />
                             <div className="flex justify-end mb-4">
-                                <a href="" className="text-sm text-blue-400 transition-colors hover:text-blue-300">Forget Password?</a>
+
+                                <a href="#" onClick={() => setCurrentForm("forgot")} className="text-sm text-blue-400 transition-colors hover:text-blue-300">
+                                    Forget Password?</a>
                             </div>
 
                             <button
                                 className="w-full py-3 mb-6 font-semibold text-white transition-all duration-200 transform bg-blue-600 rounded-lg hover:bg-blue-700 hover:scale-105">
                                 Login
                             </button>
+
                             <p className="text-sm text-center text-slate-400">Don't have an account?{" "}
-                                <a href="" className="font-semibold text-blue-400 transition-colors hover:text-blue-300">Signup for free</a>
+                                <a href="#" onClick={() => setCurrentForm("signup")} className="font-semibold text-blue-400 transition-colors hover:text-blue-300">
+                                    Signup for free</a>
                             </p>
                         </>
                     )}
+
+                    {/* Signup form */}
 
                     {currentForm === "signup" && (
                         <>
@@ -125,8 +131,27 @@ export default function Login() {
                                 type="password" placeholder="Create password..." />
 
                             <button className="w-full py-3 mb-6 font-semibold text-white transition-all duration-200 transform bg-blue-600 rounded-lg hover:bg-blue-700 hover:scale-105">Sign Up</button>
+                            
                             <p className="text-sm text-center text-slate-400">Already have an account?{" "}
-                                <a href="" className="font-semibold text-blue-400 transition-colors hover:text-blue-300">Login</a>
+                                <a href="#" onClickCapture={() => setCurrentForm("login")} className="font-semibold text-blue-400 transition-colors hover:text-blue-300">
+                                    Login</a>
+                            </p>
+                        </>
+                    )}
+
+                    {/* forgot form */}
+
+                    {currentForm === "forgot" && (
+                        <>
+                            <h1 className="mb-2 text-4xl font-bold text-white">Forgot Password?</h1>
+                            <p className="mb-8 text-sm text-slate-400">Enter your email to reset password</p>
+
+                            <input className="w-full p-3 mb-2 text-white border rounded-lg bg-slate-900 border-slate-700"
+                                type="email" placeholder="Enter your email here..." />
+                            <button className="w-full py-3 mb-6 font-semibold text-white transition-all duration-200 bg-blue-600 rounded-lg hover:bg-blue-700 hover:scale-105">Reset password</button>
+
+                            <p className="text-sm text-center text-slate-400">Remember Password?{" "}
+                                <a href="#" onClick={() => setCurrentForm("login")} className="font-semibold text-blue-400 transition-colors hover:text-blue-300">Back to Login</a>
                             </p>
                         </>
                     )}
