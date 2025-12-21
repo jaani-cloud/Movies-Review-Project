@@ -88,27 +88,28 @@ export default function Login() {
                         <>
                             {/* Login page */}
 
-                            <h1 className="mb-2 text-4xl font-bold text-white">Welcome Back!</h1>
-                            <p className="mb-8 text-sm text-slate-400">Login to continue to review movies</p>
-                            <input className="w-full p-3 mb-4 text-white border rounded-lg bg-slate-900 border-slate-700"
+                            <h1 className="form-h1">Welcome Back!</h1>
+                            <p className="form-p1">Login to continue to review movies</p>
+
+                            <input className="form-input"
                                 type="email" placeholder="Enter your email here..."
                                 onChange={(e) => setEmail(e.target.value)} value={email} />
-                            <input className="w-full p-3 mb-4 text-white border rounded-lg bg-slate-900 border-slate-700"
+
+                            <input className="form-input"
                                 type="password" placeholder="Enter your password here...."
                                 onChange={(e) => setPassword(e.target.value)} value={password} />
                             <div className="flex justify-end mb-4">
 
-                                <a href="#" onClick={() => setCurrentForm("forgot")} className="text-sm text-blue-400 transition-colors hover:text-blue-300">
+                                <a href="#" onClick={() => setCurrentForm("forgot")}
+                                    className="form-a">
                                     Forget Password?</a>
                             </div>
 
-                            <button
-                                className="w-full py-3 mb-6 font-semibold text-white transition-all duration-200 transform bg-blue-600 rounded-lg hover:bg-blue-700 hover:scale-105">
-                                Login
-                            </button>
+                            <button className="form-btn">Login</button>
 
-                            <p className="text-sm text-center text-slate-400">Don't have an account?{" "}
-                                <a href="#" onClick={() => setCurrentForm("signup")} className="font-semibold text-blue-400 transition-colors hover:text-blue-300">
+                            <p className="form-p2">Don't have an account?{" "}
+                                <a href="#" onClick={() => setCurrentForm("signup")}
+                                    className="form-a">
                                     Signup for free</a>
                             </p>
                         </>
@@ -118,22 +119,23 @@ export default function Login() {
 
                     {currentForm === "signup" && (
                         <>
-                            <h1 className="mb-4 text-4xl font-bold text-white">Create Account</h1>
-                            <p className="mb-8 text-sm text-slate-400">Signing up to start reviewing movies</p>
+                            <h1 className="form-h1">Create Account</h1>
+                            <p className="form-p1">Signing up to start reviewing movies</p>
 
-                            <input className="w-full p-3 mb-4 text-white border rounded-lg border-slate-700 bg-slate-900"
+                            <input className="form-input"
                                 type="text" placeholder="Enter your name here..." />
 
-                            <input className="w-full p-3 mb-4 text-white border rounded-lg border-slate-700 bg-slate-900"
+                            <input className="form-input"
                                 type="email" placeholder="Enter your email here..." />
 
-                            <input className="w-full p-3 mb-4 text-white border rounded-lg border-slate-700 bg-slate-900"
+                            <input className="form-input"
                                 type="password" placeholder="Create password..." />
 
-                            <button className="w-full py-3 mb-6 font-semibold text-white transition-all duration-200 transform bg-blue-600 rounded-lg hover:bg-blue-700 hover:scale-105">Sign Up</button>
-                            
-                            <p className="text-sm text-center text-slate-400">Already have an account?{" "}
-                                <a href="#" onClickCapture={() => setCurrentForm("login")} className="font-semibold text-blue-400 transition-colors hover:text-blue-300">
+                            <button className="form-btn">Sign Up</button>
+
+                            <p className="form-p2">Already have an account?{" "}
+                                <a href="#" onClickCapture={() => setCurrentForm("login")}
+                                    className="form-a">
                                     Login</a>
                             </p>
                         </>
@@ -143,15 +145,17 @@ export default function Login() {
 
                     {currentForm === "forgot" && (
                         <>
-                            <h1 className="mb-2 text-4xl font-bold text-white">Forgot Password?</h1>
-                            <p className="mb-8 text-sm text-slate-400">Enter your email to reset password</p>
+                            <h1 className="form-h1">Forgot Password?</h1>
+                            <p className="form-p1">Enter your email to reset password</p>
 
-                            <input className="w-full p-3 mb-2 text-white border rounded-lg bg-slate-900 border-slate-700"
+                            <input className="form-input"
                                 type="email" placeholder="Enter your email here..." />
-                            <button className="w-full py-3 mb-6 font-semibold text-white transition-all duration-200 bg-blue-600 rounded-lg hover:bg-blue-700 hover:scale-105">Reset password</button>
 
-                            <p className="text-sm text-center text-slate-400">Remember Password?{" "}
-                                <a href="#" onClick={() => setCurrentForm("login")} className="font-semibold text-blue-400 transition-colors hover:text-blue-300">Back to Login</a>
+                            <button className="form-btn">Reset password</button>
+
+                            <p className="form-p2">Remember Password?{" "}
+                                <a href="#" onClick={() => setCurrentForm("login")}
+                                    className="form-a">Back to Login</a>
                             </p>
                         </>
                     )}
