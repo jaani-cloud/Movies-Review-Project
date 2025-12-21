@@ -10,6 +10,16 @@ export default function Login() {
 
     const [currentForm, setCurrentForm] = useState("login");
 
+    const [emailSent, setEmailSent] = useState(false);
+    const [forgotEmail, setForgotEmail] = useState("");
+
+    // chat gpt used
+    const isValidEmail = (email) => {
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return regex.test(email.trim());
+    }
+
+
     useEffect(() => {
         const timer = setInterval(() => {
             setPreviousIndex(currentIndex);
@@ -150,13 +160,24 @@ export default function Login() {
 
                         <div className="w-full max-w-md p-8">
                             <h1 className="form-h1">Forgot Password?</h1>
-                            <p className="form-p1">Enter your email to reset password</p>
 
-                            <input className="form-input"
-                                type="email" placeholder="Enter your email here..." />
+                            {emailSent && (
+                                <div className="p-4 mb-4 text-green-400 bg-green-900 rounded-lg">
+                                    Email sent successfully...
+                                </div>
+                            )}
+                            {emailSent || (
+                                <>
+                                    <p className="form-p1">Enter your email to reset password</p>
 
-                            <button className="form-btn">Reset password</button>
+                                    <input className="form-input" type="email" placeholder="Enter your email here..."
+                                        onChange={(e) => setForgotEmail(e.target.value)} value={forgotEmail} />
 
+                                    <button className="form-btn disabled:cursor-not-allowed hover:disabled:bg-red-600 hover:disabled:scale-100" onClick={() => setEmailSent(true)}
+                                            disabled={!isValidEmail(forgotEmail)}>Reset password</button>
+
+                                </>
+                            )}
                             <p className="form-p2">Remember Password?{" "}
                                 <a href="#" onClick={() => setCurrentForm("login")}
                                     className="form-a">Back to Login</a>
