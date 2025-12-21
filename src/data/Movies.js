@@ -104,7 +104,7 @@ export const movies = [
     { id: 82, name: "DARK (Web Series – Season 2)", poster: "https://i.pinimg.com/736x/85/39/00/853900bfa08ce0b3f41a6776d252a574.jpg" },
     { id: 83, name: "DARK (Web Series – Season 3)", poster: "https://i.pinimg.com/1200x/9a/75/93/9a7593e3e3689663c42c96ef70bd75be.jpg" },
 
-    { id: 84, name: "From (Web Series – Season 1)", poster: "https://media.themoviedb.org/t/p/w440_and_h660_face/vs9sVZa2gKtY7Pof1I34BJWdENb.jpg" },
+    { id: 84, name: "From (Web Series – Season 1)", poster: "https://m.media-amazon.com/images/M/MV5BYzM5ZWMxOGEtZjEyMC00YjQ0LThiYjEtZjVkZGEzN2NlOGEwXkEyXkFqcGc@._V1_FMjpg_UY1920_.jpg%20Request%20Method%20GET" },
     { id: 85, name: "From (Web Series – Season 2)", poster: "https://image.tmdb.org/t/p/original/kKUQPhx60p9zg3tSgaT8PJ1KAMR.jpg" },
     { id: 86, name: "From (Web Series – Season 3)", poster: "https://image.tmdb.org/t/p/original/dIeamVg4smRMBG89HNycyxt21UH.jpg" },
 
