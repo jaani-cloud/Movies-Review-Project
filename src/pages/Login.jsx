@@ -28,7 +28,28 @@ export default function Login() {
 
             {/* left side of screen... */}
 
-            <div className="w-[50%] bg-white bg-gradient-to-br from-slate-900 to-slate-800">
+            <div className="w-[50%] bg-white bg-gradient-to-br from-slate-900 to-slate-800 relative">
+
+                <div className="w-[50%] bg-gradient-to-br from-slate-900 to-slate-800">
+
+                    {/* Logo div */}
+                    
+                    <div className="absolute left-4 top-4">
+                        <h2 className="text-3xl font-bold text-white">🎬 ReviewHub</h2>
+                    </div>
+
+                    {/*  */}
+
+                    <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-10">
+                        <div className="grid grid-cols-3 gap-4 p-4">
+                            {movies.slice(20,35).map((movie, index) => (
+                                <img src={movie.poster} key={index}
+                                className="object-cover w-full h-32 rounded-lg"
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
 
                 {/* In left side movie box */}
 
@@ -70,7 +91,11 @@ export default function Login() {
                     <input className="w-full p-3 mb-4 text-white border rounded-lg bg-slate-900 border-slate-700"
                     type="password" placeholder="Enter your password here...."
                     onChange={(e) => setPassword(e.target.value)} value={password} />
-                    <button className="w-full py-3 mb-6 font-semibold text-white bg-blue-600 rounded-lg">Login</button>
+
+                    <button
+                    className="w-full py-3 mb-6 font-semibold text-white transition-all duration-200 transform bg-blue-600 rounded-lg hover:bg-blue-700 hover:scale-105">
+                        Login
+                    </button>
                     <p className="text-sm text-center text-slate-400">Don't have an account? Signup</p>
                 </div>
             </div>
