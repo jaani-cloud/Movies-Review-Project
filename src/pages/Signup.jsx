@@ -1,3 +1,7 @@
 export default function Signup() {
-    return <h1>Signup Page</h1>;
+    return <div>
+        <h1>signup page</h1>
+        <input type="text" />
+        <input type="email"  placeholder="email"/>
+    </div>;
 }
