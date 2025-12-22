@@ -89,6 +89,24 @@ export default function Login() {
         } else return true;
     };
 
+    const passForgot = () => {
+        setErrors({});
+        let newErrors = {};
+
+        if (!forgotEmail) {
+            newErrors.email = "email is required"
+        }
+
+        if (forgotEmail && !isValidEmail(forgotEmail)) {
+            newErrors.email = "wrong email format"
+        }
+
+        setErrors(newErrors);
+        if (newErrors.email) {
+            return false;
+        } else return true;
+    }
+
     //! #1 Not working...
     // const [randomBgImageStart, setRandomBgImageStart] = useState(0);
 
@@ -312,10 +330,22 @@ export default function Login() {
                                     <p className="form-p1">Enter your email to reset password</p>
 
                                     <input className="form-input" type="email" placeholder="Enter your email here..."
-                                        onChange={(e) => setForgotEmail(e.target.value)} value={forgotEmail} />
+                                        onChange={(e) => setForgotEmail(e.target.value)} value={forgotEmail}
+                                    />
 
-                                    <button className="form-btn disabled:cursor-not-allowed hover:disabled:bg-red-600 hover:disabled:scale-100" onClick={() => setEmailSent(true)}
-                                        disabled={!isValidEmail(forgotEmail)}>Reset password</button>
+                                    {errors.email && <p className="form-p2">{errors.email}</p>}
+
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            if (passForgot()) {
+                                                setEmailSent(true);
+                                            }
+                                        }}
+                                        className="form-btn disabled:cursor-not-allowed hover:disabled:bg-red-600 hover:disabled:scale-100"
+                                    >
+                                        Reset password
+                                    </button>
 
                                 </>
                             )}
