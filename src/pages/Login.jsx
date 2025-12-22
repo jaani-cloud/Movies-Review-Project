@@ -8,6 +8,11 @@ export default function Login() {
         email: "",
         password: ""
     });
+    const [signupData, setSignupData] = useState({
+        name: "",
+        email: "",
+        password: ""
+    });
     const [errors, setErrors] = useState({});
 
     const [currentIndex, setCurrentIndex] = useState(() => {
@@ -21,7 +26,7 @@ export default function Login() {
     const [emailSent, setEmailSent] = useState(false);
     const [forgotEmail, setForgotEmail] = useState("");
 
-    const handleChange = (e) => {
+    const handleLoginChange = (e) => {
         setLoginData({ ...loginData, [e.target.name]: e.target.value });
     };
 
@@ -47,6 +52,39 @@ export default function Login() {
         }
         setErrors(newErrors);
         if (newErrors.email || newErrors.password) {
+            return false;
+        } else return true;
+    };
+
+    const handleSignupChange = (e) => {
+        setSignupData({ ...signupData, [e.target.name]: e.target.value });
+    }
+
+    const passSignup = () => {
+        setErrors({});
+        let newErrors = {};
+
+        if (!signupData.name) {
+            newErrors.name = "name is required";
+        }
+
+        if (!signupData.email) {
+            newErrors.email = "email is required"
+        }
+
+        if (signupData.email && !isValidEmail(signupData.email)) {
+            newErrors.email = "wrong email format";
+        }
+
+        if (!signupData.password) {
+            newErrors.password = "password is required"
+        }
+        if (signupData.password && (signupData.password).length < 6) {
+            newErrors.password = "password must be at least  6 characters"
+        }
+
+        setErrors(newErrors);
+        if (newErrors.name || newErrors.email || newErrors.password) {
             return false;
         } else return true;
     };
@@ -164,7 +202,7 @@ export default function Login() {
                                 name="email"
                                 type="email" placeholder="Enter your email here..."
                                 value={loginData.email}
-                                onChange={handleChange}
+                                onChange={handleLoginChange}
                             // onChange={(e) => setEmail(e.target.value)}
                             // value={email}
                             />
@@ -174,7 +212,7 @@ export default function Login() {
                                 name="password"
                                 type="password" placeholder="Enter your password here...."
                                 value={loginData.password}
-                                onChange={handleChange}
+                                onChange={handleLoginChange}
                             // onChange={(e) => setPassword(e.target.value)}
                             // value={password}
                             />
@@ -191,8 +229,8 @@ export default function Login() {
                             <button className="form-btn"
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    if(passLogin()){
-                                        console.log(`Login Success...\n ${loginData}`)
+                                    if (passLogin()) {
+                                        console.log(`Login Success...\n ${JSON.stringify(loginData)}`)
                                     }
                                 }}
                             >Login</button>
@@ -214,15 +252,40 @@ export default function Login() {
                             <p className="form-p1">Signing up to start reviewing movies</p>
 
                             <input className="form-input"
-                                type="text" placeholder="Enter your name here..." />
+                                name="name"
+                                value={signupData.name}
+                                onChange={handleSignupChange}
+                                type="text" placeholder="Enter your name here..."
+                            />
+
+                            {errors.name && <p className="form-p2">{errors.name}</p>}
 
                             <input className="form-input"
-                                type="email" placeholder="Enter your email here..." />
+                                name="email"
+                                value={signupData.email}
+                                onChange={handleSignupChange}
+                                type="email" placeholder="Enter your email here..."
+                            />
+
+                            {errors.email && <p className="form-p2">{errors.email}</p>}
 
                             <input className="form-input"
-                                type="password" placeholder="Create password..." />
+                                name="password"
+                                value={signupData.password}
+                                onChange={handleSignupChange}
+                                type="password" placeholder="Create password..."
+                            />
 
-                            <button className="form-btn">Sign Up</button>
+                            {errors.password && <p className="form-p2">{errors.password}</p>}
+
+                            <button className="form-btn"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    if (passSignup()) {
+                                        console.log(`Sign Up Data:\n ${JSON.stringify(signupData)}`)
+                                    }
+                                }}
+                            >Sign Up</button>
 
                             <p className="form-p2">Already have an account?{" "}
                                 <a href="#" onClickCapture={() => setCurrentForm("login")}
