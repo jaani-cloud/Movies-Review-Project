@@ -2,11 +2,16 @@ import { useEffect, useState } from "react";
 import { movies } from "../data/Movies";
 
 export default function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    // const [email, setEmail] = useState("");
+    // const [password, setPassword] = useState("");
+    const [loginData, setLoginData] = useState({
+        email: "",
+        password: ""
+    });
+    const [errors, setErrors] = useState({});
 
     const [currentIndex, setCurrentIndex] = useState(() => {
-        let index = Math.trunc(Math.random() * (movies.length -1) + 1);
+        let index = Math.trunc(Math.random() * (movies.length - 1) + 1);
         return index;
     });
     const [previousIndex, setPreviousIndex] = useState(null);
@@ -16,6 +21,36 @@ export default function Login() {
     const [emailSent, setEmailSent] = useState(false);
     const [forgotEmail, setForgotEmail] = useState("");
 
+    const handleChange = (e) => {
+        setLoginData({ ...loginData, [e.target.name]: e.target.value });
+    };
+
+    const passLogin = () => {
+        // console.log(`Login Data: ${loginData}`)
+        setErrors({});
+        let newErrors = {};
+
+        if (!loginData.email) {
+            newErrors.email = "Email is required";
+        }
+
+        if (loginData.email && !isValidEmail(loginData.email)) {
+            newErrors.email = "Wrong Email Format"
+        }
+
+        if (!loginData.password) {
+            newErrors.password = "password is required"
+        }
+
+        if (loginData.password && (loginData.password).length < 6) {
+            newErrors.password = "password must be at least 6 characters"
+        }
+        setErrors(newErrors);
+        if (newErrors.email || newErrors.password) {
+            return false;
+        } else return true;
+    };
+
     //! #1 Not working...
     // const [randomBgImageStart, setRandomBgImageStart] = useState(0);
 
@@ -24,11 +59,14 @@ export default function Login() {
         let index = Math.trunc(Math.random() * (movies.length - 1) + 1);
         return index + 15 > movies.length ? index - 15 : index;
     });
+
+
     // chat gpt used
     const isValidEmail = (email) => {
         const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return regex.test(email.trim());
     }
+
 
 
     useEffect(() => {
@@ -37,7 +75,7 @@ export default function Login() {
 
             let randomIndex;
             do {
-                randomIndex = Math.trunc(Math.random() *(movies.length -1) + 1);
+                randomIndex = Math.trunc(Math.random() * (movies.length - 1) + 1);
             } while (randomIndex === currentIndex && movies.length > 1);
 
             setCurrentIndex(randomIndex);
@@ -123,12 +161,26 @@ export default function Login() {
                             <p className="form-p1">Login to continue to review movies</p>
 
                             <input className="form-input"
+                                name="email"
                                 type="email" placeholder="Enter your email here..."
-                                onChange={(e) => setEmail(e.target.value)} value={email} />
+                                value={loginData.email}
+                                onChange={handleChange}
+                            // onChange={(e) => setEmail(e.target.value)}
+                            // value={email}
+                            />
+                            {errors.email && <p className="form-p2">{errors.email}</p>}
 
                             <input className="form-input"
+                                name="password"
                                 type="password" placeholder="Enter your password here...."
-                                onChange={(e) => setPassword(e.target.value)} value={password} />
+                                value={loginData.password}
+                                onChange={handleChange}
+                            // onChange={(e) => setPassword(e.target.value)}
+                            // value={password}
+                            />
+
+                            {errors.password && <p className="form-p2">{errors.password}</p>}
+
                             <div className="flex justify-end mb-4">
 
                                 <a href="#" onClick={() => setCurrentForm("forgot")}
@@ -136,7 +188,14 @@ export default function Login() {
                                     Forget Password?</a>
                             </div>
 
-                            <button className="form-btn">Login</button>
+                            <button className="form-btn"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    if(passLogin()){
+                                        console.log(`Login Success...\n ${loginData}`)
+                                    }
+                                }}
+                            >Login</button>
 
                             <p className="form-p2">Don't have an account?{" "}
                                 <a href="#" onClick={() => setCurrentForm("signup")}
