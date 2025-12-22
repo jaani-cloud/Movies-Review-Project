@@ -224,7 +224,7 @@ export default function Login() {
                             // onChange={(e) => setEmail(e.target.value)}
                             // value={email}
                             />
-                            {errors.email && <p className="form-p2">{errors.email}</p>}
+                            {errors.email && <p className="form-error">{errors.email}</p>}
 
                             <input className="form-input"
                                 name="password"
@@ -235,7 +235,7 @@ export default function Login() {
                             // value={password}
                             />
 
-                            {errors.password && <p className="form-p2">{errors.password}</p>}
+                            {errors.password && <p className="form-error">{errors.password}</p>}
 
                             <div className="flex justify-end mb-4">
 
@@ -276,7 +276,7 @@ export default function Login() {
                                 type="text" placeholder="Enter your name here..."
                             />
 
-                            {errors.name && <p className="form-p2">{errors.name}</p>}
+                            {errors.name && <p className="form-error">{errors.name}</p>}
 
                             <input className="form-input"
                                 name="email"
@@ -285,7 +285,7 @@ export default function Login() {
                                 type="email" placeholder="Enter your email here..."
                             />
 
-                            {errors.email && <p className="form-p2">{errors.email}</p>}
+                            {errors.email && <p className="form-error">{errors.email}</p>}
 
                             <input className="form-input"
                                 name="password"
@@ -294,7 +294,7 @@ export default function Login() {
                                 type="password" placeholder="Create password..."
                             />
 
-                            {errors.password && <p className="form-p2">{errors.password}</p>}
+                            {errors.password && <p className="form-error">{errors.password}</p>}
 
                             <button className="form-btn"
                                 onClick={(e) => {
@@ -333,7 +333,7 @@ export default function Login() {
                                         onChange={(e) => setForgotEmail(e.target.value)} value={forgotEmail}
                                     />
 
-                                    {errors.email && <p className="form-p2">{errors.email}</p>}
+                                    {errors.email && <p className="form-error">{errors.email}</p>}
 
                                     <button
                                         onClick={(e) => {
