@@ -5,7 +5,10 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentIndex, setCurrentIndex] = useState(() => {
+        let index = Math.trunc(Math.random() * (movies.length -1) + 1);
+        return index;
+    });
     const [previousIndex, setPreviousIndex] = useState(null);
 
     const [currentForm, setCurrentForm] = useState("login");
@@ -34,7 +37,7 @@ export default function Login() {
 
             let randomIndex;
             do {
-                randomIndex = Math.floor(Math.random() * movies.length);
+                randomIndex = Math.trunc(Math.random() *(movies.length -1) + 1);
             } while (randomIndex === currentIndex && movies.length > 1);
 
             setCurrentIndex(randomIndex);
