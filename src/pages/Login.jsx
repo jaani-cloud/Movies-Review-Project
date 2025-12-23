@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { movies } from "../data/Movies";
 import { useForm } from "react-hook-form";
+import { Result } from "postcss";
 
 export default function Login() {
 
     const {
-        register: resisterLogin,
+        register: registerLogin,
         handleSubmit: handleLoginSubmit,
         formState: { errors: loginErrors }
     } = useForm();
@@ -18,6 +19,7 @@ export default function Login() {
     } = useForm();
 
     const passwordValue = watchSignup('password');
+    const validEmail = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
     const {
         register: registerForgot,
@@ -98,6 +100,7 @@ export default function Login() {
 
     const onForgotSubmit = (data) => {
         console.log(`Forgot Data ${JSON.stringify(data)}`)
+        setEmailSent(true);
     }
 
     // const handleSignupChange = (e) => {
@@ -184,6 +187,7 @@ export default function Login() {
     }, [currentIndex]);
 
     //! #1 Not working...
+
     // useEffect(() => {
     //     let randomBgImageStart = Math.trunc(Math.random() * (movies.length -1) + 1);
     //     randomBgImageStart + 15 > movies.length ? randomBgImageStart -= 15: randomBgImageStart += 0;
@@ -191,6 +195,7 @@ export default function Login() {
     // },[]);
 
     return (
+
         // full div screen...
 
         <div className="flex w-full h-screen overflow-hidden">
@@ -266,10 +271,10 @@ export default function Login() {
                                 <input className="form-input"
                                     type="email"
                                     placeholder="Enter your email here..."
-                                    {...resisterLogin('email', {
+                                    {...registerLogin('email', {
                                         required: "email is required",
                                         pattern: {
-                                            value: /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+                                            value: validEmail,
                                             message: "Invalid email format"
 
                                         }
@@ -280,12 +285,9 @@ export default function Login() {
                                 <input className="form-input"
                                     type="password"
                                     placeholder="Enter your password here...."
-                                    {...resisterLogin('password', {
+                                    {...registerLogin('password', {
                                         required: "password is required",
-                                        minLength: {
-                                            value: 6,
-                                            message: "password must be at least 6 characters"
-                                        }
+                                        validate: value => value.length >= 8 || `Password must have ${8 - value.length} more ${value.length === 7 ? "character." : "characters." } ${/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])/.test(value) ? "" : "Use 1"} ${!/[a-z]/.test(value) ? "lowercase letter, " : ""}${!/[A-Z]/.test(value) ? "uppercase letter, " : ""}${!/[0-9]/.test(value) ? "number, " : ""}${!/[!@#$%^&*]/.test(value) ? "special character." : ""}`
                                     })}
                                 />
 
@@ -363,7 +365,7 @@ export default function Login() {
                                     {...registerSignup('email', {
                                         required: "email is required",
                                         pattern: {
-                                            value: /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+                                            value: validEmail,
                                             message: "Invalid Email Format"
                                         }
                                     })}
@@ -392,10 +394,7 @@ export default function Login() {
                                     placeholder="Create password..."
                                     {...registerSignup('password', {
                                         required: "Password is required",
-                                        minLength: {
-                                            value: 6,
-                                            message: "Password must be at least 6 characters"
-                                        }
+                                        validate: value => value.length >= 8 || `Password must have ${8 - value.length} more ${value.length === 7 ? "character." : "characters." } ${/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])/.test(value) ? "" : "Use 1"} ${!/[a-z]/.test(value) ? "lowercase letter, " : ""}${!/[A-Z]/.test(value) ? "uppercase letter, " : ""}${!/[0-9]/.test(value) ? "number, " : ""}${!/[!@#$%^&*]/.test(value) ? "special character." : ""}`
                                     })}
                                 />
 
@@ -455,7 +454,7 @@ export default function Login() {
                                             {...registerForgot('email', {
                                                 required: "Email is required",
                                                 pattern: {
-                                                    value: /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+                                                    value: validEmail,
                                                     message: "Invalid Email format"
                                                 }
                                             })}
