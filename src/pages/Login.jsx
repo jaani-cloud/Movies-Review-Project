@@ -1,113 +1,155 @@
 import { useEffect, useState } from "react";
 import { movies } from "../data/Movies";
+import { useForm } from "react-hook-form";
 
 export default function Login() {
+
+    const {
+        register: resisterLogin,
+        handleSubmit: handleLoginSubmit,
+        formState: { errors: loginErrors }
+    } = useForm();
+
+    const {
+        register: registerSignup,
+        handleSubmit: handleSignupSubmit,
+        watch: watchSignup,
+        formState: { errors: signupErrors }
+    } = useForm();
+
+    const passwordValue = watchSignup('password');
+
+    const {
+        register: registerForgot,
+        handleSubmit: handleForgotSubmit,
+        formState: { errors: forgotErrors }
+    } = useForm();
+
+
+
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
-    const [loginData, setLoginData] = useState({
-        email: "",
-        password: ""
-    });
-    const [signupData, setSignupData] = useState({
-        name: "",
-        email: "",
-        password: ""
-    });
-    const [loginErrors, setLoginErrors] = useState({});
-    const [signupErrors, setSignupErrors] = useState({});
-    const [forgotErrors, setForgotErrors] = useState({});
+
+    // const [loginData, setLoginData] = useState({
+    //     email: "",
+    //     password: ""
+    // });
+
+    // const [signupData, setSignupData] = useState({
+    //     name: "",
+    //     email: "",
+    //     password: ""
+    // });
+
+    // const [loginErrors, setLoginErrors] = useState({});
+    // const [signupErrors, setSignupErrors] = useState({});
+    // const [forgotErrors, setForgotErrors] = useState({});
 
     const [currentIndex, setCurrentIndex] = useState(() => {
         let index = Math.trunc(Math.random() * (movies.length - 1) + 1);
         return index;
     });
+
     const [previousIndex, setPreviousIndex] = useState(null);
 
     const [currentForm, setCurrentForm] = useState("login");
 
     const [emailSent, setEmailSent] = useState(false);
-    const [forgotEmail, setForgotEmail] = useState("");
 
-    const handleLoginChange = (e) => {
-        setLoginData({ ...loginData, [e.target.name]: e.target.value });
-    };
+    // const [forgotEmail, setForgotEmail] = useState("");
 
-    const passLogin = () => {
-        // console.log(`Login Data: ${loginData}`)
-        setLoginErrors({});
-        let newErrors = {};
+    // const handleLoginChange = (e) => {
+    //     setLoginData({ ...loginData, [e.target.name]: e.target.value });
+    // };
 
-        if (!loginData.email) {
-            newErrors.email = "Email is required";
-        }
+    // const passLogin = () => {
+    //     // console.log(`Login Data: ${loginData}`)
+    //     setLoginErrors({});
+    //     let newErrors = {};
 
-        if (loginData.email && !isValidEmail(loginData.email)) {
-            newErrors.email = "Wrong Email Format"
-        }
+    //     if (!loginData.email) {
+    //         newErrors.email = "Email is required";
+    //     }
 
-        if (!loginData.password) {
-            newErrors.password = "password is required"
-        }
+    //     if (loginData.email && !isValidEmail(loginData.email)) {
+    //         newErrors.email = "Wrong Email Format"
+    //     }
 
-        if (loginData.password && (loginData.password).length < 6) {
-            newErrors.password = "password must be at least 6 characters"
-        }
-        setLoginErrors(newErrors);
-        if (newErrors.email || newErrors.password) {
-            return false;
-        } else return true;
-    };
+    //     if (!loginData.password) {
+    //         newErrors.password = "password is required"
+    //     }
 
-    const handleSignupChange = (e) => {
-        setSignupData({ ...signupData, [e.target.name]: e.target.value });
+    //     if (loginData.password && (loginData.password).length < 6) {
+    //         newErrors.password = "password must be at least 6 characters"
+    //     }
+    //     setLoginErrors(newErrors);
+    //     if (newErrors.email || newErrors.password) {
+    //         return false;
+    //     } else return true;
+    // };
+
+    const onLoginSubmit = (data) => {
+        console.log(`Login Data: ${JSON.stringify(data)}`)
     }
 
-    const passSignup = () => {
-        setSignupErrors({});
-        let newErrors = {};
-
-        if (!signupData.name) {
-            newErrors.name = "name is required";
-        }
-
-        if (!signupData.email) {
-            newErrors.email = "email is required"
-        }
-
-        if (signupData.email && !isValidEmail(signupData.email)) {
-            newErrors.email = "wrong email format";
-        }
-
-        if (!signupData.password) {
-            newErrors.password = "password is required"
-        }
-        if (signupData.password && (signupData.password).length < 6) {
-            newErrors.password = "password must be at least  6 characters"
-        }
-
-        setSignupErrors(newErrors);
-        if (newErrors.name || newErrors.email || newErrors.password) {
-            return false;
-        } else return true;
-    };
-
-    const passForgot = () => {
-        setForgotErrors({});
-        let newErrors = {};
-
-        if (!forgotEmail) {
-            newErrors.email = "email is required"
-        }
-
-        if (forgotEmail && !isValidEmail(forgotEmail)) {
-            newErrors.email = "wrong email format"
-        }
-
-        setForgotErrors(newErrors);
-        if (newErrors.email) {
-            return false;
-        } else return true;
+    const onSignupSubmit = (data) => {
+        console.log(`Signup Data ${JSON.stringify(data)}`)
     }
+
+    const onForgotSubmit = (data) => {
+        console.log(`Forgot Data ${JSON.stringify(data)}`)
+    }
+
+    // const handleSignupChange = (e) => {
+    //     setSignupData({ ...signupData, [e.target.name]: e.target.value });
+    // }
+
+    // const passSignup = () => {
+    //     setSignupErrors({});
+    //     let newErrors = {};
+
+    //     if (!signupData.name) {
+    //         newErrors.name = "name is required";
+    //     }
+
+    //     if (!signupData.email) {
+    //         newErrors.email = "email is required"
+    //     }
+
+    //     if (signupData.email && !isValidEmail(signupData.email)) {
+    //         newErrors.email = "wrong email format";
+    //     }
+
+    //     if (!signupData.password) {
+    //         newErrors.password = "password is required"
+    //     }
+    //     if (signupData.password && (signupData.password).length < 6) {
+    //         newErrors.password = "password must be at least  6 characters"
+    //     }
+
+    //     setSignupErrors(newErrors);
+    //     if (newErrors.name || newErrors.email || newErrors.password) {
+    //         return false;
+    //     } else return true;
+    // };
+
+    // const passForgot = () => {
+    //     setForgotErrors({});
+    //     let newErrors = {};
+
+    //     if (!forgotEmail) {
+    //         newErrors.email = "email is required"
+    //     }
+
+    //     if (forgotEmail && !isValidEmail(forgotEmail)) {
+    //         newErrors.email = "wrong email format"
+    //     }
+
+    //     setForgotErrors(newErrors);
+    //     if (newErrors.email) {
+    //         return false;
+    //     } else return true;
+    // }
 
     //! #1 Not working...
     // const [randomBgImageStart, setRandomBgImageStart] = useState(0);
@@ -119,11 +161,11 @@ export default function Login() {
     });
 
 
-    // chat gpt used
-    const isValidEmail = (email) => {
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return regex.test(email.trim());
-    }
+    // // chat gpt used
+    // const isValidEmail = (email) => {
+    //     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    //     return regex.test(email.trim());
+    // }
 
 
 
@@ -208,58 +250,68 @@ export default function Login() {
             <div className="w-[50%] bg-black flex items-center justify-center">
 
                 {/* right login box */}
-                <div className="relative w-full max-w-md overflow-hidden min-h-[500px]">
+                <div className="relative w-full max-w-md overflow-hidden min-h-[700px]">
 
                     <div className={`form-animate ${currentForm === "login" ? "form-animate-in" : "form-animate-out"}`}>
 
                         {/* Login page */}
 
                         <div className="w-full max-w-md p-8">
-                            <h1 className="form-h1">Welcome Back!</h1>
-                            <p className="form-p1">Login to continue to review movies</p>
 
-                            <input className="form-input"
-                                name="email"
-                                type="email" placeholder="Enter your email here..."
-                                value={loginData.email}
-                                onChange={handleLoginChange}
-                            // onChange={(e) => setEmail(e.target.value)}
-                            // value={email}
-                            />
-                            {loginErrors.email && <p className="form-error">{loginErrors.email}</p>}
+                            <form onSubmit={handleLoginSubmit(onLoginSubmit)}>
 
-                            <input className="form-input"
-                                name="password"
-                                type="password" placeholder="Enter your password here...."
-                                value={loginData.password}
-                                onChange={handleLoginChange}
-                            // onChange={(e) => setPassword(e.target.value)}
-                            // value={password}
-                            />
+                                <h1 className="form-h1">Welcome Back!</h1>
+                                <p className="form-p1">Login to continue to review movies</p>
 
-                            {loginErrors.password && <p className="form-error">{loginErrors.password}</p>}
+                                <input className="form-input"
+                                    type="email"
+                                    placeholder="Enter your email here..."
+                                    {...resisterLogin('email', {
+                                        required: "email is required",
+                                        pattern: {
+                                            value: /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+                                            message: "Invalid email format"
 
-                            <div className="flex justify-end mb-4">
+                                        }
+                                    })}
+                                />
+                                {loginErrors.email && <p className="form-error">{loginErrors.email.message}</p>}
 
-                                <a href="#" onClick={() => setCurrentForm("forgot")}
-                                    className="form-a">
-                                    Forget Password?</a>
-                            </div>
+                                <input className="form-input"
+                                    type="password"
+                                    placeholder="Enter your password here...."
+                                    {...resisterLogin('password', {
+                                        required: "password is required",
+                                        minLength: {
+                                            value: 6,
+                                            message: "password must be at least 6 characters"
+                                        }
+                                    })}
+                                />
 
-                            <button className="form-btn"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    if (passLogin()) {
-                                        console.log(`Login Success...\n ${JSON.stringify(loginData)}`)
-                                    }
-                                }}
-                            >Login</button>
+                                {loginErrors.password && <p className="form-error">{loginErrors.password.message}</p>}
 
-                            <p className="form-p2">Don't have an account?{" "}
-                                <a href="#" onClick={() => setCurrentForm("signup")}
-                                    className="form-a">
-                                    Signup for free</a>
-                            </p>
+                                <div className="flex justify-end mb-4">
+
+                                    <a href="#" onClick={() => setCurrentForm("forgot")}
+                                        className="form-a">
+                                        Forget Password?</a>
+                                </div>
+
+                                <input
+                                    type="submit"
+                                    value="Login"
+                                    className="form-btn"
+                                />
+
+                                <p className="form-p2">Don't have an account?{" "}
+                                    <a href="#" onClick={() => setCurrentForm("signup")}
+                                        className="form-a">
+                                        Signup for free
+                                    </a>
+                                </p>
+                            </form>
+
                         </div>
                     </div>
 
@@ -268,50 +320,113 @@ export default function Login() {
                     <div className={`form-animate ${currentForm === "signup" ? "form-animate-in" : "form-animate-out"}`}>
 
                         <div className="w-full max-w-md p-8">
-                            <h1 className="form-h1">Create Account</h1>
-                            <p className="form-p1">Signing up to start reviewing movies</p>
 
-                            <input className="form-input"
-                                name="name"
-                                value={signupData.name}
-                                onChange={handleSignupChange}
-                                type="text" placeholder="Enter your name here..."
-                            />
+                            <form onSubmit={handleSignupSubmit(onSignupSubmit)}>
 
-                            {signupErrors.name && <p className="form-error">{signupErrors.name}</p>}
+                                <h1 className="form-h1">Create Account</h1>
+                                <p className="form-p1">Signing up to start reviewing movies</p>
 
-                            <input className="form-input"
-                                name="email"
-                                value={signupData.email}
-                                onChange={handleSignupChange}
-                                type="email" placeholder="Enter your email here..."
-                            />
+                                <input
+                                    className="form-input"
+                                    type="text"
+                                    placeholder="Enter your first name here..."
+                                    {...registerSignup('firstName', {
+                                        required: "First name is required",
+                                        minLength: {
+                                            value: 2,
+                                            message: "First name must be at least 2 characters"
+                                        }
+                                    })}
+                                />
 
-                            {signupErrors.email && <p className="form-error">{signupErrors.email}</p>}
+                                {signupErrors.firstName && <p className="form-error">{signupErrors.firstName.message}</p>}
 
-                            <input className="form-input"
-                                name="password"
-                                value={signupData.password}
-                                onChange={handleSignupChange}
-                                type="password" placeholder="Create password..."
-                            />
+                                <input
+                                    className="form-input"
+                                    type="text"
+                                    placeholder="Enter your last name here..."
+                                    {...registerSignup('lastName', {
+                                        required: "Last name is required",
+                                        minLength: {
+                                            value: 2,
+                                            message: "Last name must be at least 2 characters"
+                                        }
+                                    })}
+                                />
 
-                            {signupErrors.password && <p className="form-error">{signupErrors.password}</p>}
+                                {signupErrors.lastName && <p className="form-error">{signupErrors.lastName.message}</p>}
 
-                            <button className="form-btn"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    if (passSignup()) {
-                                        console.log(`Sign Up Data:\n ${JSON.stringify(signupData)}`)
-                                    }
-                                }}
-                            >Sign Up</button>
+                                <input
+                                    className="form-input"
+                                    type="email"
+                                    placeholder="Enter your email here..."
+                                    {...registerSignup('email', {
+                                        required: "email is required",
+                                        pattern: {
+                                            value: /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+                                            message: "Invalid Email Format"
+                                        }
+                                    })}
+                                />
 
-                            <p className="form-p2">Already have an account?{" "}
-                                <a href="#" onClickCapture={() => setCurrentForm("login")}
-                                    className="form-a">
-                                    Login</a>
-                            </p>
+                                {signupErrors.email && <p className="form-error">{signupErrors.email.message}</p>}
+
+                                <input
+                                    className="form-input"
+                                    type="tel"
+                                    placeholder="Enter your phone number here..."
+                                    {...registerSignup('phoneNumber', {
+                                        required: "phone number is required",
+                                        pattern: {
+                                            value: /^[0-9]{10}$/,
+                                            message: "Phone Number must be 10 digits"
+                                        }
+                                    })}
+                                />
+
+                                {signupErrors.phoneNumber && <p className="form-error">{signupErrors.phoneNumber.message}</p>}
+
+                                <input
+                                    className="form-input"
+                                    type="password"
+                                    placeholder="Create password..."
+                                    {...registerSignup('password', {
+                                        required: "Password is required",
+                                        minLength: {
+                                            value: 6,
+                                            message: "Password must be at least 6 characters"
+                                        }
+                                    })}
+                                />
+
+                                {signupErrors.password && <p className="form-error">{signupErrors.password.message}</p>}
+
+                                <input
+                                    className="form-input"
+                                    type="password"
+                                    placeholder="Confirm password..."
+                                    {...registerSignup('confirmPassword', {
+                                        required: "Confirm your password",
+                                        validate: value => value === passwordValue || "Password does not match"
+                                    })}
+                                />
+
+                                {signupErrors.confirmPassword && <p className="form-error">{signupErrors.confirmPassword.message}</p>}
+
+                                <input
+                                    type="submit"
+                                    value="Sign Up"
+                                    className="form-btn"
+                                />
+
+                                <p className="form-p2">Already have an account?{" "}
+                                    <a href="#" onClickCapture={() => setCurrentForm("login")}
+                                        className="form-a">
+                                        Login
+                                    </a>
+                                </p>
+                            </form>
+
                         </div>
                     </div>
 
@@ -320,41 +435,48 @@ export default function Login() {
                     <div className={`form-animate ${currentForm === "forgot" ? "form-animate-in" : "form-animate-out"}`}>
 
                         <div className="w-full max-w-md p-8">
-                            <h1 className="form-h1">Forgot Password?</h1>
 
-                            {emailSent && (
-                                <div className="p-4 mb-4 text-green-400 bg-green-900 rounded-lg">
-                                    Email sent successfully...
-                                </div>
-                            )}
-                            {emailSent || (
-                                <>
-                                    <p className="form-p1">Enter your email to reset password</p>
+                            <form onSubmit={handleForgotSubmit(onForgotSubmit)}>
+                                <h1 className="form-h1">Forgot Password?</h1>
 
-                                    <input className="form-input" type="email" placeholder="Enter your email here..."
-                                        onChange={(e) => setForgotEmail(e.target.value)} value={forgotEmail}
-                                    />
+                                {emailSent && (
+                                    <div className="p-4 mb-4 text-green-400 bg-green-900 rounded-lg">
+                                        Email sent successfully...
+                                    </div>
+                                )}
+                                {emailSent || (
+                                    <>
+                                        <p className="form-p1">Enter your email to reset password</p>
 
-                                    {forgotErrors.email && <p className="form-error">{forgotErrors.email}</p>}
+                                        <input
+                                            className="form-input"
+                                            type="email"
+                                            placeholder="Enter your email here..."
+                                            {...registerForgot('email', {
+                                                required: "Email is required",
+                                                pattern: {
+                                                    value: /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+                                                    message: "Invalid Email format"
+                                                }
+                                            })}
+                                        />
 
-                                    <button
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            if (passForgot()) {
-                                                setEmailSent(true);
-                                            }
-                                        }}
-                                        className="form-btn disabled:cursor-not-allowed hover:disabled:bg-red-600 hover:disabled:scale-100"
-                                    >
-                                        Reset password
-                                    </button>
+                                        {forgotErrors.email && <p className="form-error">{forgotErrors.email.message}</p>}
 
-                                </>
-                            )}
-                            <p className="form-p2">Remember Password?{" "}
-                                <a href="#" onClick={() => setCurrentForm("login")}
-                                    className="form-a">Back to Login</a>
-                            </p>
+                                        <input
+                                            type="submit"
+                                            className="form-btn"
+                                            value="Reset Password"
+                                        />
+
+                                    </>
+                                )}
+                                <p className="form-p2">Remember Password?{" "}
+                                    <a href="#" onClick={() => setCurrentForm("login")}
+                                        className="form-a">Back to Login</a>
+                                </p>
+                            </form>
+
                         </div>
                     </div>
 
