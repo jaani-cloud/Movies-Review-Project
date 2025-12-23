@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { movies } from "../data/Movies";
 import { useForm } from "react-hook-form";
 import { Result } from "postcss";
+import { passwordValidator } from "../validators/passwordValidator";
 
 export default function Login() {
 
@@ -283,12 +284,9 @@ export default function Login() {
                                 {loginErrors.email && <p className="form-error">{loginErrors.email.message}</p>}
 
                                 <input className="form-input"
-                                    type="password"
+                                    type="text"
                                     placeholder="Enter your password here...."
-                                    {...registerLogin('password', {
-                                        required: "password is required",
-                                        validate: value => value.length >= 8 || `Password must have ${8 - value.length} more ${value.length === 7 ? "character." : "characters." } ${/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])/.test(value) ? "" : "Use 1"} ${!/[a-z]/.test(value) ? "lowercase letter, " : ""}${!/[A-Z]/.test(value) ? "uppercase letter, " : ""}${!/[0-9]/.test(value) ? "number, " : ""}${!/[!@#$%^&*]/.test(value) ? "special character." : ""}`
-                                    })}
+                                    {...registerLogin('password', passwordValidator)}
                                 />
 
                                 {loginErrors.password && <p className="form-error">{loginErrors.password.message}</p>}
@@ -392,10 +390,7 @@ export default function Login() {
                                     className="form-input"
                                     type="password"
                                     placeholder="Create password..."
-                                    {...registerSignup('password', {
-                                        required: "Password is required",
-                                        validate: value => value.length >= 8 || `Password must have ${8 - value.length} more ${value.length === 7 ? "character." : "characters." } ${/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])/.test(value) ? "" : "Use 1"} ${!/[a-z]/.test(value) ? "lowercase letter, " : ""}${!/[A-Z]/.test(value) ? "uppercase letter, " : ""}${!/[0-9]/.test(value) ? "number, " : ""}${!/[!@#$%^&*]/.test(value) ? "special character." : ""}`
-                                    })}
+                                    {...registerSignup('password', passwordValidator)}
                                 />
 
                                 {signupErrors.password && <p className="form-error">{signupErrors.password.message}</p>}
