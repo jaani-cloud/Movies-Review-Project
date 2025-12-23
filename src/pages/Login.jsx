@@ -96,8 +96,34 @@ export default function Login() {
     }
 
     const onSignupSubmit = (data) => {
-        console.log(`Signup Data ${JSON.stringify(data)}`)
-    }
+        console.log(`Sign Up Data ${JSON.stringify(data)}`);
+
+        fetch("https://apistudent.codedonor.in/api/user/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                firstName: data.firstName,
+                lastName: data.lastName,
+                email: `jaanicloud-${data.email}`,
+                phoneNumber: data.phoneNumber,
+                password: data.password,
+                otherDetails: JSON.stringify({
+                    studentId: "jaani-cloud"
+                })
+            })
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((result) => {
+                console.log(`Sign Up Response: ${JSON.stringify(result)}`);
+            })
+            .catch((error) => {
+                console.log(`Sign Up Error: ${JSON.stringify(error)}`);
+            });
+    };
 
     const onForgotSubmit = (data) => {
         console.log(`Forgot Data ${JSON.stringify(data)}`)
@@ -284,7 +310,7 @@ export default function Login() {
                                 {loginErrors.email && <p className="form-error">{loginErrors.email.message}</p>}
 
                                 <input className="form-input"
-                                    type="text"
+                                    type="password"
                                     placeholder="Enter your password here...."
                                     {...registerLogin('password', passwordValidator)}
                                 />
