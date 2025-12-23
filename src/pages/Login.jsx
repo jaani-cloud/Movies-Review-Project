@@ -13,7 +13,9 @@ export default function Login() {
         email: "",
         password: ""
     });
-    const [errors, setErrors] = useState({});
+    const [loginErrors, setLoginErrors] = useState({});
+    const [signupErrors, setSignupErrors] = useState({});
+    const [forgotErrors, setForgotErrors] = useState({});
 
     const [currentIndex, setCurrentIndex] = useState(() => {
         let index = Math.trunc(Math.random() * (movies.length - 1) + 1);
@@ -32,7 +34,7 @@ export default function Login() {
 
     const passLogin = () => {
         // console.log(`Login Data: ${loginData}`)
-        setErrors({});
+        setLoginErrors({});
         let newErrors = {};
 
         if (!loginData.email) {
@@ -50,7 +52,7 @@ export default function Login() {
         if (loginData.password && (loginData.password).length < 6) {
             newErrors.password = "password must be at least 6 characters"
         }
-        setErrors(newErrors);
+        setLoginErrors(newErrors);
         if (newErrors.email || newErrors.password) {
             return false;
         } else return true;
@@ -61,7 +63,7 @@ export default function Login() {
     }
 
     const passSignup = () => {
-        setErrors({});
+        setSignupErrors({});
         let newErrors = {};
 
         if (!signupData.name) {
@@ -83,14 +85,14 @@ export default function Login() {
             newErrors.password = "password must be at least  6 characters"
         }
 
-        setErrors(newErrors);
+        setSignupErrors(newErrors);
         if (newErrors.name || newErrors.email || newErrors.password) {
             return false;
         } else return true;
     };
 
     const passForgot = () => {
-        setErrors({});
+        setForgotErrors({});
         let newErrors = {};
 
         if (!forgotEmail) {
@@ -101,7 +103,7 @@ export default function Login() {
             newErrors.email = "wrong email format"
         }
 
-        setErrors(newErrors);
+        setForgotErrors(newErrors);
         if (newErrors.email) {
             return false;
         } else return true;
@@ -224,7 +226,7 @@ export default function Login() {
                             // onChange={(e) => setEmail(e.target.value)}
                             // value={email}
                             />
-                            {errors.email && <p className="form-error">{errors.email}</p>}
+                            {loginErrors.email && <p className="form-error">{loginErrors.email}</p>}
 
                             <input className="form-input"
                                 name="password"
@@ -235,7 +237,7 @@ export default function Login() {
                             // value={password}
                             />
 
-                            {errors.password && <p className="form-error">{errors.password}</p>}
+                            {loginErrors.password && <p className="form-error">{loginErrors.password}</p>}
 
                             <div className="flex justify-end mb-4">
 
@@ -276,7 +278,7 @@ export default function Login() {
                                 type="text" placeholder="Enter your name here..."
                             />
 
-                            {errors.name && <p className="form-error">{errors.name}</p>}
+                            {signupErrors.name && <p className="form-error">{signupErrors.name}</p>}
 
                             <input className="form-input"
                                 name="email"
@@ -285,7 +287,7 @@ export default function Login() {
                                 type="email" placeholder="Enter your email here..."
                             />
 
-                            {errors.email && <p className="form-error">{errors.email}</p>}
+                            {signupErrors.email && <p className="form-error">{signupErrors.email}</p>}
 
                             <input className="form-input"
                                 name="password"
@@ -294,7 +296,7 @@ export default function Login() {
                                 type="password" placeholder="Create password..."
                             />
 
-                            {errors.password && <p className="form-error">{errors.password}</p>}
+                            {signupErrors.password && <p className="form-error">{signupErrors.password}</p>}
 
                             <button className="form-btn"
                                 onClick={(e) => {
@@ -333,7 +335,7 @@ export default function Login() {
                                         onChange={(e) => setForgotEmail(e.target.value)} value={forgotEmail}
                                     />
 
-                                    {errors.email && <p className="form-error">{errors.email}</p>}
+                                    {forgotErrors.email && <p className="form-error">{forgotErrors.email}</p>}
 
                                     <button
                                         onClick={(e) => {
