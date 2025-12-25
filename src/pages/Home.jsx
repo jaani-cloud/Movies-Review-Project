@@ -6,21 +6,22 @@ export default function Home() {
 
     const [selectedCat, setSelectedCat] = useState("All");
 
+
     const filteredMovies = movies.filter((movie) => {
         if (selectedCat === "All") {
             return true
         }
         return movie.category.includes(selectedCat);
     })
-    console.log("Selected Category:", selectedCat);
-    console.log("Filtered Movies:", filteredMovies);
+
+
 
     return (
         <div className="min-h-screen bg-black">
 
             {/* nav area */}
 
-            <nav className="fixed top-0 left-0 right-0 p-4 text-white bg-slate-900">
+            <nav className="fixed top-0 left-0 right-0 z-50 p-4 text-white bg-slate-900">
                 <h1>🎬 ReviewHub</h1>
             </nav>
 
@@ -85,8 +86,6 @@ export default function Home() {
                         ))}
                     </div>
                 </div>
-
-
             </main>
         </div>
     );
