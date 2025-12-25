@@ -5,7 +5,7 @@ import Home from "./pages/Home"
 
 export default function App() {
   return (
-    <HashRouter basename="/Movies-Review-Project">
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
