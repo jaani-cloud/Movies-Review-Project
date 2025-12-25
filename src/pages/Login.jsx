@@ -3,6 +3,7 @@ import { movies } from "../data/Movies";
 import { useForm } from "react-hook-form";
 import { Result } from "postcss";
 import { passwordValidator } from "../validators/passwordValidator";
+import {Link} from "react-router-dom"
 
 export default function Login() {
 
@@ -261,7 +262,7 @@ export default function Login() {
                     {/* Logo div */}
 
                     <div className="absolute left-4 top-4">
-                        <h2 className="text-3xl font-bold text-white">🎬 ReviewHub</h2>
+                        <h2 className="text-3xl font-bold text-white"><a href="./Home.jsx" className="">🎬</a> ReviewHub</h2>
                     </div>
 
                     {/*  */}
@@ -481,7 +482,7 @@ export default function Login() {
                         <div className="w-full max-w-md p-8">
 
                             <form onSubmit={handleForgotSubmit(onForgotSubmit)}>
-                                <h1 className="form-h1">Forgot Password?</h1>
+                                <h1 className="form-h1">Forgot Password?{"\u00A0\u00A0"} <Link to="./home" className="opacity-0 cursor-vertical-text">0</Link></h1>
 
                                 {emailSent && (
                                     <div className="p-4 mb-4 text-green-400 bg-green-900 rounded-lg">
