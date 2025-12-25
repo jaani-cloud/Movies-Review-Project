@@ -92,8 +92,33 @@ export default function Login() {
     // };
 
     const onLoginSubmit = (data) => {
-        console.log(`Login Data: ${JSON.stringify(data)}`)
-    }
+        console.log(`Login Data: ${JSON.stringify(data)}`);
+
+        fetch("https://apistudent.codedonor.in/api/user/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                code: data.email,
+                password: data.password
+            })
+        })
+            .then((response) => {
+                console.log("Response Status:", response.status);
+                console.log("Response OK?", response.ok);
+                return response.json();
+            })
+            .then((result) => {
+                console.log("Full Response:", result);
+                if (result.error || result.message) {
+                    console.log("Error Message:", result.error || result.message);
+                }
+            })
+            .catch((error) => {
+                console.log(`Login Error: ${JSON.stringify(error)}`);
+            });
+    };
 
     const onSignupSubmit = (data) => {
         console.log(`Sign Up Data ${JSON.stringify(data)}`);
@@ -303,7 +328,6 @@ export default function Login() {
                                         pattern: {
                                             value: validEmail,
                                             message: "Invalid email format"
-
                                         }
                                     })}
                                 />
