@@ -47,8 +47,8 @@ export default function Home() {
                         className={`${selectedCat === "Web Series" ? "home-btn-active" : "home-btn"}`}
                         onClick={() => setSelectedCat("Web Series")}>Web Series</button>
                     <button
-                        className={`${selectedCat === "Movies" ? "home-btn-active" : "home-btn"}`}
-                        onClick={() => setSelectedCat("Movies")}>Movies</button>
+                        className={`${selectedCat === "Movie" ? "home-btn-active" : "home-btn"}`}
+                        onClick={() => setSelectedCat("Movie")}>Movies</button>
                     <button
                         className={`${selectedCat === "Saw" ? "home-btn-active" : "home-btn"}`}
                         onClick={() => setSelectedCat("Saw")}>Saw</button>
@@ -76,11 +76,11 @@ export default function Home() {
                     <div className="grid grid-cols-5 gap-4">
 
                         {filteredMovies.map((movie) => (
-                            <div className="rounded-lg bg-slate-800 " key={movie.id}>
+                            <div className="rounded-lg bg-slate-800 poster-animate" key={movie.id}>
                                 <img className="object-cover w-full rounded-t-lg h-[400px]"
 
                                     src={movie.poster} alt="" />
-                                <h3 className="p-2 text-white">{movie.name}</h3>
+                                <h3 className="p-2 text-white transition-all duration-300">{movie.name}</h3>
                             </div>
                         ))}
                     </div>
