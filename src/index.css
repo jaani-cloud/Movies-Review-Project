@@ -44,10 +44,14 @@
     }
 
     .home-btn {
-        @apply px-4 py-2 text-white transition-all duration-200 border rounded-lg bg-gradient-to-r from-slate-800 to-slate-700 border-slate-600 hover:from-blue-600 hover:to-blue-700 hover:scale-105;
+        @apply px-4 py-2 text-white transition-all duration-300 transform border rounded-lg cursor-pointer bg-gradient-to-r from-slate-800 to-slate-700 border-slate-600 hover:from-slate-700 hover:to-slate-600 hover:border-slate-500 hover:shadow-lg hover:shadow-slate-500/50 hover:-translate-y-1;
     }
 
     .home-h1 {
         @apply flex items-center gap-2 mb-4 text-2xl font-bold text-white;
+    }
+
+    .home-btn-active {
+        @apply px-4 py-2 font-semibold text-white scale-105 border-2 border-blue-400 rounded-lg shadow-xl bg-gradient-to-r from-blue-600 to-blue-800 shadow-blue-500/50;
     }
 }

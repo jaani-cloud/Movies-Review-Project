@@ -1,8 +1,20 @@
 import { Film } from "lucide-react"
-import { movies } from "../data/Movies";
+import { movies } from "../data/Movies"
+import { useState } from "react"
 
 export default function Home() {
-    // console.log(`Movies: ${JSON.stringify(movies)}`)
+
+    const [selectedCat, setSelectedCat] = useState("All");
+
+    const filteredMovies = movies.filter((movie) => {
+        if (selectedCat === "All") {
+            return true
+        }
+        return movie.category.includes(selectedCat);
+    })
+    console.log("Selected Category:", selectedCat);
+    console.log("Filtered Movies:", filteredMovies);
+
     return (
         <div className="min-h-screen bg-black">
 
@@ -19,15 +31,39 @@ export default function Home() {
                 {/* home btn area */}
 
                 <div className="flex gap-3 p-4">
-                    <button className="home-btn">All</button>
-                    <button className="home-btn">MCU</button>
-                    <button className="home-btn">Harry Potter</button>
-                    <button className="home-btn">Indian Movies</button>
-                    <button className="home-btn">Web Series</button>
-                    <button className="home-btn">Movies</button>
-                    <button className="home-btn">Saw</button>
-                    <button className="home-btn">Stranger Things</button>
-                    <button className="home-btn">Another</button>
+                    <button
+                        className={`${selectedCat === "All" ? "home-btn-active" : "home-btn"}`}
+                        onClick={() => setSelectedCat("All")}>All</button>
+                    <button
+                        className={`${selectedCat === "MCU" ? "home-btn-active" : "home-btn"}`}
+                        onClick={() => setSelectedCat("MCU")}>MCU</button>
+                    <button
+                        className={`${selectedCat === "Harry Potter" ? "home-btn-active" : "home-btn"}`}
+                        onClick={() => setSelectedCat("Harry Potter")}>Harry Potter</button>
+                    <button
+                        className={`${selectedCat === "Indian Movie" ? "home-btn-active" : "home-btn"}`}
+                        onClick={() => setSelectedCat("Indian Movie")}>Indian Movies</button>
+                    <button
+                        className={`${selectedCat === "Web Series" ? "home-btn-active" : "home-btn"}`}
+                        onClick={() => setSelectedCat("Web Series")}>Web Series</button>
+                    <button
+                        className={`${selectedCat === "Movies" ? "home-btn-active" : "home-btn"}`}
+                        onClick={() => setSelectedCat("Movies")}>Movies</button>
+                    <button
+                        className={`${selectedCat === "Saw" ? "home-btn-active" : "home-btn"}`}
+                        onClick={() => setSelectedCat("Saw")}>Saw</button>
+                    <button
+                        className={`${selectedCat === "Stranger Things" ? "home-btn-active" : "home-btn"}`}
+                        onClick={() => setSelectedCat("Stranger Things")}>Stranger Things</button>
+                    <button
+                        className={`${selectedCat === "X-Men" ? "home-btn-active" : "home-btn"}`}
+                        onClick={() => setSelectedCat("X-Men")}>X-Men</button>
+                    <button
+                        className={`${selectedCat === "Animated" ? "home-btn-active" : "home-btn"}`}
+                        onClick={() => setSelectedCat("Animated")}>Animated</button>
+                    <button
+                        className={`${selectedCat === "Another" ? "home-btn-active" : "home-btn"}`}
+                        onClick={() => setSelectedCat("Another")}>Another</button>
                 </div>
 
                 {/* home explore area */}
@@ -39,7 +75,7 @@ export default function Home() {
 
                     <div className="grid grid-cols-5 gap-4">
 
-                        {movies.map((movie) => (
+                        {filteredMovies.map((movie) => (
                             <div className="rounded-lg bg-slate-800 " key={movie.id}>
                                 <img className="object-cover w-full rounded-t-lg h-[400px]"
 
