@@ -1,17 +1,17 @@
-import { Film } from "lucide-react"
+import { Film, Search } from "lucide-react"
 import { movies } from "../data/Movies"
 import { useState } from "react"
 
 export default function Home() {
 
     const [selectedCat, setSelectedCat] = useState("All");
+    const [userSearch, setUserSearch] = useState("");
 
 
     const filteredMovies = movies.filter((movie) => {
-        if (selectedCat === "All") {
-            return true
-        }
-        return movie.category.includes(selectedCat);
+        const catGot = selectedCat === "All" || movie.category.includes(selectedCat)
+        const searchGot = movie.name.toLowerCase().includes(userSearch.toLowerCase().trim())
+        return catGot && searchGot;
     })
 
 
@@ -21,8 +21,18 @@ export default function Home() {
 
             {/* nav area */}
 
-            <nav className="fixed top-0 left-0 right-0 z-50 p-4 text-white bg-slate-900">
+            <nav className="fixed top-0 left-0 right-0 z-50 flex items-center gap-4 p-4 text-white bg-slate-900">
                 <h1>🎬 ReviewHub</h1>
+                <div className="relative flex-1 max-w-md">
+                    <Search className="absolute -translate-y-1/2 left-3 top-1/2 text-slate-400" size={20} />
+                    <input
+                        type="text"
+                        placeholder="Search here..."
+                        value={userSearch}
+                        onChange={(e) => setUserSearch(e.target.value)}
+                        className="pl-10 search w-80"
+                    />
+                </div>
             </nav>
 
             {/* main area */}
