@@ -1,6 +1,7 @@
-import { Film, Search,Flame  } from "lucide-react"
+import { Film, Search, Flame } from "lucide-react"
 import { movies } from "../data/Movies"
 import { useState } from "react"
+import { Link } from "react-router-dom"
 
 export default function Home() {
 
@@ -93,18 +94,20 @@ export default function Home() {
                             <div className="grid grid-cols-6 gap-4">
 
                                 {filteredMovies.map((movie) => (
-                                    <div className="rounded-lg bg-slate-800 poster-animate" key={movie.id}>
-                                        <img className="object-cover w-full rounded-t-lg h-60"
+                                    <Link to={`/movie/${movie.id}`} key={movie.id}>
+                                        <div className="rounded-lg bg-slate-800 poster-animate" key={movie.id}>
+                                            <img className="object-cover w-full rounded-t-lg h-60"
 
-                                            src={movie.poster} alt="" />
-                                        <h3 className="p-2 text-white transition-all duration-300">{movie.name}</h3>
-                                    </div>
+                                                src={movie.poster} alt="" />
+                                            <h3 className="p-2 text-white transition-all duration-300">{movie.name}</h3>
+                                        </div>
+                                    </Link>
                                 ))}
                             </div>
                         </div>
                     </div>
                     <aside className="w-80 bg-slate-900 p-4 rounded-lg fixed right-4 top-24 self-start h-[calc(100vh-6rem)] flex flex-col">
-                        <h2 className="home-h1 mb-4"><Flame/> Most Interested</h2>
+                        <h2 className="home-h1 mb-4"><Flame /> Most Interested</h2>
                         <div className="overflow-y-auto flex-1 sidebar-scroll">
                             {topRatedMovies.map((movie) => (
                                 <div key={movie.id} className="sidebar">
