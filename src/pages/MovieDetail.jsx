@@ -3,6 +3,7 @@ import { movies } from "../data/Movies";
 
 import ReviewGauge from "../components/movie/ReviewGauge"
 import { formatGenres } from "../utils/formatters";
+import ReviewForm from "../components/movie/ReviewForm"
 
 export default function MovieDetail() {
     const { id } = useParams();
@@ -31,6 +32,7 @@ export default function MovieDetail() {
                     <p className="text-lg leading-relaxed text-slate-300">{movie.description}</p>
 
                     <ReviewGauge reviewData={reviewData} />
+                    <ReviewForm />
                 </div>
             </div>
         </div>
