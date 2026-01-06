@@ -32,7 +32,7 @@ export default function MovieDetail() {
                     <p className="text-lg leading-relaxed text-slate-300">{movie.description}</p>
 
                     <ReviewGauge reviewData={reviewData} />
-                    <ReviewForm />
+                    <ReviewForm movieId={movie.id}/>
                 </div>
             </div>
         </div>

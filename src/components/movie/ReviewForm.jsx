@@ -1,6 +1,8 @@
 import { useState } from "react";
 
-export default function ReviewForm() {
+import { addReview } from "../../services/reviewService"
+
+export default function ReviewForm(movieId) {
     const [selectedType, setSelectedType] = useState(null)
     const [comment, setComment] = useState("")
 
@@ -10,10 +12,12 @@ export default function ReviewForm() {
             alert("Please select a review typ")
             return;
         }
-        console.log("Review submitted:" , {
+        const newReview = addReview(movieId, {
             type: selectedType,
             comment: comment
         })
+
+        console.log("Review saved:", newReview)
 
         setSelectedType(null)
         setComment("")
@@ -29,7 +33,7 @@ export default function ReviewForm() {
                         <button
                             type="button"
                             onClick={() => setSelectedType("Skip")}
-                            className={`reviewBtn ${selectedType === "Skip" ? "border-red-500 bg-red-600": ""}`}
+                            className={`reviewBtn ${selectedType === "Skip" ? "border-red-500 bg-red-600" : ""}`}
                         >
                             Skip
                         </button>
@@ -37,7 +41,7 @@ export default function ReviewForm() {
                         <button
                             type="button"
                             onClick={() => setSelectedType("Time Pass")}
-                            className={`reviewBtn ${selectedType === "Time Pass" ? "border-yellow-500 bg-yellow-600": ""}`}
+                            className={`reviewBtn ${selectedType === "Time Pass" ? "border-yellow-500 bg-yellow-600" : ""}`}
                         >
                             Time Pass
                         </button>
@@ -45,7 +49,7 @@ export default function ReviewForm() {
                         <button
                             type="button"
                             onClick={() => setSelectedType("Go For It")}
-                            className={`reviewBtn ${selectedType === "Go For It" ? "border-green-500 bg-green-600": ""}`}
+                            className={`reviewBtn ${selectedType === "Go For It" ? "border-green-500 bg-green-600" : ""}`}
                         >
                             Go For It
                         </button>
