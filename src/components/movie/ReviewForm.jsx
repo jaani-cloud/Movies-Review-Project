@@ -10,6 +10,13 @@ export default function ReviewForm() {
             alert("Please select a review typ")
             return;
         }
+        console.log("Review submitted:" , {
+            type: selectedType,
+            comment: comment
+        })
+
+        setSelectedType(null)
+        setComment("")
     }
 
     return (
