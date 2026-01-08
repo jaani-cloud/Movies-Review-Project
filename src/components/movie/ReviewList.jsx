@@ -18,6 +18,15 @@ export default function ReviewList({ movieId }) {
         }
     }
 
+    const refreshReviews = () => {
+        const loadedReviews = getReviews(movieId)
+        setReviews(loadedReviews)
+    }
+
+    useEffect(() => {
+        refreshReviews()
+    },[movieId])
+
     return (
         <div className='mt-8 bg-slate-900 p-6 rounded-lg'>
             <h3
