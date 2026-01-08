@@ -5,6 +5,8 @@ import ReviewGauge from "../components/movie/ReviewGauge"
 import { formatGenres } from "../utils/formatters";
 import ReviewForm from "../components/movie/ReviewForm"
 
+import ReviewList from "../components/movie/ReviewList";
+
 export default function MovieDetail() {
     const { id } = useParams();
     const movie = movies.find((m) => m.id === parseInt(id));
@@ -32,7 +34,8 @@ export default function MovieDetail() {
                     <p className="text-lg leading-relaxed text-slate-300">{movie.description}</p>
 
                     <ReviewGauge reviewData={reviewData} />
-                    <ReviewForm movieId={movie.id}/>
+                    <ReviewForm movieId={movie.id} />
+                    <ReviewList movieId={movie.id}/>
                 </div>
             </div>
         </div>

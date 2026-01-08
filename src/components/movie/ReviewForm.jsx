@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { addReview } from "../../services/reviewService"
 
-export default function ReviewForm(movieId) {
+export default function ReviewForm({movieId}) {
     const [selectedType, setSelectedType] = useState(null)
     const [comment, setComment] = useState("")
 
@@ -12,6 +12,7 @@ export default function ReviewForm(movieId) {
             alert("Please select a review typ")
             return;
         }
+        // console.log("Submitting review for movie: ", movieId)
         const newReview = addReview(movieId, {
             type: selectedType,
             comment: comment
