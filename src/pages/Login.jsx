@@ -351,7 +351,7 @@ export default function Login() {
                                 <input
                                     type="submit"
                                     value="Sign Up"
-                                    className="form-btn"
+                                    className="Form-btn"
                                 />
 
                                 <p className="Form-p2">Already have an account?{" "}
