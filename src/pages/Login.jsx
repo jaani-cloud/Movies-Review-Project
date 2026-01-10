@@ -5,7 +5,11 @@ import { Result } from "postcss";
 import { passwordValidator } from "../validators/passwordValidator";
 import {Link} from "react-router-dom"
 
+import { login } from "../services/authService"
+import { useNavigate } from "react-router-dom";
+
 export default function Login() {
+    const navigate = useNavigate();
 
     const {
         register: registerLogin,
@@ -92,34 +96,21 @@ export default function Login() {
     //     } else return true;
     // };
 
-    const onLoginSubmit = (data) => {
-        console.log(`Login Data: ${JSON.stringify(data)}`);
 
-        fetch("https://apistudent.codedonor.in/api/user/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                code: data.email,
-                password: data.password
-            })
-        })
-            .then((response) => {
-                console.log("Response Status:", response.status);
-                console.log("Response OK?", response.ok);
-                return response.json();
-            })
-            .then((result) => {
-                console.log("Full Response:", result);
-                if (result.error || result.message) {
-                    console.log("Error Message:", result.error || result.message);
-                }
-            })
-            .catch((error) => {
-                console.log(`Login Error: ${JSON.stringify(error)}`);
-            });
-    };
+
+    const onLoginSubmit =(data) =>{
+        console.log("Login Attempt: ", data)
+
+        const result = login(data.email, data.password)
+        console.log('result: ', result);
+
+        if (result.success) {
+            console.log("Login Successful: ", result.user)
+            navigate("/home")
+        } else{
+            alert(result.error)
+        }
+    }
 
     const onSignupSubmit = (data) => {
         console.log(`Sign Up Data ${JSON.stringify(data)}`);
@@ -262,14 +253,14 @@ export default function Login() {
                     {/* Logo div */}
 
                     <div className="absolute left-4 top-4">
-                        <h2 className="text-3xl font-bold text-white"><a href="./Home.jsx" className="">🎬</a> ReviewHub</h2>
+                        <h2 className="text-3xl font-bold text-white">🎬 ReviewHub</h2>
                     </div>
 
                     {/*  */}
 
                     <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-10">
                         <div className="grid grid-cols-3 gap-4 p-4">
-                            {movies.slice(randomBgImageStart, randomBgImageStart + 15).map((movie, index) => (
+                            {movies.slice(randomBgImageStart, randomBgImageStart + 21).map((movie, index) => (
                                 <img src={movie.poster} key={index}
                                     className="object-cover w-full h-32 rounded-lg"
                                 />

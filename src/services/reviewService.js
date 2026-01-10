@@ -25,7 +25,7 @@ export const deleteReview = (movieId, reviewId) => {
 // -----------------------------------------------API
 
 // import axios from 'axios';
-// const API_URL = 'https://your-api.com/api/reviews';
+// const API_URL = '';
 
 // export const getReviews = async (movieId) => {
 //     const response = await axios.get(`${API_URL}?movieId=${movieId}`);

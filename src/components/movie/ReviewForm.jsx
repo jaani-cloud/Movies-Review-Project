@@ -9,7 +9,7 @@ export default function ReviewForm({movieId, onReviewAdded}) {
     const handleSubmit = (e) => {
         e.preventDefault()
         if (!selectedType) {
-            alert("Please select a review typ")
+            alert("Please select a review type...")
             return;
         }
         // console.log("Submitting review for movie: ", movieId)
