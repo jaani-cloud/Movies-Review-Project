@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { addReview, getReviews } from "../../services/reviewService"
 import { getCurrentUser } from "../../services/authService"
+console.log(getCurrentUser())
 
 
 export default function ReviewForm({movieId, onReviewAdded}) {
@@ -15,7 +16,7 @@ export default function ReviewForm({movieId, onReviewAdded}) {
             return;
         }
 
-        const currentUser = getCurrentUser;
+        const currentUser = getCurrentUser();
 
         if (!currentUser) {
             alert("Please login to submit a review...")
@@ -37,7 +38,7 @@ export default function ReviewForm({movieId, onReviewAdded}) {
             userName: `${currentUser.firstName} ${currentUser.lastName}`
         })
 
-        console.log("Review saved:", newReview)
+        console.log("New review saved:", newReview);
 
         setSelectedType(null)
         setComment("")

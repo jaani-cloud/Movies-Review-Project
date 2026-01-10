@@ -22,6 +22,15 @@ export const deleteReview = (movieId, reviewId) => {
     localStorage.setItem(`reviews_${movieId}`, JSON.stringify(filtered));
 };
 
+
+export const updateReview = (movieId, reviewId, updatedData) => {
+    const reviews = getReviews(movieId);
+    const updated = reviews.map(r =>
+        r.id === reviewId ? { ...r, ...updatedData, updatedAt: new Date().toISOString() } : r
+    );
+    localStorage.setItem(`reviews_${movieId}`, JSON.stringify(updated));
+};
+
 // -----------------------------------------------API
 
 // import axios from 'axios';
