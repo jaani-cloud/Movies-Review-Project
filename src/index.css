@@ -3,65 +3,65 @@
 @tailwind utilities;
 
 @layer components {
-    .form-h1 {
+    .Form-h1 {
         @apply mb-2 text-4xl font-bold text-white;
     }
 
-    .form-p1 {
+    .Form-p1 {
         @apply mb-8 text-sm text-slate-400;
     }
 
-    .form-input {
+    .Form-input {
         @apply w-full p-3 mb-2 text-white border rounded-lg border-slate-700 bg-slate-900;
     }
 
-    .form-btn {
+    .Form-btn {
         @apply w-full py-3 mb-6 font-semibold text-white transition-all duration-200 transform bg-blue-600 rounded-lg hover:bg-blue-700 hover:scale-105;
     }
 
-    .form-p2 {
+    .Form-p2 {
         @apply text-sm text-center text-slate-400;
     }
 
-    .form-a {
+    .Form-a {
         @apply font-semibold text-blue-400 transition-colors hover:text-blue-300;
     }
 
-    .form-animate {
+    .Form-animate {
         @apply absolute inset-0 flex flex-col items-center justify-center transition-all duration-500 ease-in-out bg-black;
     }
 
-    .form-animate-in {
+    .Form-animate-in {
         @apply translate-y-0 opacity-100 pointer-events-auto;
     }
 
-    .form-animate-out {
+    .Form-animate-out {
         @apply translate-y-full opacity-0 pointer-events-none;
     }
 
-    .form-error {
+    .Form-error {
         @apply text-sm text-red-400 mt-1.5 mb-3 font-medium border-l-4 border-red-500 pl-2;
     }
 
-    .home-btn {
+    .Home-btn {
         @apply text-white transition-all duration-300 transform border rounded-lg cursor-pointer bg-gradient-to-r from-slate-800 to-slate-700 border-slate-600 hover:from-slate-700 hover:to-slate-600 hover:border-slate-500 hover:shadow-lg hover:shadow-slate-500/50 hover:-translate-y-1 text-base px-5 py-2.5;
     }
 
-    .home-h1 {
+    .Home-h1 {
         @apply flex items-center gap-2 mb-4 text-2xl font-bold text-white;
     }
 
-    .home-btn-active {
+    .Home-btn-active {
         @apply px-4 py-2 font-semibold text-white scale-105 border-2 border-blue-400 rounded-lg shadow-xl bg-gradient-to-r from-blue-600 to-blue-800 shadow-blue-500/50;
     }
 
-    .poster-animate {
+    .Poster-animate {
         @apply relative overflow-hidden cursor-pointer;
         transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         transform-style: preserve-3d;
     }
 
-    .poster-animate::before {
+    .Poster-animate::before {
         content: '';
         position: absolute;
         top: 0;
@@ -73,11 +73,11 @@
         z-index: 1;
     }
 
-    .poster-animate:hover::before {
+    .Poster-animate:hover::before {
         left: 100%;
     }
 
-    .poster-animate:hover {
+    .Poster-animate:hover {
         transform: translateY(-12px) scale(1.08);
         box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.6),
             0 0 0 1px rgba(59, 130, 246, 0.3),
@@ -85,40 +85,29 @@
         filter: brightness(1.1);
     }
 
-    .poster-animate:hover h3 {
+    .Poster-animate:hover h3 {
         color: rgb(34, 197, 94);
         transform: translateX(5px);
         font-weight: 600;
     }
 
-    .search {
+    .Search {
         @apply px-4 py-2 text-white transition-all duration-200 border rounded-lg bg-slate-800 border-slate-600 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50;
     }
 
-    .sidebar {
-        @apply flex gap-3 p-2 mb-3 transition-all duration-200 rounded-lg cursor-pointer hover:bg-slate-800;
+    .Sidebar {
+        @apply flex gap-3 p-2 transition-all duration-200 rounded-lg cursor-pointer hover:bg-slate-800;
     }
 
-    .sidebar-scroll::-webkit-scrollbar {
+    .Sidebar-scroll::-webkit-scrollbar {
         display: none;
     }
 
-    .sidebar-scroll {
+    .Sidebar-scroll {
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
 
-    @keyframes float {
-
-        0%,
-        100% {
-            transform: translateY(0px);
-        }
-
-        50% {
-            transform: translateY(-10px);
-        }
-    }
 
     @keyframes fadeInUp {
         from {
@@ -132,12 +121,29 @@
         }
     }
 
-    .animate-fadeInUp {
+    .Animate-fadeInUp {
         animation: fadeInUp 0.8s ease-out;
-    }
-
-    .reviewBtn{
-        @apply bg-slate-800 px-6 py-2 rounded-lg mt-1 hover:bg-opacity-80 transition-all duration-200 border-2 border-transparent
-    }
 }
 
+    .ReviewBtn {
+        @apply bg-slate-800 px-6 py-2 rounded-lg mt-1 hover:bg-opacity-80 transition-all duration-200 border-2 border-transparent
+    }
+
+    .Hover-scroll {
+        animation: none;
+    }
+
+    .Group:hover .Hover-scroll {
+        animation: scroll-text 8s linear infinite;
+}
+
+    @keyframes scroll-text {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+}

@@ -7,7 +7,7 @@ export default function ReviewGauge({ reviewData }) {
         <div>
             <h3 className="text-xl font-semibold mb-3">Reviews</h3>
 
-            <div className="relative animate-fadeInUp">
+            <div className="relative Animate-fadeInUp">
                 <PieChart width={400} height={250}>
                     <Pie
                         data={reviewData}

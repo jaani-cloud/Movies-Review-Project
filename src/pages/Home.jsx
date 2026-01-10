@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Film } from "lucide-react";
 import { Link } from "react-router-dom";
 import { movies } from "../data/Movies";
@@ -51,11 +50,11 @@ export default function Home() {
                         {/* home explore area */}
 
                         <div className="p-4">
-                            <h2 className="home-h1"><Film /> Explore</h2>
+                            <h2 className="Home-h1"><Film /> Explore</h2>
 
                             {/* movie grid area */}
 
-                            <div className="grid grid-cols-6 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
 
                                 {filteredItems.map((movie) => (
                                     <Link to={`/movie/${movie.id}`} key={movie.id}>

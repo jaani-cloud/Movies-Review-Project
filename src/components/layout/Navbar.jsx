@@ -12,7 +12,7 @@ export default function Navbar({searchQuery, setSearchQuery}) {
                     placeholder="Search here..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="search w-full pl-10"
+                    className="Search w-full pl-10"
                 />
             </div>
         </nav>

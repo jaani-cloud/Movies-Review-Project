@@ -8,8 +8,12 @@ import { Link } from "react-router-dom"
 import { login } from "../services/authService"
 import { useNavigate } from "react-router-dom";
 
+import { Eye, EyeOff } from 'lucide-react';
+
+
 export default function Login() {
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
 
     const {
         register: registerLogin,
@@ -177,7 +181,7 @@ export default function Login() {
                 {/* right login box */}
                 <div className="relative w-full max-w-md overflow-hidden min-h-[700px]">
 
-                    <div className={`form-animate ${currentForm === "login" ? "form-animate-in" : "form-animate-out"}`}>
+                    <div className={`Form-animate ${currentForm === "login" ? "Form-animate-in" : "Form-animate-out"}`}>
 
                         {/* Login page */}
 
@@ -185,10 +189,10 @@ export default function Login() {
 
                             <form onSubmit={handleLoginSubmit(onLoginSubmit)}>
 
-                                <h1 className="form-h1">Welcome Back!</h1>
-                                <p className="form-p1">Login to continue to review movies</p>
+                                <h1 className="Form-h1">Welcome Back!</h1>
+                                <p className="Form-p1">Login to continue to review movies</p>
 
-                                <input className="form-input"
+                                <input className="Form-input"
                                     type="email"
                                     placeholder="Enter your email here..."
                                     {...registerLogin('email', {
@@ -199,15 +203,25 @@ export default function Login() {
                                         }
                                     })}
                                 />
-                                {loginErrors.email && <p className="form-error">{loginErrors.email.message}</p>}
+                                {loginErrors.email && <p className="Form-error">{loginErrors.email.message}</p>}
 
-                                <input className="form-input"
-                                    type="password"
-                                    placeholder="Enter your password here...."
-                                    {...registerLogin('password', passwordValidator)}
-                                />
+                                <div className="relative">
+                                    <input
+                                        className="Form-input pr-10"
+                                        type={showPassword ? "text" : "password"}
+                                        placeholder="Enter your password here...."
+                                        {...registerLogin('password', passwordValidator)}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded"
+                                    >
+                                        {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                                    </button>
+                                </div>
 
-                                {loginErrors.password && <p className="form-error">{loginErrors.password.message}</p>}
+                                {loginErrors.password && <p className="Form-error">{loginErrors.password.message}</p>}
 
                                 <div className="flex justify-end mb-4">
 
@@ -219,12 +233,12 @@ export default function Login() {
                                 <input
                                     type="submit"
                                     value="Login"
-                                    className="form-btn"
+                                    className="Form-btn"
                                 />
 
-                                <p className="form-p2">Don't have an account?{" "}
+                                <p className="Form-p2">Don't have an account?{" "}
                                     <a href="#" onClick={() => setCurrentForm("signup")}
-                                        className="form-a">
+                                        className="Form-a">
                                         Signup for free
                                     </a>
                                 </p>
@@ -235,17 +249,17 @@ export default function Login() {
 
                     {/* Signup form */}
 
-                    <div className={`form-animate ${currentForm === "signup" ? "form-animate-in" : "form-animate-out"}`}>
+                    <div className={`Form-animate ${currentForm === "signup" ? "Form-animate-in" : "Form-animate-out"}`}>
 
                         <div className="w-full max-w-md p-8">
 
                             <form onSubmit={handleSignupSubmit(onSignupSubmit)}>
 
-                                <h1 className="form-h1">Create Account</h1>
-                                <p className="form-p1">Signing up to start reviewing movies</p>
+                                <h1 className="Form-h1">Create Account</h1>
+                                <p className="Form-p1">Signing up to start reviewing movies</p>
 
                                 <input
-                                    className="form-input"
+                                    className="Form-input"
                                     type="text"
                                     placeholder="Enter your first name here..."
                                     {...registerSignup('firstName', {
@@ -260,7 +274,7 @@ export default function Login() {
                                 {signupErrors.firstName && <p className="form-error">{signupErrors.firstName.message}</p>}
 
                                 <input
-                                    className="form-input"
+                                    className="Form-input"
                                     type="text"
                                     placeholder="Enter your last name here..."
                                     {...registerSignup('lastName', {
@@ -272,10 +286,10 @@ export default function Login() {
                                     })}
                                 />
 
-                                {signupErrors.lastName && <p className="form-error">{signupErrors.lastName.message}</p>}
+                                {signupErrors.lastName && <p className="Form-error">{signupErrors.lastName.message}</p>}
 
                                 <input
-                                    className="form-input"
+                                    className="Form-input"
                                     type="email"
                                     placeholder="Enter your email here..."
                                     {...registerSignup('email', {
@@ -287,10 +301,10 @@ export default function Login() {
                                     })}
                                 />
 
-                                {signupErrors.email && <p className="form-error">{signupErrors.email.message}</p>}
+                                {signupErrors.email && <p className="Form-error">{signupErrors.email.message}</p>}
 
                                 <input
-                                    className="form-input"
+                                    className="Form-input"
                                     type="tel"
                                     placeholder="Enter your phone number here..."
                                     {...registerSignup('phoneNumber', {
@@ -302,20 +316,29 @@ export default function Login() {
                                     })}
                                 />
 
-                                {signupErrors.phoneNumber && <p className="form-error">{signupErrors.phoneNumber.message}</p>}
+                                {signupErrors.phoneNumber && <p className="Form-error">{signupErrors.phoneNumber.message}</p>}
+
+                                <div className="relative">
+                                    <input
+                                        className="Form-input pr-10"
+                                        type={showPassword ? "text" : "password"}
+                                        placeholder="Create password..."
+                                        {...registerSignup('password', passwordValidator)}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded"
+                                    >
+                                        {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                                    </button>
+                                </div>
+
+                                {signupErrors.password && <p className="Form-error">{signupErrors.password.message}</p>}
 
                                 <input
-                                    className="form-input"
-                                    type="password"
-                                    placeholder="Create password..."
-                                    {...registerSignup('password', passwordValidator)}
-                                />
-
-                                {signupErrors.password && <p className="form-error">{signupErrors.password.message}</p>}
-
-                                <input
-                                    className="form-input"
-                                    type="password"
+                                    className="Form-input"
+                                    type={showPassword ? "text" : "password"}
                                     placeholder="Confirm password..."
                                     {...registerSignup('confirmPassword', {
                                         required: "Confirm your password",
@@ -323,7 +346,7 @@ export default function Login() {
                                     })}
                                 />
 
-                                {signupErrors.confirmPassword && <p className="form-error">{signupErrors.confirmPassword.message}</p>}
+                                {signupErrors.confirmPassword && <p className="Form-error">{signupErrors.confirmPassword.message}</p>}
 
                                 <input
                                     type="submit"
@@ -331,9 +354,9 @@ export default function Login() {
                                     className="form-btn"
                                 />
 
-                                <p className="form-p2">Already have an account?{" "}
+                                <p className="Form-p2">Already have an account?{" "}
                                     <a href="#" onClickCapture={() => setCurrentForm("login")}
-                                        className="form-a">
+                                        className="Form-a">
                                         Login
                                     </a>
                                 </p>
@@ -344,12 +367,12 @@ export default function Login() {
 
                     {/* forgot form */}
 
-                    <div className={`form-animate ${currentForm === "forgot" ? "form-animate-in" : "form-animate-out"}`}>
+                    <div className={`Form-animate ${currentForm === "forgot" ? "Form-animate-in" : "Form-animate-out"}`}>
 
                         <div className="w-full max-w-md p-8">
 
                             <form onSubmit={handleForgotSubmit(onForgotSubmit)}>
-                                <h1 className="form-h1">Forgot Password?{"\u00A0\u00A0"} <Link to="./home" className="opacity-0 cursor-vertical-text">0</Link></h1>
+                                <h1 className="Form-h1">Forgot Password?</h1>
 
                                 {emailSent && (
                                     <div className="p-4 mb-4 text-green-400 bg-green-900 rounded-lg">
@@ -358,10 +381,10 @@ export default function Login() {
                                 )}
                                 {emailSent || (
                                     <>
-                                        <p className="form-p1">Enter your email to reset password</p>
+                                        <p className="Form-p1">Enter your email to reset password</p>
 
                                         <input
-                                            className="form-input"
+                                            className="Form-input"
                                             type="email"
                                             placeholder="Enter your email here..."
                                             {...registerForgot('email', {
@@ -373,19 +396,19 @@ export default function Login() {
                                             })}
                                         />
 
-                                        {forgotErrors.email && <p className="form-error">{forgotErrors.email.message}</p>}
+                                        {forgotErrors.email && <p className="Form-error">{forgotErrors.email.message}</p>}
 
                                         <input
                                             type="submit"
-                                            className="form-btn"
+                                            className="Form-btn"
                                             value="Reset Password"
                                         />
 
                                     </>
                                 )}
-                                <p className="form-p2">Remember Password?{" "}
+                                <p className="Form-p2">Remember Password?{" "}
                                     <a href="#" onClick={() => setCurrentForm("login")}
-                                        className="form-a">Back to Login</a>
+                                        className="Form-a">Back to Login</a>
                                 </p>
                             </form>
 
