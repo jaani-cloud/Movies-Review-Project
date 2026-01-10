@@ -2,10 +2,10 @@ import { useState } from "react";
 
 import { addReview, getReviews } from "../../services/reviewService"
 import { getCurrentUser } from "../../services/authService"
-console.log(getCurrentUser())
 
 
-export default function ReviewForm({movieId, onReviewAdded}) {
+
+export default function ReviewForm({ movieId, onReviewAdded }) {
     const [selectedType, setSelectedType] = useState(null)
     const [comment, setComment] = useState("")
 
@@ -26,11 +26,10 @@ export default function ReviewForm({movieId, onReviewAdded}) {
         const userReview = existingReviews.find((review) => review.userId === currentUser.id)
 
         if (userReview) {
-            alert("You have already reviewed this movie...")
+            alert("You have already reviewed this movie. You can update your existing review...")
             return;
         }
 
-        // console.log("Submitting review for movie: ", movieId)
         const newReview = addReview(movieId, {
             type: selectedType,
             comment: comment,
@@ -38,7 +37,7 @@ export default function ReviewForm({movieId, onReviewAdded}) {
             userName: `${currentUser.firstName} ${currentUser.lastName}`
         })
 
-        console.log("New review saved:", newReview);
+
 
         setSelectedType(null)
         setComment("")

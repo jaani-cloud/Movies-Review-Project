@@ -3,7 +3,7 @@ import { movies } from "../data/Movies";
 import { useForm } from "react-hook-form";
 import { Result } from "postcss";
 import { passwordValidator } from "../validators/passwordValidator";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
 
 import { login } from "../services/authService"
 import { useNavigate } from "react-router-dom";
@@ -34,71 +34,17 @@ export default function Login() {
     } = useForm();
 
 
-
-    // const [email, setEmail] = useState("");
-    // const [password, setPassword] = useState("");
-
-    // const [loginData, setLoginData] = useState({
-    //     email: "",
-    //     password: ""
-    // });
-
-    // const [signupData, setSignupData] = useState({
-    //     name: "",
-    //     email: "",
-    //     password: ""
-    // });
-
-    // const [loginErrors, setLoginErrors] = useState({});
-    // const [signupErrors, setSignupErrors] = useState({});
-    // const [forgotErrors, setForgotErrors] = useState({});
-
     const [currentIndex, setCurrentIndex] = useState(() => {
         let index = Math.trunc(Math.random() * (movies.length - 1) + 1);
         return index;
     });
 
     const [previousIndex, setPreviousIndex] = useState(null);
-
     const [currentForm, setCurrentForm] = useState("login");
-
     const [emailSent, setEmailSent] = useState(false);
 
-    // const [forgotEmail, setForgotEmail] = useState("");
 
-    // const handleLoginChange = (e) => {
-    //     setLoginData({ ...loginData, [e.target.name]: e.target.value });
-    // };
-
-    // const passLogin = () => {
-    //     // console.log(`Login Data: ${loginData}`)
-    //     setLoginErrors({});
-    //     let newErrors = {};
-
-    //     if (!loginData.email) {
-    //         newErrors.email = "Email is required";
-    //     }
-
-    //     if (loginData.email && !isValidEmail(loginData.email)) {
-    //         newErrors.email = "Wrong Email Format"
-    //     }
-
-    //     if (!loginData.password) {
-    //         newErrors.password = "password is required"
-    //     }
-
-    //     if (loginData.password && (loginData.password).length < 6) {
-    //         newErrors.password = "password must be at least 6 characters"
-    //     }
-    //     setLoginErrors(newErrors);
-    //     if (newErrors.email || newErrors.password) {
-    //         return false;
-    //     } else return true;
-    // };
-
-
-
-    const onLoginSubmit =(data) =>{
+    const onLoginSubmit = (data) => {
         console.log("Login Attempt: ", data)
 
         const result = login(data.email, data.password)
@@ -107,7 +53,7 @@ export default function Login() {
         if (result.success) {
             console.log("Login Successful: ", result.user)
             navigate("/home")
-        } else{
+        } else {
             alert(result.error)
         }
     }
@@ -147,73 +93,10 @@ export default function Login() {
         setEmailSent(true);
     }
 
-    // const handleSignupChange = (e) => {
-    //     setSignupData({ ...signupData, [e.target.name]: e.target.value });
-    // }
-
-    // const passSignup = () => {
-    //     setSignupErrors({});
-    //     let newErrors = {};
-
-    //     if (!signupData.name) {
-    //         newErrors.name = "name is required";
-    //     }
-
-    //     if (!signupData.email) {
-    //         newErrors.email = "email is required"
-    //     }
-
-    //     if (signupData.email && !isValidEmail(signupData.email)) {
-    //         newErrors.email = "wrong email format";
-    //     }
-
-    //     if (!signupData.password) {
-    //         newErrors.password = "password is required"
-    //     }
-    //     if (signupData.password && (signupData.password).length < 6) {
-    //         newErrors.password = "password must be at least  6 characters"
-    //     }
-
-    //     setSignupErrors(newErrors);
-    //     if (newErrors.name || newErrors.email || newErrors.password) {
-    //         return false;
-    //     } else return true;
-    // };
-
-    // const passForgot = () => {
-    //     setForgotErrors({});
-    //     let newErrors = {};
-
-    //     if (!forgotEmail) {
-    //         newErrors.email = "email is required"
-    //     }
-
-    //     if (forgotEmail && !isValidEmail(forgotEmail)) {
-    //         newErrors.email = "wrong email format"
-    //     }
-
-    //     setForgotErrors(newErrors);
-    //     if (newErrors.email) {
-    //         return false;
-    //     } else return true;
-    // }
-
-    //! #1 Not working...
-    // const [randomBgImageStart, setRandomBgImageStart] = useState(0);
-
-    //! #1 Working...
     const [randomBgImageStart] = useState(() => {
         let index = Math.trunc(Math.random() * (movies.length - 1) + 1);
         return index + 15 > movies.length ? index - 15 : index;
     });
-
-
-    // // chat gpt used
-    // const isValidEmail = (email) => {
-    //     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    //     return regex.test(email.trim());
-    // }
-
 
 
     useEffect(() => {
@@ -230,13 +113,6 @@ export default function Login() {
         return () => clearInterval(timer);
     }, [currentIndex]);
 
-    //! #1 Not working...
-
-    // useEffect(() => {
-    //     let randomBgImageStart = Math.trunc(Math.random() * (movies.length -1) + 1);
-    //     randomBgImageStart + 15 > movies.length ? randomBgImageStart -= 15: randomBgImageStart += 0;
-    //     setRandomBgImageStart(randomBgImageStart);
-    // },[]);
 
     return (
 

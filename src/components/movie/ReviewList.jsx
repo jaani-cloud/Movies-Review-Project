@@ -8,12 +8,12 @@ export default function ReviewList({ movieId }) {
     const [reviews, setReviews] = useState([])
     const [editedReview, setEditedReview] = useState(null);
     const [editType, setEditType] = useState("")
-    const [editCommment, setEditComment] = useState("")
+    const [editComment, setEditComment] = useState("")
     const currentUser = getCurrentUser();
 
     useEffect(() => {
         const loadedReviews = getReviews(movieId)
-        // console.log("Loaded reviews: ", loadedReviews)
+
         setReviews(loadedReviews)
     }, [movieId])
 
@@ -39,7 +39,7 @@ export default function ReviewList({ movieId }) {
     const handleSave = () => {
         updateReview(movieId, editedReview.id, {
             type: editType,
-            comment: editCommment
+            comment: editComment
         })
         setEditedReview(null);
         refreshReviews();
@@ -72,7 +72,7 @@ export default function ReviewList({ movieId }) {
                                 </select>
 
                                 <textarea className='w-full bg-slate-800 border rounded-lg p-4 border-slate-700 focus:border-blue-500 focus:outline-none h-24 mb-3 resize-none'
-                                    value={editCommment}
+                                    value={editComment}
                                     onChange={(e) => setEditComment(e.target.value)}
                                 >
                                 </textarea>
@@ -91,7 +91,7 @@ export default function ReviewList({ movieId }) {
                             </div>
                         ) : (
                             <div>
-                                {console.log("Current user:", currentUser?.id, "Review user:", review.userId)}
+                                { }
 
                                 <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getTypeColor(review.type)}`}>
                                     {review.type}
