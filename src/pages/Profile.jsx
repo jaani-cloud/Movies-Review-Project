@@ -2,6 +2,7 @@ import { useState } from "react"
 import { getCurrentUser } from "../services/authService"
 import { Link } from "react-router-dom"
 import { Instagram, Youtube } from "lucide-react"
+import UserReviews from "../components/profile/UserReviews"
 
 export default function Profile() {
     const currentUser = getCurrentUser()
@@ -143,7 +144,7 @@ export default function Profile() {
                                 </a>
                             </>) : (
                             <>
-                                <p className="text">Not Set</p>
+                                <p className="text-lg">Not Set</p>
                             </>)
                     )}
                 </div>
@@ -170,7 +171,7 @@ export default function Profile() {
                             </>
                         ) : (
                             <>
-
+                                <p className="text-lg">Not Set</p>
                             </>
                         )
                     )}
@@ -191,6 +192,7 @@ export default function Profile() {
                     {isEdited ? "Cancel" : "Edit Profile"}
                 </button>
             </div>
+            <UserReviews userId={currentUser.id}/>
         </div>
     )
 };
