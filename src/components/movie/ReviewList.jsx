@@ -90,19 +90,32 @@ export default function ReviewList({ movieId }) {
                                 </button>
                             </div>
                         ) : (
-                            <div>
-                                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getTypeColor(review.type)}`}>
+                            <div className='flex items-center gap-3 flex-wrap'>
+                                <div className='w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center '>
+                                    <div>
+                                        {currentUser.profilePhoto ? (
+                                            <img src={currentUser.profilePhoto} className='w-10 h-10 rounded-full object-cover' />
+                                        ) : (
+                                            <p className='text-xl'>👤</p>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className='mt-2'>
+                                    <p className='text-sm font-semibold text-slate-400'>
+                                        {review.userName || "Anonymous"}
+                                    </p>
+
+                                    <p className='text-slate-500 text-xs mt-1'>
+                                        {new Date(review.createdAt).toLocaleDateString()}
+                                    </p>
+                                </div>
+
+                                <span className={`px-3 py-1 rounded-lg text-sm font-semibold ${getTypeColor(review.type)}`}>
                                     {review.type}
                                 </span>
 
-                                <p className='mt-2 text-sm font-semibold text-slate-400'>
-                                    {review.userName || "Anonymous"}
-                                </p>
 
-                                <p className='text-slate-500 text-xs mt-1'>
-                                    {new Date(review.createdAt).toLocaleDateString()}
-                                </p>
-                                <p className='text-slate-300 mt-3'>{review.comment}</p>
+                                <p className='text-slate-300 italic'>💭 {review.comment || "No comment..."}</p>
                             </div>
                         )
                         }

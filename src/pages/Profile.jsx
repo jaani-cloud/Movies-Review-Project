@@ -112,7 +112,7 @@ export default function Profile() {
                     <label htmlFor="" className="Profile-label">Date of Birth</label>
                     {isEdited ? (
                         <input
-                            type="text"
+                            type="date"
                             value={formData.dob}
                             onChange={(e) => setFormData({ ...setFormData, dob: e.target.value })}
                             className="Profile-input"
