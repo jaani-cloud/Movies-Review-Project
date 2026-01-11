@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { getCurrentUser } from "../services/authService"
 import { Link } from "react-router-dom"
+import { Instagram, Youtube } from "lucide-react"
 
 export default function Profile() {
     const currentUser = getCurrentUser()
@@ -83,16 +84,7 @@ export default function Profile() {
 
                 <div className="mb-4">
                     <label htmlFor="" className="Profile-label">Email</label>
-                    {isEdited ? (
-                        <input
-                            type="email"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...setFormData, email: e.target.value })}
-                            className="Profile-input"
-                        />
-                    ) : (
-                        <p className="text-lg">{currentUser.email}</p>
-                    )}
+                    <p className="text-lg">{currentUser.email}</p>
                 </div>
 
                 <div className="mb-4">
@@ -134,12 +126,25 @@ export default function Profile() {
                     {isEdited ? (
                         <input
                             type="text"
+                            placeholder="Enter the username"
                             value={formData.instagram}
                             onChange={(e) => setFormData({ ...setFormData, instagram: e.target.value })}
                             className="Profile-input"
                         />
                     ) : (
-                        <p className="text-lg">{currentUser.instagram || "Not set"}</p>
+                        currentUser.instagram ? (
+                            <>
+                                <a className="flex items-center gap-2 text-pink-400 hover:text-pink-300 text-lg"
+                                    href={`https://instagram.com/${currentUser.instagram.replace("@", "")}`}
+                                    target="_blank"
+                                >
+                                    <Instagram size={20} />
+                                    @{currentUser.instagram.replace("@", "")}
+                                </a>
+                            </>) : (
+                            <>
+                                <p className="text">Not Set</p>
+                            </>)
                     )}
                 </div>
 
@@ -153,7 +158,21 @@ export default function Profile() {
                             className="Profile-input"
                         />
                     ) : (
-                        <p className="text-lg">{currentUser.youtube || "Not set"}</p>
+                        currentUser.youtube ? (
+                            <>
+                                <a className="flex items-center gap-2 text-red-400 hover:text-red-300 text-lg"
+                                    href={currentUser.youtube.startsWith("http") ? currentUser.youtube : `https://youtube.com/@${currentUser.youtube.replace("@", "")}`}
+                                    target="_blank"
+                                >
+                                    <Youtube size={20}/>
+                                    {currentUser.youtube.startsWith("http") ? "Visit Channel" : `@${currentUser.youtube.replace("@", "")}`}
+                                </a>
+                            </>
+                        ) : (
+                            <>
+
+                            </>
+                        )
                     )}
                 </div>
 
