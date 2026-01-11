@@ -30,8 +30,10 @@ export default function Settings() {
             return
         }
 
-        const updateUser = { ...currentUser, password: newPassword }
-        localStorage.setItem("currentUser", JSON.stringify(updateUser))
+        const hashedNewPassword = bcrypt.hashSync(newPassword, 10)
+
+        originalUser.password = hashedNewPassword
+
         setCurrentPassword("")
         setNewPassword("")
         setConfirmPassword("")
