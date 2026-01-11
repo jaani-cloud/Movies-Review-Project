@@ -59,9 +59,9 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
                                 className="block px-4 py-2 hover:bg-slate-700">
                                 My Profile
                             </Link>
-                            <a href="" className="block px-4 py-2 text-red-400 hover:bg-slate-700">
+                            <Link to={"/settings"} className="block px-4 py-2 text-red-400 hover:bg-slate-700">
                                 Settings
-                            </a>
+                            </Link>
                             <button className="block w-full px-4 py-2 text-red-400 hover:bg-slate-700"
                                 onClick={handleLogout}>
                                     Logout
