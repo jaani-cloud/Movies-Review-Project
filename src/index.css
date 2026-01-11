@@ -154,4 +154,12 @@
     .Profile-input{
         @apply w-full bg-slate-800 p-3 rounded-lg border border-slate-700
     }
+
+    .Admin-error::before{
+        content: "👑 Admin Dashboard";
+        position: relative;
+    }
+    .Admin-error:hover::before{
+        content: "🚫 Chal Nikal be...";
+    }
 }
