@@ -7,7 +7,9 @@ import ReviewForm from "../components/movie/ReviewForm"
 
 import ReviewList from "../components/movie/ReviewList";
 
-import {useState} from 'react'
+import { getReviews } from "../services/reviewService";
+
+import { useEffect, useState } from 'react'
 
 export default function MovieDetail() {
     const { id } = useParams();
@@ -15,15 +17,34 @@ export default function MovieDetail() {
 
     const [refreshTrigger, setRefreshTrigger] = useState(0)
 
-    const handleReviewAdded =() => {
-        setRefreshTrigger(prev => prev +1)
+    const [reviews, setReviews] = useState([])
+
+    useEffect(() => {
+        const movieReviews = getReviews(parseInt(id))
+        setReviews(movieReviews)
+    }, [id, refreshTrigger])
+
+    const reviewCounts = {
+        skip: reviews.filter(r => r.type === "Skip").length,
+        timePass: reviews.filter(r => r.type === "Time Pass").length,
+        goForIt: reviews.filter(r => r.type === "Go For It").length,
     }
 
     const reviewData = [
-        { label: "Skip", value: 16, color: "red" },
-        { label: "Timepass", value: 46, color: "yellow" },
-        { label: "Go for it", value: 88, color: "green" }
+        { label: "Skip", value: reviewCounts.skip, color: "red" },
+        { label: "Timepass", value: reviewCounts.timePass, color: "yellow" },
+        { label: "Go for it", value: reviewCounts.goForIt, color: "green" }
     ];
+
+    const handleReviewAdded = () => {
+        setRefreshTrigger(prev => prev + 1)
+    }
+
+    // const reviewData = [
+    //     { label: "Skip", value: 16, color: "red" },
+    //     { label: "Timepass", value: 46, color: "yellow" },
+    //     { label: "Go for it", value: 88, color: "green" }
+    // ];
 
     return (
         <div className="min-h-screen p-8 text-white bg-black">
