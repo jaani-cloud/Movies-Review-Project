@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { getCurrentUser } from "../services/authService";
+import { passwordValidator } from "../validators/passwordValidator";
+import bcrypt from "bcryptjs";
+import { Users } from "../data/Users"
 
 export default function Settings() {
     const currentUser = getCurrentUser()
@@ -8,8 +11,12 @@ export default function Settings() {
     const [newPassword, setNewPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
 
-    const handlePasswordChange = ()=>{
-        if (currentPassword !== currentUser.password) {
+    const handlePasswordChange = () => {
+        const originalUser = Users.find((user) => user.id === currentUser.id)
+
+        // console.log("current Password: ", originalUser.password)
+
+        if (!bcrypt.compareSync(currentPassword, originalUser.password)) {
             alert("Current password is incorrect...")
             return
         }
@@ -17,11 +24,13 @@ export default function Settings() {
             alert("New Password do not match...")
             return
         }
-        if (newPassword.length < 6) {
-            alert("Password must be at least 8 characters...")
+        const validationResult = passwordValidator.validate(newPassword)
+        if (validationResult !== true) {
+            alert(validationResult)
+            return
         }
 
-        const updateUser = {...currentUser, password: newPassword}
+        const updateUser = { ...currentUser, password: newPassword }
         localStorage.setItem("currentUser", JSON.stringify(updateUser))
         setCurrentPassword("")
         setNewPassword("")
@@ -29,7 +38,7 @@ export default function Settings() {
         alert("Password updated successfully...")
     }
 
-    
+
     if (!currentUser) {
         return (
             <div className="p-8 min-h-screen">
@@ -47,7 +56,7 @@ export default function Settings() {
 
                     <div className="mb-3">
                         <label htmlFor="" className="Profile-label">Current Password</label>
-                        <input type="text" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} className="Profile-input"/>
+                        <input type="text" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} className="Profile-input" />
                     </div>
 
                     <div className="mb-3">

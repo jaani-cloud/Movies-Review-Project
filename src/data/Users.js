@@ -1,11 +1,14 @@
+import bcrypt from "bcryptjs"
 
+const hashedAdminPassword = bcrypt.hashSync("Rohit@45", 10)
+const hashedUserPassword = bcrypt.hashSync("Sharma@45", 10)
 
 export const Users = [
     {
         id: 1,
         username: "jaani_cloud",
         email: "jaanilyrical@gmail.com",
-        password: "Rohit@45",
+        password: hashedAdminPassword,
         role: "admin",
         firstName: "Jaani",
         lastName: "Cloud",
@@ -19,7 +22,7 @@ export const Users = [
         id: 2,
         username: "rohit_sharma",
         email: "rohit@gmail.com",
-        password: "Sharma@45",
+        password: hashedUserPassword,
         role: "user",
         firstName: "Rohit",
         lastName: "Sharma",
@@ -38,10 +41,10 @@ export const checkEmail = (email) => {
 export const checkData = (email, password) => {
     const user = checkEmail(email);
     if (!user) return null;
-    if (user.password === password) {
 
-        const { password: _, ...userWithoutPassword } = user;
-        return userWithoutPassword;
+    if (bcrypt.compareSync(password, user.password)) {
+        const {password: _$4571, ...userWithoutPassword} = user
+        return userWithoutPassword
     }
     return null;
 };
