@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getReviews, deleteReview, updateReview } from "../../services/reviewService";
 import { getCurrentUser } from '../../services/authService';
+import { formatDate } from '../../utils/formatters';
 
 
 
@@ -106,7 +107,7 @@ export default function ReviewList({ movieId }) {
                                     </p>
 
                                     <p className='text-slate-500 text-xs mt-1'>
-                                        {new Date(review.createdAt).toLocaleDateString()}
+                                        {formatDate(review.createdAt)}
                                     </p>
                                 </div>
 
