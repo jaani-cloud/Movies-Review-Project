@@ -16,7 +16,7 @@
     }
 
     .Form-btn {
-        @apply w-full py-3 mb-6 font-semibold text-white transition-all duration-200 transform bg-blue-600 rounded-lg hover:bg-blue-700 hover:scale-105;
+        @apply w-full py-3 mb-6 font-semibold text-white transition-all duration-200 transform bg-blue-600 rounded-lg hover:bg-blue-700 hover:scale-105 hover:cursor-pointer;
     }
 
     .Form-p2 {

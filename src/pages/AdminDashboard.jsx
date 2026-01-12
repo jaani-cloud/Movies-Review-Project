@@ -1,8 +1,11 @@
 import { getCurrentUser } from "../services/authService";
 import { Link } from "react-router-dom";
+import ManageMovies  from "../components/admin/ManageMovies";
+import { useState } from "react";
 
 export default function AdminDashboard() {
     const currentUser = getCurrentUser();
+    const [activeSection, setActiveSection] = useState(null)
 
     if (!currentUser || currentUser.role !== "admin") {
         return (
@@ -27,7 +30,9 @@ export default function AdminDashboard() {
                 <div className="bg-slate-900 p-6 rounded-lg border border-slate-800">
                     <h2 className="text-2xl font-bold mb-4">🎬 Movies</h2>
                     <p className="text-slate-400 mb-4">Manage all movies in the database</p>
-                    <button className="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 w-full">
+                    <button
+                        className="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 w-full"
+                        onClick={() => setActiveSection("movies")}>
                         Manage Movies
                     </button>
                 </div>
@@ -60,6 +65,8 @@ export default function AdminDashboard() {
                         <p className="text-slate-300">Total Users: <span className="font-bold">2</span></p>
                         <p className="text-slate-300">Total Reviews: <span className="font-bold">--</span></p>
                     </div>
+
+                    {activeSection === "movies" && <ManageMovies/>}
                 </div>
             </div>
         </div>
