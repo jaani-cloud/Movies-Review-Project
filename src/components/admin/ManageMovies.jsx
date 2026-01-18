@@ -91,7 +91,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("MCU")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "MCU"]
                                                     : editingMovie.genre.filter(g => g !== "MCU");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -100,7 +100,7 @@ export default function ManageMovies() {
                                     <label className="ctm-genre-label">
                                         <input
                                             className="ctm-genre-input" type="checkbox" value="Harry Potter"
-                                            checked={editingMovie.genre.includes("")}
+                                            checked={editingMovie.genre.includes("Harry Potter")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
                                                     ? [...editingMovie.genre, "Harry Potter"]
@@ -114,7 +114,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Indian Movie")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Indian Movie"]
                                                     : editingMovie.genre.filter(g => g !== "Indian Movie");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -125,7 +125,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Action")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Action"]
                                                     : editingMovie.genre.filter(g => g !== "Action");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -137,7 +137,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Comedy")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Comedy"]
                                                     : editingMovie.genre.filter(g => g !== "Comedy");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -149,7 +149,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Drama")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Drama"]
                                                     : editingMovie.genre.filter(g => g !== "Drama");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -161,7 +161,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Sci-Fi")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Sci-Fi"]
                                                     : editingMovie.genre.filter(g => g !== "Sci-Fi");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -172,7 +172,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Thriller")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Thriller"]
                                                     : editingMovie.genre.filter(g => g !== "Thriller");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -184,7 +184,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Horror")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Horror"]
                                                     : editingMovie.genre.filter(g => g !== "Horror");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -196,7 +196,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Romance")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Romance"]
                                                     : editingMovie.genre.filter(g => g !== "Romance");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -208,7 +208,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Crime")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Crime"]
                                                     : editingMovie.genre.filter(g => g !== "Crime");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -220,7 +220,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Animation")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Animation"]
                                                     : editingMovie.genre.filter(g => g !== "Animation");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -232,7 +232,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Documentary")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Documentary"]
                                                     : editingMovie.genre.filter(g => g !== "Documentary");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -244,7 +244,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("War")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "War"]
                                                     : editingMovie.genre.filter(g => g !== "War");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -256,7 +256,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Biography")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Biography"]
                                                     : editingMovie.genre.filter(g => g !== "Biography");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -268,7 +268,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("History")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "History"]
                                                     : editingMovie.genre.filter(g => g !== "History");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -280,7 +280,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Sport")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Sport"]
                                                     : editingMovie.genre.filter(g => g !== "Sport");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -292,7 +292,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Family")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Family"]
                                                     : editingMovie.genre.filter(g => g !== "Family");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
@@ -304,7 +304,7 @@ export default function ManageMovies() {
                                             checked={editingMovie.genre.includes("Another")}
                                             onChange={(e) => {
                                                 const newGenres = e.target.checked
-                                                    ? [...editingMovie.genre, ""]
+                                                    ? [...editingMovie.genre, "Another"]
                                                     : editingMovie.genre.filter(g => g !== "Another");
                                                 setEditingMovie({ ...editingMovie, genre: newGenres })
                                             }} />
