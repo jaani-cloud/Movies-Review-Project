@@ -88,12 +88,12 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
                 >
                     👑 Admin Dashboard
                 </Link>) : (
-                    <a
-                        className="block px-4 py-2 text-slate-400  font-semibold rounded-lg text-xl cursor-not-allowed Admin-error relative"
-                    >
-                        
-                    </a>
-                )}
+                <a
+                    className="block px-4 py-2 text-slate-400  font-semibold rounded-lg text-xl cursor-not-allowed Admin-error relative"
+                >
+
+                </a>
+            )}
         </nav>
     )
 };

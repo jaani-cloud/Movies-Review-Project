@@ -7,6 +7,9 @@ export default function ManageMovies() {
     const [isAdding, setIsAdding] = useState(false)
     const [adminSearch, setAdminSearch] = useState("")
 
+    const [editingMovie, setEditingMovie] = useState(null)
+
+
     const filteredMovies = movieList.filter(movie =>
         movie.name.toLowerCase().includes(adminSearch.toLowerCase().trim())
     );
@@ -45,6 +48,8 @@ export default function ManageMovies() {
             <div className="space-y-4">
                 {filteredMovies.map(movie => (
                     <div key={movie.id} className="bg-slate-800 p-4 rounded-lg flex justify-between items-center">
+
+                        {editingMovie && editingMovie.id === movie.id ? ("trueh") : ("false h")}
                         <div className="flex gap-4 items-center">
                             <img src={movie.poster} alt={movie.name} className="w-16 h-24 object-cover rounded" />
                             <div>
@@ -53,7 +58,11 @@ export default function ManageMovies() {
                             </div>
                         </div>
                         <div className="flex gap-2">
-                            <button className="text-blue-400 hover:text-blue-300 px-3 py-1">Edit</button>
+                            <button
+                                onClick={() => setEditingMovie(movie)}
+                                className="text-blue-400 hover:text-blue-300 px-3 py-1">
+                                Edit
+                            </button>
                             <button className="text-red-400 hover:text-red-300 px-3 py-1" onClick={() => handleDelete(movie.id)}>Delete</button>
                         </div>
                     </div>

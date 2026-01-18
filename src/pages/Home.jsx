@@ -34,7 +34,6 @@ export default function Home() {
 
                     <div className="flex-1 mr-[21rem]">
 
-
                         <div className="flex gap-3 p-4 flex-wrap">
                             {CATEGORIES.map((category) => (
                                 <Button
