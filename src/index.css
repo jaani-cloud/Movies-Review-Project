@@ -162,4 +162,12 @@
     .Admin-error:hover::before{
         content: "🚫 Chal Nikal be...";
     }
+
+    .ctm-genre-label{
+        @apply text-sm text-slate-700 hover:cursor-pointer hover:text-blue-600
+    }
+
+    .ctm-genre-input{
+        @apply mr-1 appearance-none h-3 w-3 border-2 rounded-full bg-slate-700 border-slate-500 checked:bg-red-600 checked:border-2
+    }
 }
