@@ -1,0 +1,16 @@
+export const GENRES = [
+    "Action",
+    "Comedy",
+    "Drama",
+    "Sci-Fi",
+    "Thriller",
+    "Horror",
+    "Romance",
+    "Crime",
+    "Documentary",
+    "War",
+    "Biography",
+    "History",
+    "Sport",
+    "Family",
+];
