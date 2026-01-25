@@ -12,13 +12,13 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
 
     const handleLogout = () => {
         logout();
-        navigate("/");
+        navigate("/login");
     }
 
     return (
         // navbar start
 
-        <nav className="fixed top-0 left-0 right-0 z-50 p-4 text-white bg-slate-900 flex items-center gap-4 ">
+        <nav className="fixed top-0 left-0 right-0 z-50 flex items-center gap-4 p-4 text-white bg-slate-900 ">
 
             {/* logo */}
 
@@ -27,13 +27,13 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
             {/* search icon and search input */}
 
             <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+                <Search className="absolute -translate-y-1/2 left-3 top-1/2 text-slate-400" size={20} />
                 <input
                     type="text"
                     placeholder="Search here..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="Search w-full pl-10"
+                    className="w-full pl-10 Search"
                 />
             </div>
 
@@ -41,11 +41,11 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
 
             {currentUser && (
                 <div className="relative">
-                    <button className="font-semibold hover:text-blue-400 transition-colors"
+                    <button className="font-semibold transition-colors hover:text-blue-400"
                         onClick={() => setShowDropdown(!showDropdown)}
                     >
                         {currentUser.profilePhoto ? (
-                            <img src={currentUser.profilePhoto} className='w-8 h-8 rounded-full object-cover inline-block mr-2' />
+                            <img src={currentUser.profilePhoto} className='inline-block object-cover w-8 h-8 mr-2 rounded-full' />
                         ) : (
                             <span className="inline-block mr-2">👤</span>
                         )}
@@ -59,7 +59,7 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
 
 
                     {showDropdown && (
-                        <div className="absolute right-0 top-12 bg-slate-800 rounded-lg border w-48 py-2 z-50 border-slate-700 shadow-lg">
+                        <div className="absolute right-0 z-50 w-48 py-2 border rounded-lg shadow-lg top-12 bg-slate-800 border-slate-700">
 
                             <Link
                                 to={"/profile"}
@@ -84,12 +84,12 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
             {currentUser.role === "admin" ? (
                 <Link
                     to="/admin"
-                    className="block px-4 py-2 text-yellow-400 hover:bg-slate-700 font-semibold rounded-lg text-xl"
+                    className="block px-4 py-2 text-xl font-semibold text-yellow-400 rounded-lg hover:bg-slate-700"
                 >
                     👑 Admin Dashboard
                 </Link>) : (
                 <a
-                    className="block px-4 py-2 text-slate-400  font-semibold rounded-lg text-xl cursor-not-allowed Admin-error relative"
+                    className="relative block px-4 py-2 text-xl font-semibold rounded-lg cursor-not-allowed text-slate-400 Admin-error"
                 >
 
                 </a>

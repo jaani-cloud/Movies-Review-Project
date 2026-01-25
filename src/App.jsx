@@ -6,17 +6,43 @@ import MovieDetail from "./pages/MovieDetail";
 import Profile from "./pages/Profile"
 import Settings from "./pages/Settings"
 import AdminDashboard  from "./pages/AdminDashboard";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 export default function App() {
   return (
     <HashRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/movie/:id" element={<MovieDetail />} />
-        <Route path="/profile" element={<Profile/>} />
-        <Route path="/settings" element={<Settings/>} />
-        <Route path="/admin" element={<AdminDashboard/>} />
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/" element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/movie/:id" element={
+          <ProtectedRoute>
+            <MovieDetail />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/profile" element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/settings" element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        } />
       </Routes>
     </HashRouter>
   );

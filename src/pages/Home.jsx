@@ -13,10 +13,6 @@ export default function Home() {
     const { selectedCategory, setSelectedCategory, filteredMovies: categoryFiltered } = useMovieFilter(movies);
     const { searchQuery, setSearchQuery, filteredItems } = useSearch(categoryFiltered);
 
-
-
-
-
     return (
         <div className="min-h-screen bg-black">
 
@@ -34,7 +30,7 @@ export default function Home() {
 
                     <div className="flex-1 mr-[21rem]">
 
-                        <div className="flex gap-3 p-4 flex-wrap">
+                        <div className="flex flex-wrap gap-3 p-4">
                             {CATEGORIES.map((category) => (
                                 <Button
                                     key={category}
@@ -53,7 +49,7 @@ export default function Home() {
 
                             {/* movie grid area */}
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
 
                                 {filteredItems.map((movie) => (
                                     <Link to={`/movie/${movie.id}`} key={movie.id}>

@@ -3,16 +3,21 @@ import { movies } from "../data/Movies";
 import { useForm } from "react-hook-form";
 import { Result } from "postcss";
 import { passwordValidator } from "../validators/passwordValidator";
-import { Link } from "react-router-dom"
-
-import { login } from "../services/authService"
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom"
+// import { login } from "../services/authService"
 import { Eye, EyeOff } from 'lucide-react';
+import { loginWithAPI, getCurrentUser } from "../services/authService";
 
 
 export default function Login() {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const currentUser = getCurrentUser()
+        if (currentUser) {
+            navigate("/")
+        }
+    }, [navigate]);
     const [showPassword, setShowPassword] = useState(false);
 
     const {
@@ -48,16 +53,18 @@ export default function Login() {
     const [emailSent, setEmailSent] = useState(false);
 
 
-    const onLoginSubmit = (data) => {
+    const onLoginSubmit = async (data) => {
         console.log("Login Attempt: ", data)
 
-        const result = login(data.email, data.password)
+        // const result = login(data.email, data.password)
+        const result = await loginWithAPI(data.email, data.password)
         console.log('result: ', result);
 
         if (result.success) {
-            console.log("Login Successful: ", result.user)
-            navigate("/home")
+            console.log("Login Successful: ", result.role)
+            navigate("/")
         } else {
+            console.log("Login failed:", result.error)
             alert(result.error)
         }
     }
@@ -207,7 +214,7 @@ export default function Login() {
 
                                 <div className="relative">
                                     <input
-                                        className="Form-input pr-10"
+                                        className="pr-10 Form-input"
                                         type={showPassword ? "text" : "password"}
                                         placeholder="Enter your password here...."
                                         {...registerLogin('password', passwordValidator)}
@@ -215,7 +222,7 @@ export default function Login() {
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded"
+                                        className="absolute p-1 -translate-y-1/2 rounded right-3 top-1/2 hover:bg-gray-100"
                                     >
                                         {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                                     </button>
@@ -320,7 +327,7 @@ export default function Login() {
 
                                 <div className="relative">
                                     <input
-                                        className="Form-input pr-10"
+                                        className="pr-10 Form-input"
                                         type={showPassword ? "text" : "password"}
                                         placeholder="Create password..."
                                         {...registerSignup('password', passwordValidator)}
@@ -328,7 +335,7 @@ export default function Login() {
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded"
+                                        className="absolute p-1 -translate-y-1/2 rounded right-3 top-1/2 hover:bg-gray-100"
                                     >
                                         {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                                     </button>
