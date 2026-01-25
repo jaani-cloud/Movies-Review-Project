@@ -3,6 +3,7 @@ import { movies } from "../../data/Movies";
 import { DessertIcon, Search } from "lucide-react";
 import AddMovieForm from "./AddMovieForm";
 import GenreCheckboxes from "../common/GenreCheckboxes";
+import CategoryCheckboxes from "../common/CategoryCheckboxes";
 
 export default function ManageMovies() {
     const [movieList, setMovieList] = useState(() => {
@@ -61,7 +62,7 @@ export default function ManageMovies() {
                 </button>
             </div>
 
-            {isAdding && <AddMovieForm onClose={() => setIsAdding(false)} onAdd={handleAddMovie}/>}
+            {isAdding && <AddMovieForm onClose={() => setIsAdding(false)} onAdd={handleAddMovie} />}
 
             <div className="relative w-full mb-6">
                 <Search className="absolute w-5 h-5 -translate-y-1/2 pointer-events-none left-3 top-1/2 text-slate-400" />
@@ -101,9 +102,16 @@ export default function ManageMovies() {
                                 </div>
                                 <textarea name="" id="" placeholder="Description" value={editingMovie.description} onChange={(e) => setEditingMovie({ ...editingMovie, description: e.target.value })}></textarea>
 
-                                <GenreCheckboxes selectedGenres={editingMovie.genre}
-                                    onChange={(newGenres) => setEditingMovie({ ...editingMovie, genre: newGenres })}
-                                />
+                                <div className="mt-4">
+                                    <GenreCheckboxes selectedGenres={editingMovie.genre}
+                                        onChange={(newGenres) => setEditingMovie({ ...editingMovie, genre: newGenres })}
+                                    />
+                                </div>
+
+                                <div className="mt-4">
+                                    <CategoryCheckboxes selectedCategories={editingMovie.category}
+                                        onChange={(newCategories) => setEditingMovie({ ...editingMovie, category: newCategories })} />
+                                </div>
 
                                 <p className="mt-4">Release Year</p>
                                 <input type="number" placeholder="Release Year"

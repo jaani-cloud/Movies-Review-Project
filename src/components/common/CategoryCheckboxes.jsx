@@ -5,7 +5,7 @@ export default function CategoryCheckboxes({ selectedCategories, onChange }) {
         <div>
             <p>Category:</p>
             <div className="grid grid-cols-3 gap-2">
-                {CATEGORIES.filter(c => c !== "All").map(category => (
+                {CATEGORIES.filter(c => c !== "All" && c !== "Movie" && c !== "Web Series").map(category => (
                     <label key={category} className="ctm-genre-label">
                         <input
                             className="ctm-genre-input"
