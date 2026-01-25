@@ -1,7 +1,7 @@
 import { checkData } from "../data/Users";
-
 import axios from 'axios';
 import { API_BASE_URL, API_ENDPOINTS } from "../constants/apiConfig";
+import {jwtDecode} from "jwt-decode"
 
 
 export const login = (email, password) => {
@@ -23,18 +23,12 @@ export const logout = () => {
 };
 
 export const getCurrentUser = () => {
-    // const user = localStorage.getItem('currentUser');
-    // return user ? JSON.parse(user) : null;
     const token = localStorage.getItem("authToken")
-    const role = localStorage.getItem("userRole")
-    const email = localStorage.getItem("userEmail")
+    const currentUser = localStorage.getItem("currentUser")
 
-    if (!token) return null
+    if (!token || !currentUser) return null
 
-    return {
-        email: email,
-        role: role
-    }
+    return JSON.parse(currentUser)
 };
 
 
@@ -52,14 +46,22 @@ export const loginWithAPI = async (email, password) => {
             { email, password }
         )
         if (response.data.token) {
-            localStorage.setItem("authToken", response.data.token)
+            const token = response.data.token
+            const decoded = jwtDecode(token)
+            const userId = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
+
+            const userResponse = await axios.get(`${API_BASE_URL}/User/${userId}`)
+            const userData = {...userResponse.data, role: response.data.role}
+
+            localStorage.setItem("authToken", token)
             localStorage.setItem("userRole", response.data.role)
-            localStorage.setItem("userEmail", email)
+            localStorage.setItem("currentUser", JSON.stringify(userData))
 
             return {
                 success: true,
-                token: response.data.token,
-                role: response.data.role
+                token: token,
+                role: response.data.role,
+                user: userData
             }
         }
         return {

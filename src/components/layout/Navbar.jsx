@@ -81,7 +81,7 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
                 </div>
 
             )}
-            {currentUser.role === "admin" ? (
+            {currentUser.role === "User" ? (
                 <Link
                     to="/admin"
                     className="block px-4 py-2 text-xl font-semibold text-yellow-400 rounded-lg hover:bg-slate-700"
