@@ -151,11 +151,11 @@ export default function Login() {
 
         // full div screen...
 
-        <div className="flex w-full h-screen overflow-hidden">
+        <div className="flex w-full min-h-screen overflow-hidden">
 
             {/* left side of screen... */}
 
-            <div className="w-[50%] bg-white bg-gradient-to-br from-slate-900 to-slate-800 relative">
+            <div className="hidden lg:block  lg:w-[50%] bg-white bg-gradient-to-br from-slate-900 to-slate-800 relative">
 
                 <div className="w-[50%] bg-gradient-to-br from-slate-900 to-slate-800">
 
@@ -205,16 +205,16 @@ export default function Login() {
 
             {/* right side of screen... */}
 
-            <div className="w-[50%] bg-black flex items-center justify-center">
+            <div className="w-full lg:w-[50%] bg-black flex items-center justify-center">
 
                 {/* right login box */}
-                <div className="relative w-full max-w-md overflow-hidden min-h-[700px]">
+                <div className="relative w-full max-w-md overflow-hidden min-h-[700px] lg:min-h-[700px] px-4">
 
                     <div className={`Form-animate ${currentForm === "login" ? "Form-animate-in z-20" : "Form-animate-out z-0"}`}>
 
                         {/* Login page */}
 
-                        <div className="w-full max-w-md p-8">
+                        <div className="w-full max-w-md p-4 lg:p-8">
 
                             <form onSubmit={handleLoginSubmit(onLoginSubmit)}>
 
@@ -257,7 +257,7 @@ export default function Login() {
                                 <div className="flex justify-end mb-4">
 
                                     <a href="#" onClick={(e) => { e.preventDefault(); setCurrentForm("forgot") }}
-                                        className="form-a">
+                                        className="Form-a">
                                         Forget Password?</a>
                                 </div>
 
@@ -280,7 +280,7 @@ export default function Login() {
 
                     <div className={`Form-animate ${currentForm === "signup" ? "Form-animate-in z-20" : "Form-animate-out z-0"}`}>
 
-                        <div className="w-full max-w-md p-8">
+                        <div className="w-full max-w-md p-4 lg:p-8">
 
                             <form onSubmit={handleSignupSubmit(onSignupSubmit)}>
 
@@ -399,7 +399,7 @@ export default function Login() {
 
                     <div className={`Form-animate ${currentForm === "forgot" ? "Form-animate-in z-20" : "Form-animate-out z-0"}`}>
 
-                        <div className="w-full max-w-md p-8">
+                        <div className="w-full max-w-md p-4 lg:p-8">
 
                             <form onSubmit={handleForgotSubmit(onForgotSubmit)}>
                                 <h1 className="Form-h1">Forgot Password?</h1>

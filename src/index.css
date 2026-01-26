@@ -4,7 +4,7 @@
 
 @layer components {
     .Form-h1 {
-        @apply mb-2 text-4xl font-bold text-white;
+        @apply mb-2 lg:text-4xl font-bold text-white text-2xl;
     }
 
     .Form-p1 {
