@@ -7,9 +7,19 @@ import { Link, useNavigate } from "react-router-dom"
 // import { login } from "../services/authService"
 import { Eye, EyeOff } from 'lucide-react';
 import { loginWithAPI, getCurrentUser } from "../services/authService";
+import LoadingButton from "../components/common/LoadingButton";
+import ErrorMessage from "../components/common/ErrorMessage";
 
 
 export default function Login() {
+
+    const [loginLoading, setLoginLoading] = useState(false)
+    const [signupLoading, setSignupLoading] = useState(false);
+    const [forgotLoading, setForgotLoading] = useState(false);
+    const [loginError, setLoginError] = useState("");
+    const [signupError, setSignupError] = useState("");
+    const [forgotError, setForgotError] = useState("");
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -54,18 +64,21 @@ export default function Login() {
 
 
     const onLoginSubmit = async (data) => {
+        setLoginLoading(true)
+        setLoginError("")
         console.log("Login Attempt: ", data)
 
-        // const result = login(data.email, data.password)
         const result = await loginWithAPI(data.email, data.password)
         console.log('result: ', result);
+
+        setLoginLoading(false)
 
         if (result.success) {
             console.log("Login Successful: ", result.role)
             navigate("/")
         } else {
             console.log("Login failed:", result.error)
-            alert(result.error)
+            setLoginError(result.error)
         }
     }
 
@@ -230,6 +243,8 @@ export default function Login() {
 
                                 {loginErrors.password && <p className="Form-error">{loginErrors.password.message}</p>}
 
+                                <ErrorMessage message={loginError} onClose={() => setLoginError("")} />
+
                                 <div className="flex justify-end mb-4">
 
                                     <a href="#" onClick={(e) => { e.preventDefault(); setCurrentForm("forgot") }}
@@ -237,11 +252,9 @@ export default function Login() {
                                         Forget Password?</a>
                                 </div>
 
-                                <input
-                                    type="submit"
-                                    value="Login"
-                                    className="Form-btn"
-                                />
+                                <LoadingButton type="submit" isLoading={loginLoading}>
+                                    Login
+                                </LoadingButton>
 
                                 <p className="Form-p2">Don't have an account?{" "}
                                     <a href="#" onClick={(e) => { e.preventDefault(); setCurrentForm("signup") }}
@@ -321,6 +334,9 @@ export default function Login() {
                                             message: "Phone Number must be 10 digits"
                                         }
                                     })}
+                                    onInput={(e) => {
+                                        e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0, 10)
+                                    }}
                                 />
 
                                 {signupErrors.phoneNumber && <p className="Form-error">{signupErrors.phoneNumber.message}</p>}
