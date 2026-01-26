@@ -32,8 +32,8 @@ export default function Profile() {
     }
 
     return (
-        <div className="min-h-screen p-8 pt-24">
-            <h1 className="mb-8 text-4xl font-bold">MyProfile</h1>
+        <div className="min-h-screen p-8 pt-24 bg-black">
+            <h1 className="mb-8 text-4xl font-bold  text-white">MyProfile</h1>
 
             <div className="max-w-2xl p-6 rounded-lg bg-slate-900">
 
@@ -79,13 +79,13 @@ export default function Profile() {
                             className="Profile-input"
                         />
                     ) : (
-                        <p className="text-lg">@{currentUser.username}</p>
+                        <p className="text-lg text-white">@{currentUser.username}</p>
                     )}
                 </div>
 
                 <div className="mb-4">
                     <label htmlFor="" className="Profile-label">Email</label>
-                    <p className="text-lg">{currentUser.email}</p>
+                    <p className="text-lg text-white">{currentUser.email}</p>
                 </div>
 
                 <div className="mb-4">
@@ -106,7 +106,7 @@ export default function Profile() {
                             className="Profile-input"
                         />
                     ) : (
-                        <p className="text-lg">{currentUser.firstName} {currentUser.lastName}</p>
+                        <p className="text-lg text-white">{currentUser.firstName} {currentUser.lastName}</p>
                     )}
                 </div>
 
@@ -120,7 +120,7 @@ export default function Profile() {
                             className="Profile-input"
                         />
                     ) : (
-                        <p className="text-lg">{currentUser.dob || "Not set"}</p>
+                        <p className="text-lg text-white">{currentUser.dob || "Not set"}</p>
                     )}
                 </div>
 
@@ -146,7 +146,7 @@ export default function Profile() {
                                 </a>
                             </>) : (
                             <>
-                                <p className="text-lg">Not Set</p>
+                                <p className="text-lg text-white">Not Set</p>
                             </>)
                     )}
                 </div>
@@ -173,7 +173,7 @@ export default function Profile() {
                             </>
                         ) : (
                             <>
-                                <p className="text-lg">Not Set</p>
+                                <p className="text-lg text-white">Not Set</p>
                             </>
                         )
                     )}
@@ -194,7 +194,7 @@ export default function Profile() {
                             setEditingName(`${currentUser.firstName} ${currentUser.lastName}`)
                         }
                     }}
-                    className="px-6 py-2 bg-blue-600 rounded-lg hover:bg-blue-700"
+                    className="px-6 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 text-white"
                 >
                     {isEdited ? "Cancel" : "Edit Profile"}
                 </button>

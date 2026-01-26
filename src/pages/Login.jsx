@@ -246,7 +246,7 @@ export default function Login() {
                                         onClick={() => setShowPassword(!showPassword)}
                                         className="absolute p-1 -translate-y-1/2 rounded right-3 top-1/2 hover:bg-gray-100"
                                     >
-                                        {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                                        {showPassword ? <Eye size={20} className="text-white" /> : <EyeOff className="text-white" size={20} />}
                                     </button>
                                 </div>
 
@@ -300,7 +300,7 @@ export default function Login() {
                                     })}
                                 />
 
-                                {signupErrors.firstName && <p className="form-error">{signupErrors.firstName.message}</p>}
+                                {signupErrors.firstName && <p className="Form-error">{signupErrors.firstName.message}</p>}
 
                                 <input
                                     className="Form-input"
@@ -362,7 +362,7 @@ export default function Login() {
                                         onClick={() => setShowPassword(!showPassword)}
                                         className="absolute p-1 -translate-y-1/2 rounded right-3 top-1/2 hover:bg-gray-100"
                                     >
-                                        {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                                        {showPassword ? <Eye className="text-white" size={20} /> : <EyeOff className="text-white" size={20} />}
                                     </button>
                                 </div>
 

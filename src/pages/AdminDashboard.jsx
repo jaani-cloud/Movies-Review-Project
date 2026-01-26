@@ -20,18 +20,18 @@ export default function AdminDashboard() {
     }
 
     return (
-        <div className="min-h-screen p-8 pt-24">
-            <h1 className="mb-8 text-4xl font-bold">Admin Dashboard</h1>
+        <div className="min-h-screen p-8 pt-24 bg-black">
+            <h1 className="mb-8 text-4xl font-bold text-white">Admin Dashboard</h1>
 
             <div className="grid max-w-4xl grid-cols-2 gap-6">
 
                 {/* Movie Manage */}
 
                 <div className="p-6 border rounded-lg bg-slate-900 border-slate-800">
-                    <h2 className="mb-4 text-2xl font-bold">🎬 Movies</h2>
+                    <h2 className="mb-4 text-2xl font-bold text-white">🎬 Movies</h2>
                     <p className="mb-4 text-slate-400">Manage all movies in the database</p>
                     <button
-                        className="w-full px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700"
+                        className="w-full px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 text-white"
                         onClick={() => setActiveSection("movies")}>
                         Manage Movies
                     </button>
@@ -40,9 +40,9 @@ export default function AdminDashboard() {
                 {/* User Manage */}
 
                 <div className="p-6 border rounded-lg bg-slate-900 border-slate-800">
-                    <h2 className="mb-4 text-2xl font-bold">👥 Users</h2>
+                    <h2 className="mb-4 text-2xl font-bold text-white">👥 Users</h2>
                     <p className="mb-4 text-slate-400">View and manage user accounts</p>
-                    <button className="w-full px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700">
+                    <button className="w-full px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 text-white">
                         Manage Users
                     </button>
                 </div>
@@ -50,16 +50,16 @@ export default function AdminDashboard() {
                 {/* Reviews Manage */}
 
                 <div className="p-6 border rounded-lg bg-slate-900 border-slate-800">
-                    <h2 className="mb-4 text-2xl font-bold">📝 Reviews</h2>
+                    <h2 className="mb-4 text-2xl font-bold text-white">📝 Reviews</h2>
                     <p className="mb-4 text-slate-400">Monitor and moderate reviews</p>
-                    <button className="w-full px-4 py-2 bg-green-600 rounded-lg hover:bg-green-700">
+                    <button className="w-full px-4 py-2 bg-green-600 rounded-lg hover:bg-green-700 text-white">
                         View All Reviews
                     </button>
                 </div>
 
                 {/* Data */}
                 <div className="p-6 border rounded-lg bg-slate-900 border-slate-800">
-                    <h2 className="mb-4 text-2xl font-bold">📊 Statistics</h2>
+                    <h2 className="mb-4 text-2xl font-bold text-white">📊 Statistics</h2>
                     <div className="space-y-2">
                         <p className="text-slate-300">Total Movies: <span className="font-bold">88</span></p>
                         <p className="text-slate-300">Total Users: <span className="font-bold">2</span></p>
