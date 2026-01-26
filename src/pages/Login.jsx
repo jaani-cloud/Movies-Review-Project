@@ -82,45 +82,54 @@ export default function Login() {
         }
     }
 
-    const onSignupSubmit = (data) => {
-        console.log(`Sign Up Data ${JSON.stringify(data)}`);
+    const onSignupSubmit = async (data) => {
+        setSignupLoading(true)
+        setSignupError("")
 
-        fetch("https://apistudent.codedonor.in/api/user/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                firstName: data.firstName,
-                lastName: data.lastName,
-                email: `jaanicloud-${data.email}`,
-                phoneNumber: data.phoneNumber,
-                password: data.password,
-                otherDetails: JSON.stringify({
-                    studentId: "jaani-cloud"
+        try {
+            const response = await fetch("https://apistudent.codedonor.in/api/user/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    email: `jaanicloud-${data.email}`,
+                    phoneNumber: data.phoneNumber,
+                    password: data.password,
+                    otherDetails: JSON.stringify({ studentId: "jaani-cloud" })
                 })
-            })
-        })
-            .then((response) => {
-                return response.json();
-            })
-            .then((result) => {
-                console.log(`Sign Up Response: ${JSON.stringify(result)}`);
-            })
-            .catch((error) => {
-                console.log(`Sign Up Error: ${JSON.stringify(error)}`);
             });
+
+            const result = await response.json();
+            setSignupLoading(false);
+
+            if (response.ok) {
+                setCurrentForm("login");
+            } else {
+                setSignupError(result.message || "Signup failed. Please try again.");
+            }
+        } catch (error) {
+            setSignupLoading(false)
+            setSignupError(error)
+        }
     };
 
     const onForgotSubmit = (data) => {
+        setForgotLoading(true)
+        setForgotError("")
+
         console.log(`Forgot Data ${JSON.stringify(data)}`)
-        setEmailSent(true);
+
+        setTimeout(() => {
+            setForgotLoading(false)
+            setEmailSent(true)
+        }, 2000);
     }
 
     const [randomBgImageStart] = useState(() => {
         let index = Math.trunc(Math.random() * (movies.length - 1) + 1);
         return index + 15 > movies.length ? index - 15 : index;
-    });
+    })
 
 
     useEffect(() => {
@@ -371,11 +380,9 @@ export default function Login() {
 
                                 {signupErrors.confirmPassword && <p className="Form-error">{signupErrors.confirmPassword.message}</p>}
 
-                                <input
-                                    type="submit"
-                                    value="Sign Up"
-                                    className="Form-btn"
-                                />
+                                <ErrorMessage message={signupError} onClose={() => setSignupError("")} />
+
+                                <LoadingButton type="submit" isLoading={signupLoading}>Sign Up</LoadingButton>
 
                                 <p className="Form-p2">Already have an account?{" "}
                                     <a href="#" onClick={(e) => { e.preventDefault(); setCurrentForm("login") }}
@@ -421,11 +428,9 @@ export default function Login() {
 
                                         {forgotErrors.email && <p className="Form-error">{forgotErrors.email.message}</p>}
 
-                                        <input
-                                            type="submit"
-                                            className="Form-btn"
-                                            value="Reset Password"
-                                        />
+                                        <ErrorMessage message={forgotError} onClose={() => setForgotError("")} />
+
+                                        <LoadingButton type="submit" isLoading={forgotLoading}>Reset Password</LoadingButton>
                                     </>
                                 )}
                                 <p className="Form-p2">Remember Password?{" "}
