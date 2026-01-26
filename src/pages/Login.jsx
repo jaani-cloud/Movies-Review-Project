@@ -188,7 +188,7 @@ export default function Login() {
                 {/* right login box */}
                 <div className="relative w-full max-w-md overflow-hidden min-h-[700px]">
 
-                    <div className={`Form-animate ${currentForm === "login" ? "Form-animate-in" : "Form-animate-out"}`}>
+                    <div className={`Form-animate ${currentForm === "login" ? "Form-animate-in z-20" : "Form-animate-out z-0"}`}>
 
                         {/* Login page */}
 
@@ -232,7 +232,7 @@ export default function Login() {
 
                                 <div className="flex justify-end mb-4">
 
-                                    <a href="#" onClick={() => setCurrentForm("forgot")}
+                                    <a href="#" onClick={(e) => { e.preventDefault(); setCurrentForm("forgot") }}
                                         className="form-a">
                                         Forget Password?</a>
                                 </div>
@@ -244,7 +244,7 @@ export default function Login() {
                                 />
 
                                 <p className="Form-p2">Don't have an account?{" "}
-                                    <a href="#" onClick={() => setCurrentForm("signup")}
+                                    <a href="#" onClick={(e) => { e.preventDefault(); setCurrentForm("signup") }}
                                         className="Form-a">
                                         Signup for free
                                     </a>
@@ -256,7 +256,7 @@ export default function Login() {
 
                     {/* Signup form */}
 
-                    <div className={`Form-animate ${currentForm === "signup" ? "Form-animate-in" : "Form-animate-out"}`}>
+                    <div className={`Form-animate ${currentForm === "signup" ? "Form-animate-in z-20" : "Form-animate-out z-0"}`}>
 
                         <div className="w-full max-w-md p-8">
 
@@ -362,7 +362,7 @@ export default function Login() {
                                 />
 
                                 <p className="Form-p2">Already have an account?{" "}
-                                    <a href="#" onClickCapture={() => setCurrentForm("login")}
+                                    <a href="#" onClick={(e) => { e.preventDefault(); setCurrentForm("login") }}
                                         className="Form-a">
                                         Login
                                     </a>
@@ -374,7 +374,7 @@ export default function Login() {
 
                     {/* forgot form */}
 
-                    <div className={`Form-animate ${currentForm === "forgot" ? "Form-animate-in" : "Form-animate-out"}`}>
+                    <div className={`Form-animate ${currentForm === "forgot" ? "Form-animate-in z-20" : "Form-animate-out z-0"}`}>
 
                         <div className="w-full max-w-md p-8">
 
@@ -410,11 +410,10 @@ export default function Login() {
                                             className="Form-btn"
                                             value="Reset Password"
                                         />
-
                                     </>
                                 )}
                                 <p className="Form-p2">Remember Password?{" "}
-                                    <a href="#" onClick={() => setCurrentForm("login")}
+                                    <a href="#" onClick={(e) => { e.preventDefault(); setCurrentForm("login") }}
                                         className="Form-a">Back to Login</a>
                                 </p>
                             </form>
