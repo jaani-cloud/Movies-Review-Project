@@ -1,18 +1,9 @@
-import { checkData } from "../data/Users";
 import axios from 'axios';
 import { API_BASE_URL, API_ENDPOINTS } from "../constants/apiConfig";
 import {jwtDecode} from "jwt-decode"
+import { toTitleCase } from "../utils/formatters";
 
 
-export const login = (email, password) => {
-    const user = checkData(email, password);
-    if (user) {
-
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        return { success: true, user };
-    }
-    return { success: false, error: "Invalid email or password" };
-};
 
 export const logout = () => {
     localStorage.removeItem('currentUser');
@@ -45,34 +36,105 @@ export const loginWithAPI = async (email, password) => {
             `${API_BASE_URL}${API_ENDPOINTS.AUTH.LOGIN}`,
             { email, password }
         )
-        if (response.data.token) {
-            const token = response.data.token
-            const decoded = jwtDecode(token)
-            const userId = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
 
-            const userResponse = await axios.get(`${API_BASE_URL}/User/${userId}`)
-            const userData = {...userResponse.data, role: response.data.role}
+        if (response.data.success && response.data.token) {
+            const token = response.data.token;
+            const decoded = jwtDecode(token);
 
-            localStorage.setItem("authToken", token)
-            localStorage.setItem("userRole", response.data.role)
-            localStorage.setItem("currentUser", JSON.stringify(userData))
+            const userId = decoded.userId;
+            const userEmail = decoded.email;
+            const userRole = decoded.role;
+
+            const userData = {
+                userId: userId,
+                email: userEmail,
+                role: userRole
+            }
+
+            localStorage.setItem("authToken", token);
+            localStorage.setItem("userRole", userRole);
+            localStorage.setItem("currentUser", JSON.stringify(userData));
 
             return {
                 success: true,
                 token: token,
-                role: response.data.role,
+                role: userRole,
                 user: userData
             }
         }
+
         return {
             success: false,
-            error: "No token received...."
+            error: "Login failed"
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.response?.data?.message || "Invalid email or password"
         }
     }
-    catch (error) {
+}
+
+
+export const registerWithAPI = async (userData) => {
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}${API_ENDPOINTS.AUTH.REGISTER}`,
+            {
+                firstName: toTitleCase(userData.firstName),
+                lastName: toTitleCase(userData.lastName),
+                email: userData.email,
+                phoneNumber: userData.phoneNumber,
+                password: userData.password
+            }
+        )
+
+        return {
+            success: response.data.success,
+            message: response.data.message
+        }
+    } catch (error) {
         return {
             success: false,
-            error: error.response?.data?.message || "Invalid email or password....."
+            error: error.response?.data?.message || "Registration failed"
+        }
+    }
+}
+
+export const verifyEmailWithAPI = async (email, code) => {
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}${API_ENDPOINTS.AUTH.VERIFY_EMAIL}`,
+            { email, code }
+        );
+
+        return {
+            success: response.data.success,
+            message: response.data.message
+        }
+    } catch (error) {
+        return {
+            success: false,
+            error: error.response?.data?.message || "Verification failed"
+        }
+    }
+};
+
+export const resendCodeWithAPI = async (email) => {
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}${API_ENDPOINTS.AUTH.RESEND_CODE}`,
+            { email }
+        )
+
+        return {
+            success: response.data.success,
+            message: response.data.message
+        }
+    } catch (error) {
+        return {
+            success: false,
+            error: error.response?.data?.message || "Resend failed"
         }
     }
 }

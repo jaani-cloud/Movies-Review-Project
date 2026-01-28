@@ -1,5 +1,4 @@
-import { Search } from "lucide-react"
-
+import { Search, Menu, X } from "lucide-react"
 import { getCurrentUser, logout } from "../../services/authService"
 import { useNavigate, Link } from "react-router-dom"
 import { useState } from "react"
@@ -9,6 +8,8 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
     const navigate = useNavigate();
 
     const [showDropdown, setShowDropdown] = useState(false);
+    const [showMoblieMenu, setShowMoblieMenu] = useState(false);
+    const [showMobileSearch, setShowMobileSearch] = useState(false);
 
     const handleLogout = () => {
         logout();
@@ -22,11 +23,11 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
 
             {/* logo */}
 
-            <h1>🎬 ReviewHub</h1>
+            <h1 className="text-xl lg:text-2xl font-bold">🎬 ReviewHub</h1>
 
             {/* search icon and search input */}
 
-            <div className="relative flex-1 max-w-md">
+            <div className="relative flex-1 max-w-md hidden lg:flex">
                 <Search className="absolute -translate-y-1/2 left-3 top-1/2 text-slate-400" size={20} />
                 <input
                     type="text"
@@ -36,6 +37,28 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
                     className="w-full pl-10 Search"
                 />
             </div>
+
+            {/* mobile search icon */}
+
+            {showMobileSearch ? (
+                <div className="flex items-center flex-1 gap-2 lg:hidden">
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        autoFocus
+                        className="flex-1 Search"
+                    />
+                </div>
+                ) : (
+                    <button
+                        onClick={() => setShowMobileSearch(true)}
+                        className="lg:hidden"
+                    >
+                        <Search size={24}/>
+                    </button>
+                )}
 
             {/* user info and logout button */}
 

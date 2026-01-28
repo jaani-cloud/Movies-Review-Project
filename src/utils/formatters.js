@@ -16,3 +16,8 @@ export function formatGenres(genres) {
     if (!genres || genres.length === 0) return 'N/A';
     return genres.map(g => g.charAt(0).toUpperCase() + g.slice(1)).join(' • ');
 }
+
+export const toTitleCase = (str) => {
+    if (!str) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};

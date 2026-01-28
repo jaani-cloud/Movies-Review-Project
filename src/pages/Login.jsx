@@ -1,17 +1,38 @@
-import { useEffect, useState } from "react";
 import { movies } from "../data/Movies";
 import { useForm } from "react-hook-form";
-import { Result } from "postcss";
 import { passwordValidator } from "../validators/passwordValidator";
-import { Link, useNavigate } from "react-router-dom"
-// import { login } from "../services/authService"
+import { useNavigate } from "react-router-dom"
 import { Eye, EyeOff } from 'lucide-react';
-import { loginWithAPI, getCurrentUser } from "../services/authService";
 import LoadingButton from "../components/common/LoadingButton";
 import ErrorMessage from "../components/common/ErrorMessage";
+import { useEffect, useState, useRef } from "react";
+import {
+    loginWithAPI,
+    getCurrentUser,
+    registerWithAPI,
+    verifyEmailWithAPI,
+    resendCodeWithAPI
+} from "../services/authService";
+
+import SuccessMessage from "../components/common/SuccessMessage";
+import { IMAGES } from "../constants/apiConfig";
+
+const successImage = new Image();
+successImage.src = IMAGES.EMAIL_VERIFIED;
 
 
 export default function Login() {
+    const [userEmail, setUserEmail] = useState("");
+    const [verifyLoading, setVerifyLoading] = useState(false);
+    const [verifyError, setVerifyError] = useState("");
+
+    const {
+        register: registerVerify,
+        handleSubmit: handleVerifySubmit,
+        reset: resetVerify,
+        setFocus: setVerifyFocus,
+        formState: { errors: verifyErrors }
+    } = useForm()
 
     const [loginLoading, setLoginLoading] = useState(false)
     const [signupLoading, setSignupLoading] = useState(false);
@@ -19,6 +40,7 @@ export default function Login() {
     const [loginError, setLoginError] = useState("");
     const [signupError, setSignupError] = useState("");
     const [forgotError, setForgotError] = useState("");
+    const [verifySuccess, setVerifySuccess] = useState(false);
 
     const navigate = useNavigate();
 
@@ -33,6 +55,8 @@ export default function Login() {
     const {
         register: registerLogin,
         handleSubmit: handleLoginSubmit,
+        setValue: setLoginValue,
+        setFocus: setLoginFocus,
         formState: { errors: loginErrors }
     } = useForm();
 
@@ -61,6 +85,7 @@ export default function Login() {
     const [previousIndex, setPreviousIndex] = useState(null);
     const [currentForm, setCurrentForm] = useState("login");
     const [emailSent, setEmailSent] = useState(false);
+    const [userName, setUserName] = useState("");
 
 
     const onLoginSubmit = async (data) => {
@@ -86,33 +111,22 @@ export default function Login() {
         setSignupLoading(true)
         setSignupError("")
 
-        try {
-            const response = await fetch("https://apistudent.codedonor.in/api/user/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    email: `jaanicloud-${data.email}`,
-                    phoneNumber: data.phoneNumber,
-                    password: data.password,
-                    otherDetails: JSON.stringify({ studentId: "jaani-cloud" })
-                })
-            });
+        const result = await registerWithAPI(data)
+        setSignupLoading(false)
 
-            const result = await response.json();
-            setSignupLoading(false);
+        if (result.success) {
+            setUserEmail(data.email)
+            setUserName(data.firstName)
+            setCurrentForm("verify")
 
-            if (response.ok) {
-                setCurrentForm("login");
-            } else {
-                setSignupError(result.message || "Signup failed. Please try again.");
-            }
-        } catch (error) {
-            setSignupLoading(false)
-            setSignupError(error)
+            setTimeout(() => {
+                setVerifyFocus("code");
+            }, 800);
+
+        } else {
+            setSignupError(result.error)
         }
-    };
+    }
 
     const onForgotSubmit = (data) => {
         setForgotLoading(true)
@@ -123,13 +137,50 @@ export default function Login() {
         setTimeout(() => {
             setForgotLoading(false)
             setEmailSent(true)
-        }, 2000);
+        }, 2000)
     }
 
     const [randomBgImageStart] = useState(() => {
         let index = Math.trunc(Math.random() * (movies.length - 1) + 1);
-        return index + 15 > movies.length ? index - 15 : index;
+        return index + 15 > movies.length ? index - 15 : index
     })
+
+    const onVerifySubmit = async (data) => {
+        setVerifyLoading(true)
+        setVerifyError("")
+
+        const result = await verifyEmailWithAPI(userEmail, data.code);
+        setVerifyLoading(false)
+
+        if (result.success) {
+            setVerifySuccess(true)
+            resetVerify()
+
+            setTimeout(() => {
+                setVerifySuccess(false)
+                setCurrentForm("login");
+                setLoginError("");
+                setLoginValue("email", userEmail)
+
+                setTimeout(() => {
+                    setLoginFocus("password");
+                }, 800);
+
+            }, 3500);
+        } else {
+            setVerifyError(result.error)
+        }
+    }
+
+    const handleResendCode = async () => {
+        const result = await resendCodeWithAPI(userEmail)
+
+        if (result.success) {
+            setVerifyError("")
+        } else {
+            setVerifyError(result.error)
+        }
+    }
 
 
     useEffect(() => {
@@ -145,6 +196,20 @@ export default function Login() {
         }, 3000);
         return () => clearInterval(timer);
     }, [currentIndex]);
+
+    // useEffect(() => {
+    //     console.log("shouldFocusPassword:", shouldFocusPassword);
+
+    //     if (shouldFocusPassword) {
+    //         setTimeout(() => {
+    //             console.log("passwordInputRef after timeout:", passwordInputRef.current);
+    //             if (passwordInputRef.current) {
+    //                 passwordInputRef.current.focus();
+    //             }
+    //             setShouldFocusPassword(false);
+    //         }, 100);
+    //     }
+    // }, [shouldFocusPassword]);
 
 
     return (
@@ -217,7 +282,6 @@ export default function Login() {
                         <div className="w-full max-w-md p-4 lg:p-8">
 
                             <form onSubmit={handleLoginSubmit(onLoginSubmit)}>
-
                                 <h1 className="Form-h1">Welcome Back!</h1>
                                 <p className="Form-p1">Login to continue to review movies</p>
 
@@ -261,7 +325,8 @@ export default function Login() {
                                         Forget Password?</a>
                                 </div>
 
-                                <LoadingButton type="submit" isLoading={loginLoading}>
+                                <LoadingButton type="submit" isLoading={loginLoading} onClick={() => console.log("Login button click - ref:", passwordInputRef.current)}
+                                >
                                     Login
                                 </LoadingButton>
 
@@ -439,6 +504,67 @@ export default function Login() {
                                 </p>
                             </form>
 
+                        </div>
+                    </div>
+
+                    {/* register otp form */}
+
+                    <div className={`Form-animate ${currentForm === "verify" ? "Form-animate-in z-20" : "Form-animate-out z-0"}`}>
+
+                        <div className="w-full max-w-md p-4 lg:p-8">
+
+                            {verifySuccess ? (
+                                <SuccessMessage
+                                    message={`Welcome ${userName} Ji! 🎉`}
+                                    subMessage="Redirecting to login..."
+                                />
+                            ) : (
+                                <form onSubmit={handleVerifySubmit(onVerifySubmit)}>
+
+                                    <h1 className="Form-h1">Verify Email</h1>
+                                    <p className="Form-p1">Enter the 6-digit code sent to {userEmail}</p>
+
+                                    <input
+                                        className="Form-input text-center text-2xl tracking-widest"
+                                        type="text"
+                                        placeholder="1-2-3-4-5-6"
+                                        maxLength="6"
+                                        {...registerVerify('code', {
+                                            required: "Verification code is required",
+                                            pattern: {
+                                                value: /^[0-9]{6}$/,
+                                                message: "Code must be 6 digits"
+                                            }
+                                        })}
+                                        onInput={(e) => {
+                                            e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0, 6);
+                                        }}
+                                    />
+
+                                    {verifyErrors.code && <p className="Form-error">{verifyErrors.code.message}</p>}
+
+                                    <ErrorMessage message={verifyError} onClose={() => setVerifyError("")} />
+
+                                    <p className="Form-p2 border-l-4 border-blue-600 w-max pl-1 rounded mb-4 mt-1">
+                                        Didn't receive code?{" "}
+                                        <a href="#" onClick={(e) => { e.preventDefault(); handleResendCode(); }}
+                                            className="Form-a">
+                                            Resend Code
+                                        </a>
+                                    </p>
+
+                                    <LoadingButton type="submit" isLoading={verifyLoading}>
+                                        Verify Email
+                                    </LoadingButton>
+
+                                    <p className="Form-p2">
+                                        <a href="#" onClick={(e) => { e.preventDefault(); setCurrentForm("login"); }}
+                                            className="Form-a">
+                                            Back to Login
+                                        </a>
+                                    </p>
+                                </form>
+                            )}
                         </div>
                     </div>
 
