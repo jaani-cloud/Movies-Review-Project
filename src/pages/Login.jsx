@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { Eye, EyeOff } from 'lucide-react';
 import LoadingButton from "../components/common/LoadingButton";
 import ErrorMessage from "../components/common/ErrorMessage";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState} from "react";
 import {
     loginWithAPI,
     getCurrentUser,
@@ -197,21 +197,6 @@ export default function Login() {
         return () => clearInterval(timer);
     }, [currentIndex]);
 
-    // useEffect(() => {
-    //     console.log("shouldFocusPassword:", shouldFocusPassword);
-
-    //     if (shouldFocusPassword) {
-    //         setTimeout(() => {
-    //             console.log("passwordInputRef after timeout:", passwordInputRef.current);
-    //             if (passwordInputRef.current) {
-    //                 passwordInputRef.current.focus();
-    //             }
-    //             setShouldFocusPassword(false);
-    //         }, 100);
-    //     }
-    // }, [shouldFocusPassword]);
-
-
     return (
 
         // full div screen...
@@ -325,7 +310,7 @@ export default function Login() {
                                         Forget Password?</a>
                                 </div>
 
-                                <LoadingButton type="submit" isLoading={loginLoading} onClick={() => console.log("Login button click - ref:", passwordInputRef.current)}
+                                <LoadingButton type="submit" isLoading={loginLoading}
                                 >
                                     Login
                                 </LoadingButton>
