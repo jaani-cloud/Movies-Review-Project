@@ -10,7 +10,7 @@ export default function Sidebar({ movies }) {
     })).sort((a, b) => b.avgRating - a.avgRating).slice(0, 10);
 
     return (
-        <aside className="w-80 bg-slate-900 p-4 rounded-lg fixed right-4 top-24 h-[calc(100vh-6rem)] flex flex-col">
+        <aside className="hidden w-80 bg-slate-900 p-4 rounded-lg fixed right-4 top-24 h-[calc(100vh-6rem)] lg:flex flex-col">
 
             <h2 className="mb-4 Home-h1">
                 <Flame /> Most Interested

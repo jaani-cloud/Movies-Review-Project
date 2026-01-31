@@ -5,7 +5,10 @@ export const API_ENDPOINTS = {
         LOGIN: '/auth/login',
         REGISTER: '/auth/register',
         VERIFY_EMAIL: '/auth/verify-email',
-        RESEND_CODE: '/auth/resend-code'
+        RESEND_CODE: '/auth/resend-code',
+        FORGOT_PASSWORD: '/auth/forgot-password',
+        VERIFY_RESET_CODE: '/auth/verify-reset-code',
+        RESET_PASSWORD: '/auth/reset-password'
     },
     MOVIES: {
         GET_ALL: '/Movies',

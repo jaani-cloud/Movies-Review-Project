@@ -5,13 +5,16 @@ import { useNavigate } from "react-router-dom"
 import { Eye, EyeOff } from 'lucide-react';
 import LoadingButton from "../components/common/LoadingButton";
 import ErrorMessage from "../components/common/ErrorMessage";
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import {
     loginWithAPI,
     getCurrentUser,
     registerWithAPI,
     verifyEmailWithAPI,
-    resendCodeWithAPI
+    resendCodeWithAPI,
+    forgotPasswordWithAPI,
+    verifyResetCodeWithAPI,
+    resetPasswordWithAPI
 } from "../services/authService";
 
 import SuccessMessage from "../components/common/SuccessMessage";
@@ -41,6 +44,8 @@ export default function Login() {
     const [signupError, setSignupError] = useState("");
     const [forgotError, setForgotError] = useState("");
     const [verifySuccess, setVerifySuccess] = useState(false);
+    const [resetToken, setResetToken] = useState("");
+    const [resetEmail, setResetEmail] = useState("");
 
     const navigate = useNavigate();
 
@@ -73,9 +78,44 @@ export default function Login() {
     const {
         register: registerForgot,
         handleSubmit: handleForgotSubmit,
+        reset: resetForgot,
         formState: { errors: forgotErrors }
     } = useForm();
 
+    const {
+        register: registerReset,
+        handleSubmit: handleResetSubmit,
+        watch: watchReset,
+        formState: { errors: resetErrors }
+    } = useForm();
+
+    const [resetLoading, setResetLoading] = useState(false);
+    const [resetError, setResetError] = useState("");
+    const [resetSuccess, setResetSuccess] = useState(false);
+
+    const onResetSubmit = async (data) => {
+        setResetLoading(true);
+        setResetError("");
+
+        const result = await resetPasswordWithAPI(resetToken, data.newPassword);
+        setResetLoading(false);
+
+        if (result.success) {
+            setResetSuccess(true);
+
+            setTimeout(() => {
+                setResetSuccess(false);
+                setCurrentForm("login");
+                setEmailSent(false);
+                setLoginValue("email", resetEmail)
+                setTimeout(() => {
+                    setLoginFocus("password")
+                }, 1000);
+            }, 3500);
+        } else {
+            setResetError(result.error);
+        }
+    };
 
     const [currentIndex, setCurrentIndex] = useState(() => {
         let index = Math.trunc(Math.random() * (movies.length - 1) + 1);
@@ -124,21 +164,47 @@ export default function Login() {
             }, 800);
 
         } else {
-            setSignupError(result.error)
+            if (result.error && result.error.includes("Verification code already sent")) {
+                setUserEmail(data.email)
+                setUserName(data.firstName)
+                setCurrentForm("verify")
+
+                setTimeout(() => {
+                    setVerifyFocus("code")
+                }, 3000);
+            } else {
+                setSignupError(result.error)
+            }
         }
     }
 
-    const onForgotSubmit = (data) => {
-        setForgotLoading(true)
-        setForgotError("")
+    const onForgotSubmit = async (data) => {
+        setForgotLoading(true);
+        setForgotError("");
 
-        console.log(`Forgot Data ${JSON.stringify(data)}`)
+        if (!emailSent) {
+            const result = await forgotPasswordWithAPI(data.email);
+            setForgotLoading(false);
 
-        setTimeout(() => {
-            setForgotLoading(false)
-            setEmailSent(true)
-        }, 2000)
-    }
+            if (result.success) {
+                setResetEmail(data.email);
+                setEmailSent(true);
+                resetForgot();
+            } else {
+                setForgotError(result.error);
+            }
+        } else {
+            const result = await verifyResetCodeWithAPI(resetEmail, data.code);
+            setForgotLoading(false);
+
+            if (result.success) {
+                setResetToken(result.resetToken);
+                setCurrentForm("resetPassword");
+            } else {
+                setForgotError(result.error);
+            }
+        }
+    };
 
     const [randomBgImageStart] = useState(() => {
         let index = Math.trunc(Math.random() * (movies.length - 1) + 1);
@@ -164,7 +230,7 @@ export default function Login() {
 
                 setTimeout(() => {
                     setLoginFocus("password");
-                }, 800);
+                }, 1000);
 
             }, 3500);
         } else {
@@ -454,12 +520,38 @@ export default function Login() {
                             <form onSubmit={handleForgotSubmit(onForgotSubmit)}>
                                 <h1 className="Form-h1">Forgot Password?</h1>
 
-                                {emailSent && (
-                                    <div className="p-4 mb-4 text-green-400 bg-green-900 rounded-lg">
-                                        Email sent successfully...
-                                    </div>
-                                )}
-                                {emailSent || (
+                                {emailSent ? (
+                                    <>
+                                        <p className="Form-p1">Enter the 6-digit code sent to {resetEmail}</p>
+
+                                        <input
+                                            onFocus={(e) => console.log("OTP input focused, value: ", e.target.value)}
+                                            className="Form-input text-center text-2xl tracking-widest"
+                                            type="tel"
+                                            placeholder="1-2-3-4-5-6"
+                                            maxLength="6"
+                                            autoComplete="off"
+                                            {...registerForgot('code', {
+                                                required: "Verification code is required",
+                                                pattern: {
+                                                    value: /^[0-9]{6}$/,
+                                                    message: "Code must be 6 digits"
+                                                }
+                                            })}
+                                            onInput={(e) => {
+                                                e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0, 6);
+                                            }}
+                                        />
+
+                                        {forgotErrors.code && <p className="Form-error">{forgotErrors.code.message}</p>}
+
+                                        <ErrorMessage message={forgotError} onClose={() => setForgotError("")} />
+
+                                        <LoadingButton type="submit" isLoading={forgotLoading}>
+                                            Verify Code
+                                        </LoadingButton>
+                                    </>
+                                ) : (
                                     <>
                                         <p className="Form-p1">Enter your email to reset password</p>
 
@@ -480,7 +572,9 @@ export default function Login() {
 
                                         <ErrorMessage message={forgotError} onClose={() => setForgotError("")} />
 
-                                        <LoadingButton type="submit" isLoading={forgotLoading}>Reset Password</LoadingButton>
+                                        <LoadingButton type="submit" isLoading={forgotLoading}>
+                                            Send Reset Code
+                                        </LoadingButton>
                                     </>
                                 )}
                                 <p className="Form-p2">Remember Password?{" "}
@@ -488,6 +582,71 @@ export default function Login() {
                                         className="Form-a">Back to Login</a>
                                 </p>
                             </form>
+
+                        </div>
+                    </div>
+
+                    {/* Reset Password form */}
+
+                    <div className={`Form-animate ${currentForm === "resetPassword" ? "Form-animate-in z-20" : "Form-animate-out z-0"}`}>
+
+                        <div className="w-full max-w-md p-4 lg:p-8">
+
+                            {resetSuccess ? (
+                                <SuccessMessage
+                                    message="Password Reset Successful! 🎉"
+                                    subMessage="Redirecting to login..."
+                                />
+                            ) : (
+                                <form onSubmit={handleResetSubmit(onResetSubmit)}>
+
+                                    <h1 className="Form-h1">Reset Password</h1>
+                                    <p className="Form-p1">Enter your new password</p>
+
+                                    <div className="relative">
+                                        <input
+                                            className="pr-10 Form-input"
+                                            type={showPassword ? "text" : "password"}
+                                            placeholder="Enter new password..."
+                                            {...registerReset('newPassword', passwordValidator)}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute p-1 -translate-y-1/2 rounded right-3 top-1/2 hover:bg-gray-100"
+                                        >
+                                            {showPassword ? <Eye size={20} className="text-white" /> : <EyeOff className="text-white" size={20} />}
+                                        </button>
+                                    </div>
+
+                                    {resetErrors.newPassword && <p className="Form-error">{resetErrors.newPassword.message}</p>}
+
+                                    <input
+                                        className="Form-input"
+                                        type={showPassword ? "text" : "password"}
+                                        placeholder="Confirm new password..."
+                                        {...registerReset('confirmPassword', {
+                                            required: "Confirm your password",
+                                            validate: value => value === watchReset('newPassword') || "Password does not match"
+                                        })}
+                                    />
+
+                                    {resetErrors.confirmPassword && <p className="Form-error">{resetErrors.confirmPassword.message}</p>}
+
+                                    <ErrorMessage message={resetError} onClose={() => setResetError("")} />
+
+                                    <LoadingButton type="submit" isLoading={resetLoading}>
+                                        Reset Password
+                                    </LoadingButton>
+
+                                    <p className="Form-p2">
+                                        <a href="#" onClick={(e) => { e.preventDefault(); setCurrentForm("login"); setEmailSent(false); }}
+                                            className="Form-a">
+                                            Back to Login
+                                        </a>
+                                    </p>
+                                </form>
+                            )}
 
                         </div>
                     </div>
@@ -511,9 +670,10 @@ export default function Login() {
 
                                     <input
                                         className="Form-input text-center text-2xl tracking-widest"
-                                        type="text"
+                                        type="tel"
                                         placeholder="1-2-3-4-5-6"
                                         maxLength="6"
+                                        autoComplete="off"
                                         {...registerVerify('code', {
                                             required: "Verification code is required",
                                             pattern: {

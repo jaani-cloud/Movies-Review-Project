@@ -138,3 +138,61 @@ export const resendCodeWithAPI = async (email) => {
         }
     }
 }
+
+export const forgotPasswordWithAPI = async (email) => {
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}${API_ENDPOINTS.AUTH.FORGOT_PASSWORD}`,
+            { email }
+        );
+
+        return {
+            success: response.data.success,
+            message: response.data.message
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.response?.data?.message || "Failed to send reset code"
+        };
+    }
+};
+
+export const verifyResetCodeWithAPI = async (email, code) => {
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}${API_ENDPOINTS.AUTH.VERIFY_RESET_CODE}`,
+            { email, code }
+        );
+
+        return {
+            success: response.data.success,
+            message: response.data.message,
+            resetToken: response.data.token
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.response?.data?.message || "Invalid verification code"
+        };
+    }
+};
+
+export const resetPasswordWithAPI = async (resetToken, newPassword) => {
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}${API_ENDPOINTS.AUTH.RESET_PASSWORD}`,
+            { resetToken, newPassword }
+        );
+
+        return {
+            success: response.data.success,
+            message: response.data.message
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.response?.data?.message || "Failed to reset password"
+        };
+    }
+};
