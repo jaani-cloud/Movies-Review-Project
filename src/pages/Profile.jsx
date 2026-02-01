@@ -1,26 +1,72 @@
-import { useState } from "react"
-import { getCurrentUser } from "../services/authService"
+import { useState, useEffect } from "react"
+import { getProfileWithAPI, updateProfileWithAPI } from "../services/authService"
 import { Link } from "react-router-dom"
 import { Instagram, Youtube } from "lucide-react"
 import UserReviews from "../components/profile/UserReviews"
+import { formatDate } from "../utils/formatters";
 export default function Profile() {
-    const currentUser = getCurrentUser()
-    const [isEdited, setIsEdited] = useState(false)
+    const [currentUser, setCurrentUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [isEdited, setIsEdited] = useState(false);
     const [formData, setFormData] = useState({
-        firstName: currentUser?.firstName || "",
-        lastName: currentUser?.lastName || "",
-        dob: currentUser?.dob || "",
-        instagram: currentUser?.instagram || "",
-        youtube: currentUser?.youtube || "",
-        profilePhoto: currentUser?.profilePhoto || ""
-    })
+        firstName: "",
+        lastName: "",
+        phoneNumber: "",
+        dob: "",
+        instagram: "",
+        youtube: "",
+        profilePhoto: ""
+    });
+
     const [editingName, setEditingName] = useState("")
 
-    const handleSave = () => {
-        const updateUser = { ...currentUser, ...formData }
-        localStorage.setItem("currentUser", JSON.stringify(updateUser))
-        setIsEdited(false)
-        alert("Your Profile Updated Successfully...")
+    useEffect(() => {
+        const fetchProfile = async () => {
+            setLoading(true);
+            const result = await getProfileWithAPI();
+
+            if (result.success) {
+                setCurrentUser(result.user);
+                setFormData({
+                    firstName: result.user.firstName || "",
+                    lastName: result.user.lastName || "",
+                    phoneNumber: result.user.phoneNumber || "",
+                    dob: result.user.dob ? result.user.dob.split("T")[0] : "",
+                    instagram: result.user.instagram || "",
+                    youtube: result.user.youtube || "",
+                    profilePhoto: result.user.profilePhoto || ""
+                });
+            }
+
+            setLoading(false);
+        };
+
+        fetchProfile();
+    }, []);
+
+    const handleSave = async () => {
+        setLoading(true)
+
+        const result = await updateProfileWithAPI(formData)
+
+        if (result.success) {
+            setCurrentUser(result.user)
+            localStorage.setItem("currentUser", JSON.stringify(result.user))
+            setIsEdited(false)
+            alert("Your Profile Updated Successfully...")
+        } else {
+            alert(result.error || "Failed to update profile...")
+        }
+        setLoading(false)
+    }
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center">
+                <div className="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+                <div className="mt-2">Loading..</div>
+            </div>
+        )
     }
 
     if (!currentUser) {
@@ -70,20 +116,6 @@ export default function Profile() {
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="" className="Profile-label">Username</label>
-                    {isEdited ? (
-                        <input
-                            type="text"
-                            value={formData.username}
-                            onChange={(e) => setFormData({ ...setFormData, username: e.target.value })}
-                            className="Profile-input"
-                        />
-                    ) : (
-                        <p className="text-lg text-white">@{currentUser.username}</p>
-                    )}
-                </div>
-
-                <div className="mb-4">
                     <label htmlFor="" className="Profile-label">Email</label>
                     <p className="text-lg text-white">{currentUser.email}</p>
                 </div>
@@ -120,7 +152,7 @@ export default function Profile() {
                             className="Profile-input"
                         />
                     ) : (
-                        <p className="text-lg text-white">{currentUser.dob || "Not set"}</p>
+                            <p className="text-lg text-white">{formatDate(currentUser.dob) || "Not set"}</p>
                     )}
                 </div>
 

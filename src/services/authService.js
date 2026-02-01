@@ -1,8 +1,21 @@
 import axios from 'axios';
 import { API_BASE_URL, API_ENDPOINTS } from "../constants/apiConfig";
-import {jwtDecode} from "jwt-decode"
+import { jwtDecode } from "jwt-decode"
 import { toTitleCase } from "../utils/formatters";
 
+
+axios.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem("authToken")
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config
+    },
+    (error) => {
+        return Promise.reject(error)
+    }
+);
 
 
 export const logout = () => {
@@ -196,3 +209,60 @@ export const resetPasswordWithAPI = async (resetToken, newPassword) => {
         };
     }
 };
+
+export const getProfileWithAPI = async () => {
+    try {
+        const response = await axios.get(
+            `${API_BASE_URL}${API_ENDPOINTS.USER.PROFILE}`
+        )
+
+        return {
+            success: true,
+            user: response.data
+        }
+    } catch (error) {
+        return {
+            success: false,
+            error: error.response?.data?.message || "Failed to fetch profile"
+        }
+    }
+}
+
+export const updateProfileWithAPI = async (profileData) => {
+    try {
+        const response = await axios.put(
+            `${API_BASE_URL}${API_ENDPOINTS.USER.PROFILE}`,
+            profileData
+        )
+
+        return {
+            success: response.data.success,
+            message: response.data.message,
+            user: response.data.user
+        }
+    } catch (error) {
+        return {
+            success: false,
+            error: error.response?.data?.message || "Failed to update profile"
+        }
+    }
+}
+
+export const changePasswordWithAPI = async (currentPassword, newPassword) => {
+    try {
+        const response = await axios.put(
+            `${API_BASE_URL}${API_ENDPOINTS.USER.CHANGE_PASSWORD}`,
+            { currentPassword, newPassword }
+        )
+
+        return {
+            success: response.data.success,
+            message: response.data.message
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.response?.data?.message || "Failed to change password"
+        }
+    }
+}

@@ -1,53 +1,47 @@
 import { useState } from "react";
-import { getCurrentUser } from "../services/authService";
 import { passwordValidator } from "../validators/passwordValidator";
-import bcrypt from "bcryptjs";
-import { Users } from "../data/Users"
+import { Eye, EyeOff } from "lucide-react"
+import { changePasswordWithAPI } from "../services/authService";
+import LoadingButton from "../components/common/LoadingButton"
+import ErrorMessage from "../components/common/ErrorMessage"
+import SuccessMessage from "../components/common/SuccessMessage"
+import { useForm } from "react-hook-form"
 
 export default function Settings() {
-    const currentUser = getCurrentUser()
+    const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState(false);
 
-    const [currentPassword, setCurrentPassword] = useState("")
-    const [newPassword, setNewPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
+    const {
+        register,
+        handleSubmit,
+        watch,
+        reset,
+        formState: { errors }
+    } = useForm()
 
-    const handlePasswordChange = () => {
-        const originalUser = Users.find((user) => user.id === currentUser.id)
+    const newPasswordValue = watch("newPassword")
 
-        // console.log("current Password: ", originalUser.password)
+    const handlePasswordChange = async (data) => {
+        setLoading(true)
+        setError("")
 
-        if (!bcrypt.compareSync(currentPassword, originalUser.password)) {
-            alert("Current password is incorrect...")
-            return
+        const result = await changePasswordWithAPI(data.currentPassword, data.newPassword)
+        setLoading(false)
+
+        if (result.success) {
+            setSuccess(true)
+            reset()
+
+            setTimeout(() => {
+                setSuccess(false)
+            }, 3000);
+        } else {
+            setError(result.error)
         }
-        if (newPassword !== confirmPassword) {
-            alert("New Password do not match...")
-            return
-        }
-        const validationResult = passwordValidator.validate(newPassword)
-        if (validationResult !== true) {
-            alert(validationResult)
-            return
-        }
-
-        const hashedNewPassword = bcrypt.hashSync(newPassword, 10)
-
-        originalUser.password = hashedNewPassword
-
-        setCurrentPassword("")
-        setNewPassword("")
-        setConfirmPassword("")
-        alert("Password updated successfully...")
     }
 
-
-    if (!currentUser) {
-        return (
-            <div className="p-8 min-h-screen ">
-                Please <Link to={"/"} className="text-blue-400 font-semibold hover:text-blue-300">login here</Link> to view your profile
-            </div>
-        )
-    }
     return (
         <div className="min-h-screen p-8 pt-24 bg-black">
             <h1 className="text-4xl font-bold mb-4  text-white">Settings</h1>
@@ -56,26 +50,64 @@ export default function Settings() {
                 <div className="bg-slate-900 p-6 rounded-lg mb-6">
                     <h2 className="text-2xl font-bold mb-4  text-white">Change Password</h2>
 
-                    <div className="mb-3">
-                        <label htmlFor="" className="Profile-label">Current Password</label>
-                        <input type="text" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} className="Profile-input" />
-                    </div>
+                    {success && (
+                        <SuccessMessage message="Password Changed Successfully..." subMessage="Your password has been updated." />
+                    )}
 
-                    <div className="mb-3">
-                        <label htmlFor="" className="Profile-label">New Password</label>
-                        <input type="text" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="Profile-input" />
-                    </div>
+                    <form onSubmit={handleSubmit(handlePasswordChange)}>
 
-                    <div className="mb-3">
-                        <label htmlFor="" className="Profile-label">Confirm Password</label>
-                        <input type="text" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="Profile-input" />
-                    </div>
+                        <div className="mb-3">
+                            <label htmlFor="" className="Profile-label">Current Password</label>
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    className="Profile-input pr-10"
+                                    placeholder="Enter current password..."
+                                    {...register("currentPassword", {
+                                        required: "Current password is required."
+                                    })}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute p-1 right-3 top-1/2 -translate-y-1/2 hover:bg-gray-700 rounded"
+                                >
+                                    {showPassword ? <Eye size={20} className="text-white" /> : <EyeOff size={20} className="text-white" />}
+                                </button>
+                            </div>
+                        </div>
 
-                    <button className="bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700  text-white" onClick={handlePasswordChange}>Update Password</button>
+                        <div className="mb-3">
+                            <label htmlFor="" className="Profile-label">New Password</label>
+                            <input
+                                className="Profile-input"
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Enter new Password..."
+                                {...register("newPassword", passwordValidator)}
+                            />
+                            {errors.newPassword && <p className="Form-error">{error.newPassword.message}</p>}
+                        </div>
+
+                        <div className="mb-3">
+                            <label htmlFor="" className="Profile-label">Confirm Password</label>
+                            <input
+                                className="Profile-input"
+                                type={showPassword ? "text": "password"}
+                                placeholder="Confirm new password..."
+                                {...register("confirmPassword" , {
+                                    required: "Confirm you password",
+                                    validate: value => value === newPasswordValue || "Password don't match"
+                                })}
+                            />
+                            {errors.confirmPassword && <p className="Form-error">{errors.confirmPassword.message}</p>}
+                        </div>
+
+                        <ErrorMessage message={error} onClose={() => setError("")}/>
+
+                        <LoadingButton type="submit" isLoading={loading}>Update Password</LoadingButton>
+                    </form>
                 </div>
             </div>
         </div>
     )
-
-
 };

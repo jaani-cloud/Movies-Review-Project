@@ -10,6 +10,10 @@ export const API_ENDPOINTS = {
         VERIFY_RESET_CODE: '/auth/verify-reset-code',
         RESET_PASSWORD: '/auth/reset-password'
     },
+    USER: {
+        PROFILE: '/user/profile',
+        CHANGE_PASSWORD: '/user/change-password'
+    },
     MOVIES: {
         GET_ALL: '/Movies',
         GET_BY_ID: '/Movies/:id',
