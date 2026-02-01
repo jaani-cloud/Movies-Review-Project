@@ -160,7 +160,7 @@
         position: relative;
     }
     .Admin-error:hover::before{
-        content: "🚫 Chal Nikal be...";
+        content: " 🚫 Chal Nikal be . . . .";
     }
 
     .ctm-genre-label{

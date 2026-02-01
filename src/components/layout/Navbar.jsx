@@ -19,7 +19,7 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
     return (
         // navbar start
         <>
-            <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between gap-4 p-4 text-white bg-slate-900 ">
+            <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between gap-4 p-4 text-white bg-slate-900 lg:pr-24">
 
                 {/* logo */}
 
@@ -117,7 +117,7 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
 
                     </a>
                 )}
-                <button onClick={() => setShowMobileMenu(!showMobileMenu)} className="">
+                <button onClick={() => setShowMobileMenu(!showMobileMenu)} className="lg:hidden block">
                     {showMobileMenu ? <X size={28} /> : <Menu size={28} />}
                 </button>
             </nav>

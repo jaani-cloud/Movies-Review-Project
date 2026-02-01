@@ -66,7 +66,25 @@ export const loginWithAPI = async (email, password) => {
 
             localStorage.setItem("authToken", token);
             localStorage.setItem("userRole", userRole);
-            localStorage.setItem("currentUser", JSON.stringify(userData));
+
+            try {
+                const profileResult = await getProfileWithAPI()
+
+                if (profileResult.success) {
+                    localStorage.setItem("currentUser", JSON.stringify(profileResult.user))
+
+                    return {
+                        success: true,
+                        token: token,
+                        role: userRole,
+                        firstName: userRole === "Admin" ? "ADMIN": "USER"
+                    }
+                }
+            } catch (profileError) {
+                alert("Profile fetch failed... ", profileError)
+            }
+
+            localStorage.setItem("currentUser", JSON.stringify(userData))
 
             return {
                 success: true,
