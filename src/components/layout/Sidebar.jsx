@@ -27,7 +27,7 @@ export default function Sidebar({ movies }) {
                         <div className="flex flex-col justify-center gap-1">
                             <p className="text-base font-semibold text-white">{movie.name}</p>
                             <p className="text-sm text-slate-400">{movie.releaseYear}</p>
-                            <p className="text-xs capitalize text-slate-500">{movie.genre.join(", ")}</p>
+                            <p className="text-xs capitalize text-slate-500">{"NEED A FIX"}</p>
                         </div>
                     </Link>
                 ))}

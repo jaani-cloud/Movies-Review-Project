@@ -1,152 +1,279 @@
-import { useState } from "react";
-import { movies } from "../../data/Movies";
-import { DessertIcon, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Search } from "lucide-react";
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import AddMovieForm from "./AddMovieForm";
 import GenreCheckboxes from "../common/GenreCheckboxes";
 import CategoryCheckboxes from "../common/CategoryCheckboxes";
+import { getAllMoviesWithAPI, updateMovieWithAPI, deleteMovieWithAPI, createMovieWithAPI } from "../../services/movieService";
+import LoadingSpinner from "../common/LoadingSpinner";
+import { toTitleCase } from "../../utils/formatters";
 
 export default function ManageMovies() {
-    const [movieList, setMovieList] = useState(() => {
-        const saved = localStorage.getItem("movies");
-        return saved ? JSON.parse(saved) : movies;
-    })
-    const [isAdding, setIsAdding] = useState(false)
-    const [adminSearch, setAdminSearch] = useState("")
+    const queryClient = useQueryClient();
+    const [isAdding, setIsAdding] = useState(false);
+    const [adminSearch, setAdminSearch] = useState("");
+    const [editingMovie, setEditingMovie] = useState(null);
+    const [filteredMovies, setFilteredMovies] = useState([]);
 
-    const [editingMovie, setEditingMovie] = useState(null)
+    const { data: movieList = [], isLoading } = useQuery({
+        queryKey: ['movies'],
+        queryFn: async () => {
+            const result = await getAllMoviesWithAPI();
+            if (!result.success) {
+                throw new Error(result.error || "Failed to load movies");
+            }
+            return result.movies;
+        },
+        staleTime: 5 * 60 * 1000,
+    });
 
+    useEffect(() => {
+        if (adminSearch.trim() === "") {
+            setFilteredMovies(movieList);
+            return;
+        }
 
-    const filteredMovies = movieList.filter(movie =>
-        movie.name.toLowerCase().includes(adminSearch.toLowerCase().trim())
-    );
+        const searchLower = adminSearch.toLowerCase().trim();
 
-    const handleDelete = (movieId) => {
+        const filtered = movieList.filter(movie =>
+            movie.name.toLowerCase().includes(searchLower)
+        );
+
+        setFilteredMovies(filtered);
+    }, [adminSearch, movieList]);
+
+    useEffect(() => {
+        setFilteredMovies(movieList);
+    }, [movieList]);
+
+    const handleDelete = async (movieId) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this movie?");
         if (!confirmDelete) return;
 
-        const updatedList = movieList.filter(m => m.id !== movieId);
-        setMovieList(updatedList);
-        alert("Movie deleted successfully!");
+        const result = await deleteMovieWithAPI(movieId);
+
+        if (result.success) {
+            queryClient.invalidateQueries(['movies']);
+            queryClient.invalidateQueries(['movie', movieId]);
+            alert("Movie deleted successfully...");
+        } else {
+            alert(result.error || "Failed to delete movie...");
+        }
     };
 
-    const handleSave = () => {
-        const updatedList = movieList.map(m => m.id === editingMovie.id ? editingMovie : m)
+    const handleSave = async () => {
+        const result = await updateMovieWithAPI(editingMovie.id, editingMovie);
 
-        setMovieList(updatedList)
-        localStorage.setItem("movies", JSON.stringify(updatedList))
-        setEditingMovie(null)
-        alert("Movie updated successfully")
+        if (result.success) {
+            queryClient.invalidateQueries(['movies']);
+            queryClient.invalidateQueries(['movie', editingMovie.id]);
+            setEditingMovie(null);
+            alert("Movie updated successfully...");
+        } else {
+            alert(result.error || "Failed to update movie...");
+        }
+    };
+
+    const handleAddMovie = async (newMovie) => {
+        const result = await createMovieWithAPI(newMovie);
+
+        if (result.success) {
+            queryClient.invalidateQueries(['movies']);
+            setIsAdding(false);
+            alert("Movie added successfully!");
+        } else {
+            alert(result.error || "Failed to add movie");
+        }
+    };
+
+    if (isLoading) {
+        return <LoadingSpinner />;
     }
-
-    const handleAddMovie = (newMovie) => {
-        const movieWithId = { ...newMovie, id: Date.now }
-
-        const updatedList = [...movieList, movieWithId]
-        setMovieList(updatedList)
-        localStorage.setItem("movies", JSON.stringify(updatedList))
-        setIsAdding(false)
-        alert("Movie added successfully")
-    }
-
-
 
     return (
-        <div className="mt-8">
-            <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold">Manage Movies</h2>
+        <div className="ctm-manage-movies">
+            <div className="ctm-manage-header">
+                <h2 className="ctm-manage-title">
+                    <span className="ctm-title-icon">🎬</span>
+                    Manage Movies
+                </h2>
                 <button
                     onClick={() => setIsAdding(true)}
-                    className="px-4 py-2 bg-green-600 rounded-lg hover:bg-green-700"
+                    className="ctm-add-movie-btn"
                 >
-                    + Add New Movie
+                    <span className="ctm-btn-icon">+</span>
+                    <span>Add New Movie / Web Series</span>
                 </button>
             </div>
 
-            {isAdding && <AddMovieForm onClose={() => setIsAdding(false)} onAdd={handleAddMovie} />}
+            {isAdding && (
+                <div className="ctm-form-overlay">
+                    <AddMovieForm onClose={() => setIsAdding(false)} onAdd={handleAddMovie} />
+                </div>
+            )}
 
-            <div className="relative w-full mb-6">
-                <Search className="absolute w-5 h-5 -translate-y-1/2 pointer-events-none left-3 top-1/2 text-slate-400" />
+            <div className="ctm-search-container">
+                <Search className="ctm-search-icon" />
                 <input
                     type="text"
-                    placeholder="Search movies..."
+                    placeholder="Search movies by name..."
                     value={adminSearch}
                     onChange={(e) => setAdminSearch(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-900/70 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all hover:border-slate-500"
+                    className="ctm-search-input"
                 />
             </div>
-            <div className="space-y-4">
-                {filteredMovies.map(movie => (
-                    <div key={movie.id} className="flex items-center justify-between p-4 rounded-lg bg-slate-800">
 
-                        {editingMovie && editingMovie.id === movie.id ? (
-                            <div className="flex flex-col gap-2">
-                                <input type="text" placeholder="Movie Name"
-                                    value={editingMovie.name}
-                                    onChange={(e) => setEditingMovie({ ...editingMovie, name: e.target.value })}
-                                    className="pl-2" />
+            <div className="ctm-movies-list">
+                {filteredMovies.length === 0 ? (
+                    <div className="ctm-empty-state">
+                        <p className="ctm-empty-icon">🎭</p>
+                        <p className="ctm-empty-text">No movies found</p>
+                    </div>
+                ) : (
+                    filteredMovies.map((movie, index) => (
+                        <div
+                            key={movie.id}
+                            className="ctm-movie-item"
+                            style={{ animationDelay: `${index * 0.1}s` }}
+                        >
+                            {editingMovie && editingMovie.id === movie.id ? (
+                                <div className="ctm-edit-form">
+                                    <div className="ctm-form-group">
+                                        <label className="ctm-form-label">Movie Name</label>
+                                        <input
+                                            type="text"
+                                            placeholder="Enter movie name"
+                                            value={editingMovie.name}
+                                            onChange={(e) => setEditingMovie({ ...editingMovie, name: e.target.value })}
+                                            className="ctm-form-input"
+                                        />
+                                    </div>
 
-                                <input type="text" placeholder="Poster URL" value={editingMovie.poster} onChange={(e) => setEditingMovie({ ...editingMovie, poster: e.target.value })} />
-                                <div className="space-x-4">
-                                    <label htmlFor="movie" className="font-bold hover:cursor-pointer hover:text-blue-600">
-                                        <input id="movie" type="radio" name="type" value="movie" className="w-4 h-4 mr-1 border-2 rounded-full appearance-none border-slate-500 bg-slate-800 checked:bg-red-600 checked:border-3"
-                                            checked={editingMovie.type === "movie"}
-                                            onChange={(e) => setEditingMovie({ ...editingMovie, type: e.target.value })} />
-                                        Movie
-                                    </label>
-                                    <label htmlFor="webseries" className="font-bold hover:cursor-pointer hover:text-blue-600">
-                                        <input id="webseries" type="radio" name="type" value="webseries" className="w-4 h-4 mr-1 border-2 rounded-full appearance-none border-slate-500 bg-slate-800 checked:bg-red-600 checked:border-3"
-                                            checked={editingMovie.type === "webseries"}
-                                            onChange={(e) => setEditingMovie({ ...editingMovie, type: e.target.value })} />
-                                        Web Series
-                                    </label>
-                                </div>
-                                <textarea name="" id="" placeholder="Description" value={editingMovie.description} onChange={(e) => setEditingMovie({ ...editingMovie, description: e.target.value })}></textarea>
+                                    <div className="ctm-form-group">
+                                        <label className="ctm-form-label">Poster URL</label>
+                                        <input
+                                            type="text"
+                                            placeholder="Enter poster URL"
+                                            value={editingMovie.poster}
+                                            onChange={(e) => setEditingMovie({ ...editingMovie, poster: e.target.value })}
+                                            className="ctm-form-input"
+                                        />
+                                    </div>
 
-                                <div className="mt-4">
-                                    <GenreCheckboxes selectedGenres={editingMovie.genre}
-                                        onChange={(newGenres) => setEditingMovie({ ...editingMovie, genre: newGenres })}
-                                    />
-                                </div>
+                                    <div className="ctm-form-group">
+                                        <label className="ctm-form-label">Type</label>
+                                        <div className="ctm-radio-group">
+                                            <label className="ctm-radio-label">
+                                                <input
+                                                    type="radio"
+                                                    name="type"
+                                                    value="movie"
+                                                    className="ctm-radio-input"
+                                                    checked={editingMovie.type === "movie"}
+                                                    onChange={(e) => setEditingMovie({ ...editingMovie, type: e.target.value })}
+                                                />
+                                                <span className="ctm-radio-text">🎬 Movie</span>
+                                            </label>
+                                            <label className="ctm-radio-label">
+                                                <input
+                                                    type="radio"
+                                                    name="type"
+                                                    value="webseries"
+                                                    className="ctm-radio-input"
+                                                    checked={editingMovie.type === "webseries"}
+                                                    onChange={(e) => setEditingMovie({ ...editingMovie, type: e.target.value })}
+                                                />
+                                                <span className="ctm-radio-text">📺 Web Series</span>
+                                            </label>
+                                        </div>
+                                    </div>
 
-                                <div className="mt-4">
-                                    <CategoryCheckboxes selectedCategories={editingMovie.category}
-                                        onChange={(newCategories) => setEditingMovie({ ...editingMovie, category: newCategories })} />
-                                </div>
+                                    <div className="ctm-form-group">
+                                        <label className="ctm-form-label">Description</label>
+                                        <textarea
+                                            placeholder="Enter movie description"
+                                            value={editingMovie.description}
+                                            onChange={(e) => setEditingMovie({ ...editingMovie, description: e.target.value })}
+                                            className="ctm-form-textarea"
+                                            rows="4"
+                                        ></textarea>
+                                    </div>
 
-                                <p className="mt-4">Release Year</p>
-                                <input type="number" placeholder="Release Year"
-                                    value={editingMovie.releaseYear}
-                                    onChange={(e) => setEditingMovie({ ...editingMovie, releaseYear: +(e.target.value) })}
-                                    className="pl-2" />
+                                    <div className="ctm-form-group">
+                                        <label className="ctm-form-label">Genres</label>
+                                        <GenreCheckboxes
+                                            selectedGenres={editingMovie.genre}
+                                            onChange={(newGenres) => setEditingMovie({ ...editingMovie, genre: newGenres })}
+                                        />
+                                    </div>
 
-                                <div className="space-x-4">
-                                    <button onClick={handleSave}>Save</button>
-                                    <button onClick={() => setEditingMovie(null)}>Cancel</button>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="flex items-center gap-4">
-                                <img src={movie.poster} alt={movie.name} className="object-cover w-16 h-24 rounded" />
-                                <div className="flex flex-col self-start">
-                                    <h3 className="text-lg font-bold">{movie.name}</h3>
-                                    <p className="text-sm text-slate-400">{movie.releaseYear}</p>
-                                    <div>
-                                        <button
-                                            onClick={() => setEditingMovie(movie)}
-                                            className="py-1 text-blue-400 hover:text-blue-300">
-                                            Edit
+                                    <div className="ctm-form-group">
+                                        <label className="ctm-form-label">Categories</label>
+                                        <CategoryCheckboxes
+                                            selectedCategories={editingMovie.category}
+                                            onChange={(newCategories) => setEditingMovie({ ...editingMovie, category: newCategories })}
+                                        />
+                                    </div>
+
+                                    <div className="ctm-form-group">
+                                        <label className="ctm-form-label">Release Year</label>
+                                        <input
+                                            type="number"
+                                            placeholder="2024"
+                                            value={editingMovie.releaseYear}
+                                            onChange={(e) => setEditingMovie({ ...editingMovie, releaseYear: +(e.target.value) })}
+                                            className="ctm-form-input"
+                                        />
+                                    </div>
+
+                                    <div className="ctm-form-actions">
+                                        <button onClick={handleSave} className="ctm-save-btn">
+                                            <span>💾</span> Save Changes
                                         </button>
-                                        <button
-                                            className="px-3 py-1 text-red-400 hover:text-red-300"
-                                            onClick={() => handleDelete(movie.id)}>
-                                            Delete
+                                        <button onClick={() => setEditingMovie(null)} className="ctm-cancel-btn">
+                                            <span>✖</span> Cancel
                                         </button>
                                     </div>
                                 </div>
-                            </div>
-                        )}
-                    </div>
-                ))}
+                            ) : (
+                                <div className="ctm-movie-view">
+                                    <div className="ctm-movie-poster-wrapper">
+                                        <img
+                                            src={movie.poster}
+                                            alt={movie.name}
+                                            className="ctm-movie-poster"
+                                        />
+                                        <div className="ctm-poster-overlay"></div>
+                                    </div>
+                                    <div className="ctm-movie-info">
+                                        <h3 className="ctm-movie-name">{movie.name}</h3>
+                                        <div className="ctm-movie-meta">
+                                            <span className="ctm-meta-badge ctm-badge-year">📅 {movie.releaseYear}</span>
+                                            <span className="ctm-meta-badge ctm-badge-type">
+                                                {(movie.type).toLowerCase() === 'movie' ? '🎬 Movie' : '📺 Series'}
+                                            </span>
+                                        </div>
+                                        <span className="ctm-meta-badge mb-4">
+                                            {movie.genre.map(g => toTitleCase(g)).join(" 💠 ")}
+                                        </span>
+                                        <div className="ctm-movie-actions">
+                                            <button
+                                                onClick={() => setEditingMovie(movie)}
+                                                className="ctm-edit-btn">
+                                                <span>✏️</span> Edit
+                                            </button>
+                                            <button
+                                                className="ctm-delete-btn"
+                                                onClick={() => handleDelete(movie.id)}>
+                                                <span>🗑️</span> Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     );

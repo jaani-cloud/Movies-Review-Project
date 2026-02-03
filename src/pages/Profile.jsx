@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react"
 import { getProfileWithAPI, updateProfileWithAPI } from "../services/authService"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Instagram, Youtube } from "lucide-react"
 import UserReviews from "../components/profile/UserReviews"
 import { formatDate } from "../utils/formatters";
+import {logout} from "../services/authService"
+
 export default function Profile() {
+    const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isEdited, setIsEdited] = useState(false);
@@ -47,11 +50,18 @@ export default function Profile() {
     const handleSave = async () => {
         setLoading(true)
 
+        const { profilePhoto, ...apiData } = formData
+        console.log('apiData: ', apiData);
         const result = await updateProfileWithAPI(formData)
 
         if (result.success) {
-            setCurrentUser(result.user)
-            localStorage.setItem("currentUser", JSON.stringify(result.user))
+            const updateUser = {
+                ...result.user,
+                profilePhoto: profilePhoto
+            }
+
+            setCurrentUser(updateUser)
+            localStorage.setItem("currentUser", JSON.stringify(updateUser))
             setIsEdited(false)
             alert("Your Profile Updated Successfully...")
         } else {
@@ -72,7 +82,10 @@ export default function Profile() {
     if (!currentUser) {
         return (
             <div className="min-h-screen p-8">
-                Please <Link to={"/"} className="font-semibold text-blue-400 hover:text-blue-300">login here</Link> to view your profile
+                Please <button onClick={() => {
+                    logout()
+                    navigate("/login")
+                }} className="font-semibold text-blue-400 hover:text-blue-300">login here</button> to view your profile
             </div>
         )
     }
@@ -152,7 +165,7 @@ export default function Profile() {
                             className="Profile-input"
                         />
                     ) : (
-                            <p className="text-lg text-white">{formatDate(currentUser.dob) || "Not set"}</p>
+                        <p className="text-lg text-white">{formatDate(currentUser.dob) || "Not set"}</p>
                     )}
                 </div>
 

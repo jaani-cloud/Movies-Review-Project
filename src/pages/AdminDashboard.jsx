@@ -1,74 +1,119 @@
 import { getCurrentUser } from "../services/authService";
 import { Link } from "react-router-dom";
-import ManageMovies  from "../components/admin/ManageMovies";
+import { useQuery } from '@tanstack/react-query';
+import { getAllMoviesWithAPI } from "../services/movieService";
+import ManageMovies from "../components/admin/ManageMovies";
 import { useState } from "react";
 
 export default function AdminDashboard() {
     const currentUser = getCurrentUser();
-    const [activeSection, setActiveSection] = useState(null)
+    const [activeSection, setActiveSection] = useState(null);
 
-    if (!currentUser || currentUser.role !== "User") {
+    const { data: movies = [] } = useQuery({
+        queryKey: ['movies'],
+        queryFn: async () => {
+            const result = await getAllMoviesWithAPI();
+            if (!result.success) {
+                throw new Error(result.error || "Failed to load movies");
+            }
+            return result.movies;
+        },
+        staleTime: 5 * 60 * 1000,
+    });
+
+    if (!currentUser || currentUser.role !== "Admin") {
         return (
-            <div className="min-h-screen p-8 pt-24">
-                <h1 className="text-4xl font-bold text-red-500">Access Denied</h1>
-                <p className="mt-4 text-slate-400">Only admins can access this page.</p>
-                <Link to="/home" className="inline-block mt-2 text-blue-400 hover:text-blue-300">
-                    Go to Home
-                </Link>
+            <div className="ctm-access-denied">
+                <div className="ctm-denied-content">
+                    <h1 className="ctm-denied-title">⛔ Access Denied</h1>
+                    <p className="ctm-denied-text">Only admins can access this page.</p>
+                    <Link to="/home" className="ctm-denied-link">
+                        ← Go to Home
+                    </Link>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen p-8 pt-24 bg-black">
-            <h1 className="mb-8 text-4xl font-bold text-white">Admin Dashboard</h1>
+        <div className="ctm-admin-container">
+            <div className="ctm-admin-header">
+                <div className="ctm-crown-icon">👑</div>
+                <h1 className="ctm-admin-title">Admin Dashboard</h1>
+                <p className="ctm-admin-subtitle">Master Control Center</p>
+            </div>
 
-            <div className="grid max-w-4xl grid-cols-2 gap-6">
+            <div className="ctm-admin-grid">
 
-                {/* Movie Manage */}
-
-                <div className="p-6 border rounded-lg bg-slate-900 border-slate-800">
-                    <h2 className="mb-4 text-2xl font-bold text-white">🎬 Movies</h2>
-                    <p className="mb-4 text-slate-400">Manage all movies in the database</p>
-                    <button
-                        className="w-full px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 text-white"
-                        onClick={() => setActiveSection("movies")}>
-                        Manage Movies
-                    </button>
-                </div>
-
-                {/* User Manage */}
-
-                <div className="p-6 border rounded-lg bg-slate-900 border-slate-800">
-                    <h2 className="mb-4 text-2xl font-bold text-white">👥 Users</h2>
-                    <p className="mb-4 text-slate-400">View and manage user accounts</p>
-                    <button className="w-full px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 text-white">
-                        Manage Users
-                    </button>
-                </div>
-
-                {/* Reviews Manage */}
-
-                <div className="p-6 border rounded-lg bg-slate-900 border-slate-800">
-                    <h2 className="mb-4 text-2xl font-bold text-white">📝 Reviews</h2>
-                    <p className="mb-4 text-slate-400">Monitor and moderate reviews</p>
-                    <button className="w-full px-4 py-2 bg-green-600 rounded-lg hover:bg-green-700 text-white">
-                        View All Reviews
-                    </button>
-                </div>
-
-                {/* Data */}
-                <div className="p-6 border rounded-lg bg-slate-900 border-slate-800">
-                    <h2 className="mb-4 text-2xl font-bold text-white">📊 Statistics</h2>
-                    <div className="space-y-2">
-                        <p className="text-slate-300">Total Movies: <span className="font-bold">88</span></p>
-                        <p className="text-slate-300">Total Users: <span className="font-bold">2</span></p>
-                        <p className="text-slate-300">Total Reviews: <span className="font-bold">--</span></p>
+                <div className="ctm-admin-card ctm-card-blue">
+                    <div className="ctm-card-glow"></div>
+                    <div className="ctm-card-content">
+                        <div className="ctm-card-icon">🎬</div>
+                        <h2 className="ctm-card-title">Movies</h2>
+                        <p className="ctm-card-desc">Manage all movies in the database</p>
+                        <button
+                            className="ctm-card-btn ctm-btn-blue"
+                            onClick={() => setActiveSection("movies")}>
+                            <span>Manage Movies</span>
+                            <span className="ctm-btn-arrow">→</span>
+                        </button>
                     </div>
+                </div>
 
-                    {activeSection === "movies" && <ManageMovies/>}
+                <div className="ctm-admin-card ctm-card-purple">
+                    <div className="ctm-card-glow"></div>
+                    <div className="ctm-card-content">
+                        <div className="ctm-card-icon">👥</div>
+                        <h2 className="ctm-card-title">Users</h2>
+                        <p className="ctm-card-desc">View and manage user accounts</p>
+                        <button className="ctm-card-btn ctm-btn-purple">
+                            <span>Manage Users</span>
+                            <span className="ctm-btn-arrow">→</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div className="ctm-admin-card ctm-card-green">
+                    <div className="ctm-card-glow"></div>
+                    <div className="ctm-card-content">
+                        <div className="ctm-card-icon">📝</div>
+                        <h2 className="ctm-card-title">Reviews</h2>
+                        <p className="ctm-card-desc">Monitor and moderate reviews</p>
+                        <button className="ctm-card-btn ctm-btn-green">
+                            <span>View All Reviews</span>
+                            <span className="ctm-btn-arrow">→</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div className="ctm-admin-card ctm-card-gold">
+                    <div className="ctm-card-glow"></div>
+                    <div className="ctm-card-content">
+                        <div className="ctm-card-icon">📊</div>
+                        <h2 className="ctm-card-title">Statistics</h2>
+                        <div className="ctm-stats-container">
+                            <div className="ctm-stat-item">
+                                <span className="ctm-stat-label">Total Movies</span>
+                                <span className="ctm-stat-value">{movies.length}</span>
+                            </div>
+                            <div className="ctm-stat-item">
+                                <span className="ctm-stat-label">Total Users</span>
+                                <span className="ctm-stat-value">2</span>
+                            </div>
+                            <div className="ctm-stat-item">
+                                <span className="ctm-stat-label">Total Reviews</span>
+                                <span className="ctm-stat-value">--</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            {activeSection === "movies" && (
+                <div className="ctm-manage-section">
+                    <ManageMovies />
+                </div>
+            )}
         </div>
     );
 }

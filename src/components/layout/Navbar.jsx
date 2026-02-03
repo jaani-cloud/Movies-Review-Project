@@ -104,7 +104,7 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
                     </div>
 
                 )}
-                {currentUser.role === "User" ? (
+                {currentUser.role === "Admin" ? (
                     <Link
                         to="/admin"
                         className="hidden lg:block  px-4 py-2 text-xl font-semibold text-yellow-400 rounded-lg hover:bg-slate-700"
@@ -130,26 +130,26 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
                             onClick={() => setShowMobileMenu(false)}
                             className="block px-4 py-3 text-lg hover:bg-slate-800 rounded-lg"
                         >
-                            My Profile
+                            👤 My Profile
                         </Link>
 
                         <Link to="/settings"
                             onClick={() => setShowMobileMenu(false)}
                             className="block px-4 py-3 text-lg hover:bg-slate-800 rounded-lg"
                         >
-                            Settings
+                            🔧 Settings
                         </Link>
 
-                        {currentUser?.role === "User" && (
+                        {currentUser?.role === "Admin" && (
                             <Link to="/admin"
                                 onClick={() => setShowMobileMenu(false)}
                                 className="block px-4 py-3 text-lg hover:bg-slate-800 rounded-lg"
                             >
-                                Admin Dashboard
+                                👑 Admin Dashboard
                             </Link>
                         )}
                         <button onClick={handleLogout}
-                            className="text-red-400 hover:bg-slate-800 block px-4 py-3 text-lg rounded-lg text-left"
+                            className="text-red-400 hover:bg-slate-800 block px-4 py-3 text-lg rounded-lg mt-4"
                         >
                             Logout
                         </button>

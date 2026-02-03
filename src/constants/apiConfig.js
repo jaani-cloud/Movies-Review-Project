@@ -14,12 +14,13 @@ export const API_ENDPOINTS = {
         PROFILE: '/user/profile',
         CHANGE_PASSWORD: '/user/change-password'
     },
-    MOVIES: {
-        GET_ALL: '/Movies',
-        GET_BY_ID: '/Movies/:id',
-        CREATE: '/Movies',
-        UPDATE: '/Movies/:id',
-        DELETE: '/Movies/:id'
+    MOVIE: {
+        GET_ALL: '/Movie',
+        GET_BY_ID: '/Movie/:id',
+        CREATE: '/Movie',
+        UPDATE: '/Movie/:id',
+        DELETE: '/Movie/:id',
+        SEARCH: '/movie/search'
     },
     REVIEWS: {
         GET_BY_MOVIE: '/Reviews/movie/:id',
