@@ -15,18 +15,20 @@ export const API_ENDPOINTS = {
         CHANGE_PASSWORD: '/user/change-password'
     },
     MOVIE: {
-        GET_ALL: '/Movie',
-        GET_BY_ID: '/Movie/:id',
-        CREATE: '/Movie',
-        UPDATE: '/Movie/:id',
-        DELETE: '/Movie/:id',
+        GET_ALL: '/movie',
+        GET_BY_ID: '/movie/:id',
+        CREATE: '/movie',
+        UPDATE: '/movie/:id',
+        DELETE: '/movie/:id',
         SEARCH: '/movie/search'
     },
-    REVIEWS: {
-        GET_BY_MOVIE: '/Reviews/movie/:id',
-        CREATE: '/Reviews',
-        UPDATE: '/Reviews/:id',
-        DELETE: '/Reviews/:id'
+    REVIEW: {
+        CREATE: '/review',
+        GET_BY_MOVIE: '/review/movie/:movieId',
+        GET_BY_USER: '/review/user/:userId',
+        GET_ALL: '/review',
+        UPDATE: '/review/:id',
+        DELETE: '/review/:id'
     }
 };
 

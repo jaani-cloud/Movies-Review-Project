@@ -1,17 +1,14 @@
 import { useState } from "react";
 import { passwordValidator } from "../validators/passwordValidator";
-import { Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff, Lock, Shield } from "lucide-react";
 import { changePasswordWithAPI } from "../services/authService";
-import LoadingButton from "../components/common/LoadingButton"
-import ErrorMessage from "../components/common/ErrorMessage"
-import SuccessMessage from "../components/common/SuccessMessage"
-import { useForm } from "react-hook-form"
+import LoadingButton from "../components/common/LoadingButton";
+import { showAlert } from "../components/common/CustomAlert";
+import { useForm } from "react-hook-form";
 
 export default function Settings() {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState(false);
 
     const {
         register,
@@ -19,95 +16,137 @@ export default function Settings() {
         watch,
         reset,
         formState: { errors }
-    } = useForm()
+    } = useForm();
 
-    const newPasswordValue = watch("newPassword")
+    const newPasswordValue = watch("newPassword");
 
     const handlePasswordChange = async (data) => {
-        setLoading(true)
-        setError("")
+        setLoading(true);
 
-        const result = await changePasswordWithAPI(data.currentPassword, data.newPassword)
-        setLoading(false)
+        const result = await changePasswordWithAPI(data.currentPassword, data.newPassword);
+        setLoading(false);
 
         if (result.success) {
-            setSuccess(true)
-            reset()
-
-            setTimeout(() => {
-                setSuccess(false)
-            }, 3000);
+            showAlert("Password changed successfully!", "success");
+            reset();
         } else {
-            setError(result.error)
+            showAlert(result.error || "Failed to change password", "error");
         }
-    }
+    };
 
     return (
-        <div className="min-h-screen p-8 pt-24 bg-black">
-            <h1 className="text-4xl font-bold mb-4  text-white">Settings</h1>
+        <div className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-black pt-20 pb-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-2xl mx-auto">
+                <div className="mb-8">
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="p-2 bg-gradient-to-br from-red-600 to-red-500 rounded-lg">
+                            <Shield className="w-6 h-6 text-white" />
+                        </div>
+                        <h1 className="text-3xl sm:text-4xl font-bold text-white">Settings</h1>
+                    </div>
+                    <p className="text-gray-400">Manage your account security</p>
+                </div>
 
-            <div className="max-w-2xl">
-                <div className="bg-slate-900 p-6 rounded-lg mb-6">
-                    <h2 className="text-2xl font-bold mb-4  text-white">Change Password</h2>
+                <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl shadow-2xl overflow-hidden border border-slate-700">
+                    <div className="bg-gradient-to-r from-red-600/10 to-orange-600/10 p-6 border-b border-slate-700">
+                        <div className="flex items-center gap-2">
+                            <Lock className="w-5 h-5 text-red-500" />
+                            <h2 className="text-xl sm:text-2xl font-bold text-white">Change Password</h2>
+                        </div>
+                        <p className="text-sm text-gray-400 mt-1">Update your password to keep your account secure</p>
+                    </div>
 
-                    {success && (
-                        <SuccessMessage message="Password Changed Successfully..." subMessage="Your password has been updated." />
-                    )}
-
-                    <form onSubmit={handleSubmit(handlePasswordChange)}>
-
-                        <div className="mb-3">
-                            <label htmlFor="" className="Profile-label">Current Password</label>
+                    <form onSubmit={handleSubmit(handlePasswordChange)} className="p-6 space-y-5">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                                Current Password
+                            </label>
                             <div className="relative">
                                 <input
                                     type={showPassword ? "text" : "password"}
-                                    className="Profile-input pr-10"
-                                    placeholder="Enter current password..."
+                                    className="w-full bg-slate-800 text-white rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-red-500 border border-slate-700 transition-all"
+                                    placeholder="Enter current password"
                                     {...register("currentPassword", {
-                                        required: "Current password is required."
+                                        required: "Current password is required"
                                     })}
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute p-1 right-3 top-1/2 -translate-y-1/2 hover:bg-gray-700 rounded"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-slate-700 rounded-lg transition-colors"
                                 >
-                                    {showPassword ? <Eye size={20} className="text-white" /> : <EyeOff size={20} className="text-white" />}
+                                    {showPassword ?
+                                        <Eye className="w-5 h-5 text-gray-400" /> :
+                                        <EyeOff className="w-5 h-5 text-gray-400" />
+                                    }
                                 </button>
                             </div>
+                            {errors.currentPassword && (
+                                <p className="text-red-400 text-sm mt-1 flex items-center gap-1">
+                                    <span>⚠️</span> {errors.currentPassword.message}
+                                </p>
+                            )}
                         </div>
 
-                        <div className="mb-3">
-                            <label htmlFor="" className="Profile-label">New Password</label>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                                New Password
+                            </label>
                             <input
-                                className="Profile-input"
                                 type={showPassword ? "text" : "password"}
-                                placeholder="Enter new Password..."
+                                className="w-full bg-slate-800 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 border border-slate-700 transition-all"
+                                placeholder="Enter new password"
                                 {...register("newPassword", passwordValidator)}
                             />
-                            {errors.newPassword && <p className="Form-error">{error.newPassword.message}</p>}
+                            {errors.newPassword && (
+                                <p className="text-red-400 text-sm mt-1 flex items-center gap-1">
+                                    <span>⚠️</span> {errors.newPassword.message}
+                                </p>
+                            )}
                         </div>
 
-                        <div className="mb-3">
-                            <label htmlFor="" className="Profile-label">Confirm Password</label>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                                Confirm New Password
+                            </label>
                             <input
-                                className="Profile-input"
-                                type={showPassword ? "text": "password"}
-                                placeholder="Confirm new password..."
-                                {...register("confirmPassword" , {
-                                    required: "Confirm you password",
-                                    validate: value => value === newPasswordValue || "Password don't match"
+                                type={showPassword ? "text" : "password"}
+                                className="w-full bg-slate-800 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 border border-slate-700 transition-all"
+                                placeholder="Confirm new password"
+                                {...register("confirmPassword", {
+                                    required: "Please confirm your password",
+                                    validate: value => value === newPasswordValue || "Passwords don't match"
                                 })}
                             />
-                            {errors.confirmPassword && <p className="Form-error">{errors.confirmPassword.message}</p>}
+                            {errors.confirmPassword && (
+                                <p className="text-red-400 text-sm mt-1 flex items-center gap-1">
+                                    <span>⚠️</span> {errors.confirmPassword.message}
+                                </p>
+                            )}
                         </div>
 
-                        <ErrorMessage message={error} onClose={() => setError("")}/>
-
-                        <LoadingButton type="submit" isLoading={loading}>Update Password</LoadingButton>
+                        <div className="pt-4">
+                            <LoadingButton
+                                type="submit"
+                                isLoading={loading}
+                                className="w-full"
+                            >
+                                Update Password
+                            </LoadingButton>
+                        </div>
                     </form>
+                </div>
+
+                <div className="mt-6 p-4 bg-slate-900/50 rounded-xl border border-slate-800">
+                    <h3 className="text-sm font-semibold text-white mb-2">Password Requirements:</h3>
+                    <ul className="text-xs text-gray-400 space-y-1">
+                        <li>• At least 8 characters long</li>
+                        <li>• Contains uppercase and lowercase letters</li>
+                        <li>• Includes at least one number</li>
+                        <li>• Has at least one special character</li>
+                    </ul>
                 </div>
             </div>
         </div>
-    )
-};
+    );
+}

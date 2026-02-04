@@ -5,8 +5,9 @@ import AddMovieForm from "./AddMovieForm";
 import GenreCheckboxes from "../common/GenreCheckboxes";
 import CategoryCheckboxes from "../common/CategoryCheckboxes";
 import { getAllMoviesWithAPI, updateMovieWithAPI, deleteMovieWithAPI, createMovieWithAPI } from "../../services/movieService";
-import LoadingSpinner from "../common/LoadingSpinner";
+// import LoadingSpinner from "../common/LoadingSpinner";
 import { toTitleCase } from "../../utils/formatters";
+import { showAlert } from "../common/CustomAlert";
 
 export default function ManageMovies() {
     const queryClient = useQueryClient();
@@ -55,7 +56,7 @@ export default function ManageMovies() {
         if (result.success) {
             queryClient.invalidateQueries(['movies']);
             queryClient.invalidateQueries(['movie', movieId]);
-            alert("Movie deleted successfully...");
+            showAlert("Movie deleted successfully...", "warning");
         } else {
             alert(result.error || "Failed to delete movie...");
         }
@@ -68,9 +69,9 @@ export default function ManageMovies() {
             queryClient.invalidateQueries(['movies']);
             queryClient.invalidateQueries(['movie', editingMovie.id]);
             setEditingMovie(null);
-            alert("Movie updated successfully...");
+            showAlert("Movie updated successfully...", "info");
         } else {
-            alert(result.error || "Failed to update movie...");
+            showAlert(result.error || "Failed to update movie...", "error");
         }
     };
 
@@ -80,15 +81,14 @@ export default function ManageMovies() {
         if (result.success) {
             queryClient.invalidateQueries(['movies']);
             setIsAdding(false);
-            alert("Movie added successfully!");
+            showAlert("Movie added successfully!", "success");
         } else {
             alert(result.error || "Failed to add movie");
         }
     };
-
-    if (isLoading) {
-        return <LoadingSpinner />;
-    }
+    // if (isLoading) {
+    //     return <LoadingSpinner />;
+    // }
 
     return (
         <div className="ctm-manage-movies">

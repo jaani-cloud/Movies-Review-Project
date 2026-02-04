@@ -55,41 +55,7 @@
         @apply sm:px-4 sm:py-2 font-semibold text-white scale-105 border-2 border-blue-400 rounded-lg shadow-xl bg-gradient-to-r from-blue-600 to-blue-800 shadow-blue-500/50 sm:text-base text-sm active:scale-100 px-3 py-2;
     }
 
-    .Poster-animate {
-        @apply relative overflow-hidden cursor-pointer;
-        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-        transform-style: preserve-3d;
-    }
 
-    .Poster-animate::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
-        transition: left 0.6s;
-        z-index: 1;
-    }
-
-    .Poster-animate:hover::before {
-        left: 100%;
-    }
-
-    .Poster-animate:hover {
-        transform: translateY(-12px) scale(1.08);
-        box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.6),
-            0 0 0 1px rgba(59, 130, 246, 0.3),
-            inset 0 0 20px rgba(59, 130, 246, 0.1);
-        filter: brightness(1.1);
-    }
-
-    .Poster-animate:hover h3 {
-        color: rgb(34, 197, 94);
-        transform: translateX(5px);
-        font-weight: 600;
-    }
 
     .Search {
         @apply px-4 py-2 text-white transition-all duration-200 border rounded-lg bg-slate-800 border-slate-600 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50;
@@ -129,6 +95,56 @@
         @apply bg-slate-800 px-6 py-2 rounded-lg mt-1 hover:bg-opacity-80 transition-all duration-200 border-2 border-transparent
     }
 
+    .Poster-animate {
+        @apply relative overflow-hidden cursor-pointer;
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        transform-style: preserve-3d;
+    }
+
+    .Poster-animate::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+        transition: left 0.6s;
+        z-index: 1;
+    }
+
+    .Poster-animate:hover::before {
+        left: 100%;
+    }
+
+    .Poster-animate:hover {
+        transform: translateY(-12px) scale(1.08);
+        box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.6),
+            0 0 0 1px rgba(59, 130, 246, 0.3),
+            inset 0 0 20px rgba(59, 130, 246, 0.1);
+        filter: brightness(1.1);
+    }
+
+    @media (max-width: 768px) {
+        .Poster-animate:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 40px -12px rgba(59, 130, 246, 0.5),
+                0 0 0 1px rgba(59, 130, 246, 0.25);
+        }
+    }
+
+    .Poster-animate:hover h3 {
+        color: rgb(34, 197, 94);
+        transform: translateX(5px);
+        font-weight: 600;
+    }
+
+    .Poster-animate:focus-visible {
+        outline: 2px solid rgb(59, 130, 246);
+        outline-offset: 2px;
+        transform: translateY(-8px) scale(1.05);
+    }
+
     .Hover-scroll {
         animation: none;
     }
@@ -142,10 +158,124 @@
             transform: translateX(0);
         }
 
+        25% {
+            transform: translateX(0);
+        }
+
+        75% {
+            transform: translateX(calc(-100% + 100px));
+        }
+
         100% {
-            transform: translateX(-100%);
+            transform: translateX(calc(-100% + 100px));
         }
     }
+
+    .shimmer-effect {
+        background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(148, 163, 184, 0.1) 50%,
+                transparent 100%);
+        background-size: 200% 100%;
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.7;
+        }
+    }
+
+    @keyframes progress {
+        0% {
+            width: 0%;
+        }
+
+        100% {
+            width: 95%;
+        }
+    }
+
+    .animate-progress {
+        animation: progress 2s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    @supports (backdrop-filter: blur(8px)) {
+        .backdrop-blur-sm {
+            backdrop-filter: blur(8px);
+        }
+    }
+
+    @media (max-width: 480px) {
+        @keyframes scroll-text {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(0);
+            }
+
+            75% {
+                transform: translateX(calc(-100% + 60px));
+            }
+
+            100% {
+                transform: translateX(calc(-100% + 60px));
+            }
+        }
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+        .Poster-animate:hover {
+            transform: none;
+            box-shadow: none;
+            filter: none;
+        }
+
+        .Poster-animate:hover::before {
+            left: -100%;
+        }
+
+        .Poster-animate:active {
+            transform: scale(0.98);
+            transition: transform 0.1s;
+        }
+    }
+
+
 
     .Profile-label {
         @apply text-slate-400 text-sm block mb-1

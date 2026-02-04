@@ -7,10 +7,12 @@ import Profile from "./pages/Profile"
 import Settings from "./pages/Settings"
 import AdminDashboard  from "./pages/AdminDashboard";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import CustomAlert from "./components/common/CustomAlert";
 
 export default function App() {
   return (
     <HashRouter>
+      <CustomAlert/>
       <Routes>
         <Route path="/login" element={<Login />} />
 

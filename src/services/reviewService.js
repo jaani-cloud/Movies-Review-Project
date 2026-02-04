@@ -1,3 +1,84 @@
+import axios from 'axios';
+import { API_BASE_URL, API_ENDPOINTS } from "../constants/apiConfig";
+
+export const createReviewWithAPI = async (reviewData) => {
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}${API_ENDPOINTS.REVIEW.CREATE}`,
+            reviewData
+        );
+
+        return {
+            success: response.data.success,
+            message: response.data.message,
+            review: response.data.data
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.response?.data?.message || "Failed to create review"
+        };
+    }
+};
+
+export const getReviewsByMovieWithAPI = async (movieId) => {
+    try {
+        const response = await axios.get(
+            `${API_BASE_URL}${API_ENDPOINTS.REVIEW.GET_BY_MOVIE.replace(':movieId', movieId)}`
+        );
+
+        return {
+            success: response.data.success,
+            reviews: response.data.data
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.response?.data?.message || "Failed to fetch reviews"
+        };
+    }
+};
+
+export const updateReviewWithAPI = async (reviewId, reviewData) => {
+    try {
+        const response = await axios.put(
+            `${API_BASE_URL}${API_ENDPOINTS.REVIEW.UPDATE.replace(':id', reviewId)}`,
+            reviewData
+        );
+
+        return {
+            success: response.data.success,
+            message: response.data.message,
+            review: response.data.data
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.response?.data?.message || "Failed to update review"
+        };
+    }
+};
+
+export const deleteReviewWithAPI = async (reviewId) => {
+    try {
+        const response = await axios.delete(
+            `${API_BASE_URL}${API_ENDPOINTS.REVIEW.DELETE.replace(':id', reviewId)}`
+        );
+
+        return {
+            success: true,
+            message: "Review deleted successfully"
+        };
+    } catch (error) {
+        return {
+            success: false,
+            error: error.response?.data?.message || "Failed to delete review"
+        };
+    }
+};
+
+//-----------------------------
+
 export const getReviews = (movieId) => {
     const reviews = localStorage.getItem(`reviews_${movieId}`);
     return reviews ? JSON.parse(reviews) : [];
@@ -22,7 +103,6 @@ export const deleteReview = (movieId, reviewId) => {
     localStorage.setItem(`reviews_${movieId}`, JSON.stringify(filtered));
 };
 
-
 export const updateReview = (movieId, reviewId, updatedData) => {
     const reviews = getReviews(movieId);
     const updated = reviews.map(r =>
@@ -30,22 +110,3 @@ export const updateReview = (movieId, reviewId, updatedData) => {
     );
     localStorage.setItem(`reviews_${movieId}`, JSON.stringify(updated));
 };
-
-// -----------------------------------------------API
-
-// import axios from 'axios';
-// const API_URL = '';
-
-// export const getReviews = async (movieId) => {
-//     const response = await axios.get(`${API_URL}?movieId=${movieId}`);
-//     return response.data;
-// };
-
-// export const addReview = async (movieId, review) => {
-//     const response = await axios.post(API_URL, { movieId, ...review });
-//     return response.data;
-// };
-
-// export const deleteReview = async (movieId, reviewId) => {
-//     await axios.delete(`${API_URL}/${reviewId}`);
-// };

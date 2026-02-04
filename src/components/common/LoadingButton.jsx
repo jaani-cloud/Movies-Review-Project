@@ -3,7 +3,7 @@ export default function LoadingButton({ isLoading, children, ...props }) {
         <button
             {...props}
             disabled={isLoading}
-            className={`Form-btn ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`Form-btn px-6 mb-0  ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
             {isLoading ? (
                 <span className="flex items-center justify-center gap-2">

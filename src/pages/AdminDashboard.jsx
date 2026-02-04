@@ -43,75 +43,74 @@ export default function AdminDashboard() {
                 <p className="ctm-admin-subtitle">Master Control Center</p>
             </div>
 
-            <div className="ctm-admin-grid">
+            {activeSection === "movies" ? (
+                <ManageMovies />
+            ) : (
 
-                <div className="ctm-admin-card ctm-card-blue">
-                    <div className="ctm-card-glow"></div>
-                    <div className="ctm-card-content">
-                        <div className="ctm-card-icon">🎬</div>
-                        <h2 className="ctm-card-title">Movies</h2>
-                        <p className="ctm-card-desc">Manage all movies in the database</p>
-                        <button
-                            className="ctm-card-btn ctm-btn-blue"
-                            onClick={() => setActiveSection("movies")}>
-                            <span>Manage Movies</span>
-                            <span className="ctm-btn-arrow">→</span>
-                        </button>
+                <div className="ctm-admin-grid">
+
+                    <div className="ctm-admin-card ctm-card-blue">
+                        <div className="ctm-card-glow"></div>
+                        <div className="ctm-card-content">
+                            <div className="ctm-card-icon">🎬</div>
+                            <h2 className="ctm-card-title">Movies</h2>
+                            <p className="ctm-card-desc">Manage all movies in the database</p>
+                            <button
+                                className="ctm-card-btn ctm-btn-blue"
+                                onClick={() => setActiveSection("movies")}>
+                                <span>Manage Movies</span>
+                                <span className="ctm-btn-arrow">→</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <div className="ctm-admin-card ctm-card-purple">
-                    <div className="ctm-card-glow"></div>
-                    <div className="ctm-card-content">
-                        <div className="ctm-card-icon">👥</div>
-                        <h2 className="ctm-card-title">Users</h2>
-                        <p className="ctm-card-desc">View and manage user accounts</p>
-                        <button className="ctm-card-btn ctm-btn-purple">
-                            <span>Manage Users</span>
-                            <span className="ctm-btn-arrow">→</span>
-                        </button>
+                    <div className="ctm-admin-card ctm-card-purple">
+                        <div className="ctm-card-glow"></div>
+                        <div className="ctm-card-content">
+                            <div className="ctm-card-icon">👥</div>
+                            <h2 className="ctm-card-title">Users</h2>
+                            <p className="ctm-card-desc">View and manage user accounts</p>
+                            <button className="ctm-card-btn ctm-btn-purple">
+                                <span>Manage Users</span>
+                                <span className="ctm-btn-arrow">→</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <div className="ctm-admin-card ctm-card-green">
-                    <div className="ctm-card-glow"></div>
-                    <div className="ctm-card-content">
-                        <div className="ctm-card-icon">📝</div>
-                        <h2 className="ctm-card-title">Reviews</h2>
-                        <p className="ctm-card-desc">Monitor and moderate reviews</p>
-                        <button className="ctm-card-btn ctm-btn-green">
-                            <span>View All Reviews</span>
-                            <span className="ctm-btn-arrow">→</span>
-                        </button>
+                    <div className="ctm-admin-card ctm-card-green">
+                        <div className="ctm-card-glow"></div>
+                        <div className="ctm-card-content">
+                            <div className="ctm-card-icon">📝</div>
+                            <h2 className="ctm-card-title">Reviews</h2>
+                            <p className="ctm-card-desc">Monitor and moderate reviews</p>
+                            <button className="ctm-card-btn ctm-btn-green">
+                                <span>View All Reviews</span>
+                                <span className="ctm-btn-arrow">→</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <div className="ctm-admin-card ctm-card-gold">
-                    <div className="ctm-card-glow"></div>
-                    <div className="ctm-card-content">
-                        <div className="ctm-card-icon">📊</div>
-                        <h2 className="ctm-card-title">Statistics</h2>
-                        <div className="ctm-stats-container">
-                            <div className="ctm-stat-item">
-                                <span className="ctm-stat-label">Total Movies</span>
-                                <span className="ctm-stat-value">{movies.length}</span>
-                            </div>
-                            <div className="ctm-stat-item">
-                                <span className="ctm-stat-label">Total Users</span>
-                                <span className="ctm-stat-value">2</span>
-                            </div>
-                            <div className="ctm-stat-item">
-                                <span className="ctm-stat-label">Total Reviews</span>
-                                <span className="ctm-stat-value">--</span>
+                    <div className="ctm-admin-card ctm-card-gold">
+                        <div className="ctm-card-glow"></div>
+                        <div className="ctm-card-content">
+                            <div className="ctm-card-icon">📊</div>
+                            <h2 className="ctm-card-title">Statistics</h2>
+                            <div className="ctm-stats-container">
+                                <div className="ctm-stat-item">
+                                    <span className="ctm-stat-label">Total Movies</span>
+                                    <span className="ctm-stat-value">{movies.length}</span>
+                                </div>
+                                <div className="ctm-stat-item">
+                                    <span className="ctm-stat-label">Total Users</span>
+                                    <span className="ctm-stat-value">2</span>
+                                </div>
+                                <div className="ctm-stat-item">
+                                    <span className="ctm-stat-label">Total Reviews</span>
+                                    <span className="ctm-stat-value">--</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            {activeSection === "movies" && (
-                <div className="ctm-manage-section">
-                    <ManageMovies />
                 </div>
             )}
         </div>

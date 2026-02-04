@@ -1,13 +1,14 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getMovieByIdWithAPI } from "../services/movieService";
-
+import { ArrowLeft, Calendar, Film } from "lucide-react";
 import ReviewGauge from "../components/movie/ReviewGauge";
 import { formatGenres } from "../utils/formatters";
 import ReviewForm from "../components/movie/ReviewForm";
 import ReviewList from "../components/movie/ReviewList";
 import { getReviews } from "../services/reviewService";
 import { useEffect, useState } from 'react';
+import MovieDetailSkeleton from "../components/Skeleton/MovieDetailSkeleton";
 
 export default function MovieDetail() {
     const { id } = useParams();
@@ -17,28 +18,25 @@ export default function MovieDetail() {
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [reviews, setReviews] = useState([]);
 
-    // React Query se movie fetch
     const { data: movie, isLoading, error } = useQuery({
         queryKey: ['movie', id],
         queryFn: async () => {
-            // Pehle cache check karo
             const cachedMovies = queryClient.getQueryData(['movies']);
 
             if (cachedMovies) {
                 const foundMovie = cachedMovies.find(m => m.id === parseInt(id));
                 if (foundMovie) {
-                    return foundMovie; // Cache se return
+                    return foundMovie;
                 }
             }
 
-            // Cache me nahi mili, API call
             const result = await getMovieByIdWithAPI(id);
             if (!result.success) {
                 throw new Error(result.error);
             }
             return result.movie;
         },
-        staleTime: 10 * 60 * 1000, // 10 minutes
+        staleTime: 10 * 60 * 1000,
     });
 
     useEffect(() => {
@@ -52,38 +50,31 @@ export default function MovieDetail() {
         setRefreshTrigger(prev => prev + 1);
     };
 
-    // Loading state
     if (isLoading) {
-        return (
-            <div className="min-h-screen bg-black flex items-center justify-center">
-                <div className="text-center">
-                    <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-white text-xl">Loading movie details...</p>
-                </div>
-            </div>
-        );
+        return <MovieDetailSkeleton />;
     }
 
-    // Error state
     if (error || !movie) {
         return (
-            <div className="min-h-screen bg-black flex items-center justify-center">
-                <div className="text-center">
-                    <p className="text-red-500 text-xl mb-4">
-                        ⚠️ {error?.message || "Movie not found"}
-                    </p>
+            <div className="min-h-screen bg-black flex items-center justify-center px-4">
+                <div className="text-center max-w-md">
+                    <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-red-900/20 flex items-center justify-center">
+                        <Film className="w-10 h-10 text-red-500" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-white mb-2">Movie Not Found</h2>
+                    <p className="text-red-400 mb-6">{error?.message || "The movie you're looking for doesn't exist"}</p>
                     <button
                         onClick={() => navigate('/')}
-                        className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                        className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg hover:from-red-700 hover:to-red-600 transition-all font-medium inline-flex items-center gap-2"
                     >
-                        Go to Home
+                        <ArrowLeft className="w-4 h-4" />
+                        Back to Home
                     </button>
                 </div>
             </div>
         );
     }
 
-    // Review counts
     const reviewCounts = {
         skip: reviews.filter(r => r.type === "Skip").length,
         timePass: reviews.filter(r => r.type === "Time Pass").length,
@@ -97,35 +88,68 @@ export default function MovieDetail() {
     ];
 
     return (
-        <div className="min-h-screen p-8 text-white bg-black">
-            <div className="flex gap-8">
-                <div className="w-[800px] sticky top-8 self-start">
-                    <img
-                        src={movie.poster}
-                        alt={movie.name}
-                        className="w-full rounded-lg shadow-2xl"
-                    />
-                </div>
+        <div className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-black text-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+                <button
+                    onClick={() => navigate('/')}
+                    className="mb-6 inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+                >
+                    <ArrowLeft className="w-5 h-5" />
+                    <span className="text-sm font-medium">Back to Home</span>
+                </button>
 
-                <div className="flex flex-col gap-4">
-                    <h1 className="mb-4 text-5xl font-bold">{movie.name}</h1>
-                    <p className="mb-2 text-lg text-slate-400">{movie.releaseYear}</p>
-                    <p className="mb-4 capitalize text-slate-500">
-                        {formatGenres(movie.genre)}
-                    </p>
-                    <p className="text-lg leading-relaxed text-slate-300">
-                        {movie.description}
-                    </p>
+                <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] xl:grid-cols-[500px_1fr] gap-6 lg:gap-8 xl:gap-12">
+                    <div className="lg:sticky lg:top-12 lg:self-start">
+                        <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                            <img
+                                src={movie.poster}
+                                alt={movie.name}
+                                className="w-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                        </div>
+                    </div>
 
-                    <ReviewGauge reviewData={reviewData} />
-                    <ReviewForm
-                        movieId={movie.id}
-                        onReviewAdded={handleReviewAdded}
-                    />
-                    <ReviewList
-                        movieId={movie.id}
-                        key={refreshTrigger}
-                    />
+                    <div className="flex flex-col gap-6">
+                        <div className="space-y-4">
+                            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight">
+                                {movie.name}
+                            </h1>
+
+                            <div className="flex flex-wrap items-center gap-3 text-sm sm:text-base">
+                                <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 rounded-lg">
+                                    <Calendar className="w-4 h-4 text-gray-400" />
+                                    <span className="text-gray-300">{movie.releaseYear}</span>
+                                </div>
+                                <div className="px-3 py-1.5 bg-slate-800 rounded-lg">
+                                    <span className="text-gray-300 capitalize">{formatGenres(movie.genre)}</span>
+                                </div>
+                            </div>
+
+                            <p className="text-sm sm:text-base leading-relaxed text-gray-300">
+                                {movie.description}
+                            </p>
+                        </div>
+
+                        <div className="bg-slate-900/50 rounded-2xl p-4 sm:p-6 border border-slate-800">
+                            <ReviewGauge reviewData={reviewData} />
+                        </div>
+
+                        <div className="bg-slate-900/50 rounded-2xl p-4 sm:p-6 border border-slate-800">
+                            <ReviewForm
+                                movieId={movie.id}
+                                onReviewAdded={handleReviewAdded}
+                            />
+                        </div>
+
+                        <div className="bg-slate-900/50 rounded-2xl p-4 sm:p-6 border border-slate-800">
+                            <ReviewList
+                                movieId={movie.id}
+                                movieType={movie.type}
+                                key={refreshTrigger}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
