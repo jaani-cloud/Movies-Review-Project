@@ -1,4 +1,4 @@
-import { Film, Sparkles, TrendingUp } from "lucide-react";
+import { Film, Sparkles, TrendingUp, ArrowBigUpDash } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query';
 import { getAllMoviesWithAPI } from "../services/movieService";
@@ -63,7 +63,7 @@ export default function Home() {
                 <div className="sm:flex sm:gap-6 lg:gap-8">
                     <div className="sm:flex-1 lg:mr-[21rem]">
 
-                        <div className="sticky top-16 sm:top-20 z-10 bg-gradient-to-b from-black via-black/95 to-transparent pb-4 backdrop-blur-sm">
+                        <div className="lg:sticky top-16 sm:top-20 z-10 bg-gradient-to-b from-black via-black/95 to-transparent pb-4 backdrop-blur-sm">
                             <div className="flex flex-wrap gap-2 sm:gap-3 p-3 sm:p-4">
                                 {CATEGORIES.map((category) => (
                                     <Button
@@ -128,6 +128,14 @@ export default function Home() {
 
                     <Sidebar movies={movies} />
                 </div>
+
+                <button
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className="lg:hidden bg-blue-500 hover:bg-blue-600 fixed bottom-3 right-3 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-colors z-50 animate-pulse"
+                >
+                    <ArrowBigUpDash className="w-8 h-8 text-white" />
+                </button>
+
             </main>
 
             <style jsx>{`

@@ -110,3 +110,18 @@ export const updateReview = (movieId, reviewId, updatedData) => {
     );
     localStorage.setItem(`reviews_${movieId}`, JSON.stringify(updated));
 };
+
+export const getUserReviewsWithAPI = async (userId) => {
+    try {
+        const response = await axios.get(
+            `${API_BASE_URL}${API_ENDPOINTS.REVIEW.GET_BY_USER.replace(':userId', userId)}`
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching user reviews:", error);
+        return {
+            success: false,
+            error: error.response?.data?.message || "Failed to fetch user reviews",
+        };
+    }
+};
