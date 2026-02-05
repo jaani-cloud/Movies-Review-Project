@@ -1,11 +1,32 @@
 import { useState } from 'react';
+import LoadingButton from '../common/LoadingButton';
+import { showAlert } from '../common/CustomAlert';
 
 export default function ReviewEditForm({ review, onSave, onCancel }) {
     const [editType, setEditType] = useState(review.type);
     const [editComment, setEditComment] = useState(review.comment);
+    const [loading, setLoading] = useState(false);
 
-    const handleSave = () => {
-        onSave(review.id, { type: editType, comment: editComment });
+    const handleSave = async () => {
+        if (!editType) {
+            showAlert("Please select a review type", "error");
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            await onSave(review.id, {
+                movieId: review.movieId,
+                type: editType,
+                comment: editComment
+            });
+            showAlert("Review updated successfully!", "success");
+        } catch (error) {
+            showAlert("Failed to update review", "error");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -18,8 +39,8 @@ export default function ReviewEditForm({ review, onSave, onCancel }) {
                     onChange={(e) => setEditType(e.target.value)}
                 >
                     <option value="Skip">Skip</option>
-                    <option value="Time Pass">Time Pass</option>
-                    <option value="Go For It">Go For It</option>
+                    <option value="TimePass">Time Pass</option>
+                    <option value="GoForIt">Go For It</option>
                 </select>
             </div>
 
@@ -33,16 +54,14 @@ export default function ReviewEditForm({ review, onSave, onCancel }) {
                 />
             </div>
 
-            <div className="flex gap-2">
-                <button
-                    className='flex-1 sm:flex-none bg-green-600 px-6 py-2 rounded-lg hover:bg-green-700 font-semibold transition-colors'
-                    onClick={handleSave}
-                >
+            <div className="flex gap-2 sm:w-72">
+                <LoadingButton onClick={handleSave} isLoading={loading}>
                     Save Changes
-                </button>
+                </LoadingButton>
                 <button
                     className='flex-1 sm:flex-none bg-slate-700 px-6 py-2 rounded-lg font-semibold hover:bg-slate-600 transition-colors'
                     onClick={onCancel}
+                    disabled={loading}
                 >
                     Cancel
                 </button>

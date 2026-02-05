@@ -109,8 +109,8 @@ export default function ReviewForm({ movieId, onReviewAdded }) {
                                 <span className="font-semibold text-sm">
                                     {
                                         type === "Skip" ? "Skip" :
-                                        type === "TimePass" ? "Time Pass" :
-                                        type === "GoForIt" ? "Go For It" : ""
+                                            type === "TimePass" ? "Time Pass" :
+                                                type === "GoForIt" ? "Go For It" : ""
                                     }
                                 </span>
                             </button>
@@ -130,11 +130,13 @@ export default function ReviewForm({ movieId, onReviewAdded }) {
                     />
                 </div>
 
-                <button type="submit" className="w-full">
-                    <LoadingButton isLoading={isLoading}>
-                        Submit Review
-                    </LoadingButton>
-                </button>
+                <LoadingButton
+                    type="submit"
+                    className="w-full"
+                    isLoading={isLoading}
+                >
+                    Submit Review
+                </LoadingButton>
             </form>
         </div>
     );

@@ -4,14 +4,21 @@ import { getReviewsByMovieWithAPI, deleteReviewWithAPI, updateReviewWithAPI } fr
 import { getCurrentUser } from '../../services/authService';
 import { formatDate } from '../../utils/formatters';
 import ReviewEditForm from './ReviewEditForm';
+import ReviewListSkeleton from '../Skeleton/ReviewListSkeleton';
+import ConfirmDialog from '../common/ConfirmDialog';
+import { showAlert } from '../common/CustomAlert';
+
 
 export default function ReviewList({ movieId, movieType }) {
     const [reviews, setReviews] = useState([]);
     const [editedReview, setEditedReview] = useState(null);
     const currentUser = getCurrentUser();
+    const [loading, setLoading] = useState(true);
+    const [deleteDialog, setDeleteDialog] = useState({ isOpen: false, reviewId: null });
 
     useEffect(() => {
         const fetchReviews = async () => {
+            setLoading(true)
             const result = await getReviewsByMovieWithAPI(movieId);
 
             if (result.success) {
@@ -20,6 +27,7 @@ export default function ReviewList({ movieId, movieType }) {
                 console.error("Failed to fetch reviews:", result.error);
                 setReviews([]);
             }
+            setLoading(false)
         };
 
         fetchReviews();
@@ -43,15 +51,20 @@ export default function ReviewList({ movieId, movieType }) {
     };
 
     const handleDelete = async (reviewId) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this review?");
-        if (!confirmDelete) return;
+        setDeleteDialog({ isOpen: true, reviewId })
+    };
+
+    const confirmDelete = async () => {
+        const reviewId = deleteDialog.reviewId
+        setDeleteDialog({ isOpen: false, reviewId: null })
 
         const result = await deleteReviewWithAPI(reviewId);
 
         if (result.success) {
+            showAlert("Review deleted successfully!", "warning");
             refreshReviews();
         } else {
-            alert(result.error || "Failed to delete review");
+            showAlert(result.error || "Failed to delete review", "error");
         }
     };
 
@@ -59,8 +72,8 @@ export default function ReviewList({ movieId, movieType }) {
         const result = await updateReviewWithAPI(reviewId, updatedData);
 
         if (result.success) {
-            setEditedReview(null);
-            refreshReviews();
+            setEditedReview(null)
+            refreshReviews()
         } else {
             alert(result.error || "Failed to update review");
         }
@@ -69,14 +82,16 @@ export default function ReviewList({ movieId, movieType }) {
     return (
         <div className='w-full'>
             <div className="flex items-center gap-2 mb-6">
-                <MessageCircle className="w-6 h-6 text-blue-500" />
+                <MessageCircle className="w-6 h-6 text-red-500" />
                 <h3 className='text-xl sm:text-2xl font-bold text-white'>
                     {reviews.length === 0 ? "No Reviews Yet" : `User Reviews (${reviews.length})`}
                 </h3>
             </div>
 
             <div className="space-y-4">
-                {reviews.length === 0 ? (
+                {loading ? (
+                    <ReviewListSkeleton />
+                ) : reviews.length === 0 ? (
                     <div className="text-center py-12 px-4">
                         <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-800 flex items-center justify-center">
                             <MessageCircle className="w-8 h-8 text-gray-600" />
@@ -156,6 +171,23 @@ export default function ReviewList({ movieId, movieType }) {
                     ))
                 )}
             </div>
+
+            <ConfirmDialog
+                isOpen={deleteDialog.isOpen}
+                onClose={() => setDeleteDialog({ isOpen: false, reviewId: null })}
+                onConfirm={confirmDelete}
+                title="Delete Review"
+                message={
+                    <>
+                        Are you sure you want to delete this review?
+                        <br />
+                        The action cannot be undone.
+                    </>
+                }
+                confirmText="Delete"
+                cancelText="Cancel"
+            />
+
         </div>
     );
 }
