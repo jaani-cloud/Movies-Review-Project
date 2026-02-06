@@ -6,8 +6,7 @@ import ReviewGauge from "../components/movie/ReviewGauge";
 import { formatGenres } from "../utils/formatters";
 import ReviewForm from "../components/movie/ReviewForm";
 import ReviewList from "../components/movie/ReviewList";
-import { getReviews } from "../services/reviewService";
-import { useEffect, useState } from 'react';
+import { useState, useCallback } from 'react';
 import MovieDetailSkeleton from "../components/Skeleton/MovieDetailSkeleton";
 
 export default function MovieDetail() {
@@ -15,7 +14,6 @@ export default function MovieDetail() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
-    const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [reviews, setReviews] = useState([]);
 
     const { data: movie, isLoading, error } = useQuery({
@@ -39,16 +37,13 @@ export default function MovieDetail() {
         staleTime: 10 * 60 * 1000,
     });
 
-    useEffect(() => {
-        if (movie) {
-            const movieReviews = getReviews(parseInt(id));
-            setReviews(movieReviews);
-        }
-    }, [id, refreshTrigger, movie]);
-
     const handleReviewAdded = () => {
-        setRefreshTrigger(prev => prev + 1);
+        queryClient.invalidateQueries(['reviews', parseInt(id)]);
     };
+
+    const handleReviewsLoad = useCallback((loadedReviews) => {
+        setReviews(loadedReviews);
+    }, []);
 
     if (isLoading) {
         return <MovieDetailSkeleton />;
@@ -77,8 +72,8 @@ export default function MovieDetail() {
 
     const reviewCounts = {
         skip: reviews.filter(r => r.type === "Skip").length,
-        timePass: reviews.filter(r => r.type === "Time Pass").length,
-        goForIt: reviews.filter(r => r.type === "Go For It").length,
+        timePass: reviews.filter(r => r.type === "TimePass").length,
+        goForIt: reviews.filter(r => r.type === "GoForIt").length,
     };
 
     const reviewData = [
@@ -146,7 +141,7 @@ export default function MovieDetail() {
                             <ReviewList
                                 movieId={movie.id}
                                 movieType={movie.type}
-                                key={refreshTrigger}
+                                onReviewsLoad={handleReviewsLoad}
                             />
                         </div>
                     </div>

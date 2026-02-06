@@ -381,7 +381,7 @@ export default function Login() {
                                     Login
                                 </LoadingButton>
 
-                                <p className="Form-p2">Don't have an account?{" "}
+                                <p className="Form-p2 mt-4">Don't have an account?{" "}
                                     <a href="#" onClick={(e) => { e.preventDefault(); setCurrentForm("signup") }}
                                         className="Form-a">
                                         Signup for free
@@ -500,7 +500,7 @@ export default function Login() {
 
                                 <LoadingButton type="submit" isLoading={signupLoading}>Sign Up</LoadingButton>
 
-                                <p className="Form-p2">Already have an account?{" "}
+                                <p className="Form-p2 mt-4">Already have an account?{" "}
                                     <a href="#" onClick={(e) => { e.preventDefault(); setCurrentForm("login") }}
                                         className="Form-a">
                                         Login
@@ -577,7 +577,7 @@ export default function Login() {
                                         </LoadingButton>
                                     </>
                                 )}
-                                <p className="Form-p2">Remember Password?{" "}
+                                <p className="Form-p2 mt-4">Remember Password?{" "}
                                     <a href="#" onClick={(e) => { e.preventDefault(); setCurrentForm("login") }}
                                         className="Form-a">Back to Login</a>
                                 </p>

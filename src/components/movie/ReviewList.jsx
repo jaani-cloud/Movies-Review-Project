@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { MessageCircle, Edit2, Trash2, User } from 'lucide-react';
 import { getReviewsByMovieWithAPI, deleteReviewWithAPI, updateReviewWithAPI } from "../../services/reviewService";
 import { getCurrentUser } from '../../services/authService';
@@ -7,31 +6,31 @@ import ReviewEditForm from './ReviewEditForm';
 import ReviewListSkeleton from '../Skeleton/ReviewListSkeleton';
 import ConfirmDialog from '../common/ConfirmDialog';
 import { showAlert } from '../common/CustomAlert';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 
-
-export default function ReviewList({ movieId, movieType }) {
-    const [reviews, setReviews] = useState([]);
+export default function ReviewList({ movieId, movieType, onReviewsLoad }) {
     const [editedReview, setEditedReview] = useState(null);
-    const currentUser = getCurrentUser();
-    const [loading, setLoading] = useState(true);
     const [deleteDialog, setDeleteDialog] = useState({ isOpen: false, reviewId: null });
+    const currentUser = getCurrentUser();
+    const queryClient = useQueryClient();
 
-    useEffect(() => {
-        const fetchReviews = async () => {
-            setLoading(true)
+    // React Query se reviews fetch - caching automatic!
+    const { data: reviews = [], isLoading } = useQuery({
+        queryKey: ['reviews', movieId],
+        queryFn: async () => {
             const result = await getReviewsByMovieWithAPI(movieId);
-
-            if (result.success) {
-                setReviews(result.reviews);
-            } else {
-                console.error("Failed to fetch reviews:", result.error);
-                setReviews([]);
+            if (!result.success) {
+                throw new Error(result.error);
             }
-            setLoading(false)
-        };
-
-        fetchReviews();
-    }, [movieId]);
+            // Parent ko bhi reviews bhejo
+            if (onReviewsLoad) {
+                onReviewsLoad(result.reviews);
+            }
+            return result.reviews;
+        },
+        staleTime: 5 * 60 * 1000, // 5 minutes cache
+    });
 
     const getTypeColor = (type) => {
         switch (type) {
@@ -42,27 +41,20 @@ export default function ReviewList({ movieId, movieType }) {
         }
     };
 
-    const refreshReviews = async () => {
-        const result = await getReviewsByMovieWithAPI(movieId);
-
-        if (result.success) {
-            setReviews(result.reviews);
-        }
-    };
-
     const handleDelete = async (reviewId) => {
-        setDeleteDialog({ isOpen: true, reviewId })
+        setDeleteDialog({ isOpen: true, reviewId });
     };
 
     const confirmDelete = async () => {
-        const reviewId = deleteDialog.reviewId
-        setDeleteDialog({ isOpen: false, reviewId: null })
+        const reviewId = deleteDialog.reviewId;
+        setDeleteDialog({ isOpen: false, reviewId: null });
 
         const result = await deleteReviewWithAPI(reviewId);
 
         if (result.success) {
-            showAlert("Review deleted successfully!", "warning");
-            refreshReviews();
+            showAlert("Review deleted successfully!", "success");
+            // Cache invalidate - fresh data fetch
+            queryClient.invalidateQueries(['reviews', movieId]);
         } else {
             showAlert(result.error || "Failed to delete review", "error");
         }
@@ -72,10 +64,12 @@ export default function ReviewList({ movieId, movieType }) {
         const result = await updateReviewWithAPI(reviewId, updatedData);
 
         if (result.success) {
-            setEditedReview(null)
-            refreshReviews()
+            setEditedReview(null);
+            showAlert("Review updated successfully!", "success");
+            // Cache invalidate
+            queryClient.invalidateQueries(['reviews', movieId]);
         } else {
-            alert(result.error || "Failed to update review");
+            showAlert(result.error || "Failed to update review", "error");
         }
     };
 
@@ -89,7 +83,7 @@ export default function ReviewList({ movieId, movieType }) {
             </div>
 
             <div className="space-y-4">
-                {loading ? (
+                {isLoading ? (
                     <ReviewListSkeleton />
                 ) : reviews.length === 0 ? (
                     <div className="text-center py-12 px-4">
@@ -177,17 +171,10 @@ export default function ReviewList({ movieId, movieType }) {
                 onClose={() => setDeleteDialog({ isOpen: false, reviewId: null })}
                 onConfirm={confirmDelete}
                 title="Delete Review"
-                message={
-                    <>
-                        Are you sure you want to delete this review?
-                        <br />
-                        The action cannot be undone.
-                    </>
-                }
+                message="Are you sure you want to delete this review? This action cannot be undone."
                 confirmText="Delete"
                 cancelText="Cancel"
             />
-
         </div>
     );
 }

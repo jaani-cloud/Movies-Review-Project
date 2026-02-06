@@ -22,6 +22,8 @@ export const createReviewWithAPI = async (reviewData) => {
 };
 
 export const getReviewsByMovieWithAPI = async (movieId) => {
+    console.trace(`Calling:getReviewsByMovieWithAPI`);
+    
     try {
         const response = await axios.get(
             `${API_BASE_URL}${API_ENDPOINTS.REVIEW.GET_BY_MOVIE.replace(':movieId', movieId)}`
