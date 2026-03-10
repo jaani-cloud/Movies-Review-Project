@@ -4,10 +4,12 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllMoviesWithAPI } from "../services/movieService";
 import ManageMovies from "../components/admin/ManageMovies";
 import { useState } from "react";
+import ManageReviews from "../components/admin/ManageReviews";
 
 export default function AdminDashboard() {
     const currentUser = getCurrentUser();
     const [activeSection, setActiveSection] = useState(null);
+    
 
     const { data: movies = [] } = useQuery({
         queryKey: ['movies'],
@@ -45,6 +47,8 @@ export default function AdminDashboard() {
 
             {activeSection === "movies" ? (
                 <ManageMovies />
+            ) : activeSection === "reviews" ? (
+                <ManageReviews movies={movies} />
             ) : (
 
                 <div className="ctm-admin-grid">
@@ -83,10 +87,13 @@ export default function AdminDashboard() {
                             <div className="ctm-card-icon">📝</div>
                             <h2 className="ctm-card-title">Reviews</h2>
                             <p className="ctm-card-desc">Monitor and moderate reviews</p>
-                            <button className="ctm-card-btn ctm-btn-green">
-                                <span>View All Reviews</span>
-                                <span className="ctm-btn-arrow">→</span>
-                            </button>
+                                <button
+                                    className="ctm-card-btn ctm-btn-green"
+                                    onClick={() => setActiveSection("reviews")}
+                                >
+                                    <span>View All Reviews</span>
+                                    <span className="ctm-btn-arrow">→</span>
+                                </button>
                         </div>
                     </div>
 
