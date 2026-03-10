@@ -1,36 +1,17 @@
 import { MessageCircle, Edit2, Trash2, User } from 'lucide-react';
-import { getReviewsByMovieWithAPI, deleteReviewWithAPI, updateReviewWithAPI } from "../../services/reviewService";
+import { deleteReviewWithAPI, updateReviewWithAPI } from "../../services/reviewService";
 import { getCurrentUser } from '../../services/authService';
 import { formatDate } from '../../utils/formatters';
 import ReviewEditForm from './ReviewEditForm';
 import ReviewListSkeleton from '../Skeleton/ReviewListSkeleton';
 import ConfirmDialog from '../common/ConfirmDialog';
 import { showAlert } from '../common/CustomAlert';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
-export default function ReviewList({ movieId, movieType, onReviewsLoad }) {
+export default function ReviewList({ movieId, movieType, reviews, isLoading, onReviewUpdated }) {
     const [editedReview, setEditedReview] = useState(null);
     const [deleteDialog, setDeleteDialog] = useState({ isOpen: false, reviewId: null });
     const currentUser = getCurrentUser();
-    const queryClient = useQueryClient();
-
-    // React Query se reviews fetch - caching automatic!
-    const { data: reviews = [], isLoading } = useQuery({
-        queryKey: ['reviews', movieId],
-        queryFn: async () => {
-            const result = await getReviewsByMovieWithAPI(movieId);
-            if (!result.success) {
-                throw new Error(result.error);
-            }
-            // Parent ko bhi reviews bhejo
-            if (onReviewsLoad) {
-                onReviewsLoad(result.reviews);
-            }
-            return result.reviews;
-        },
-        staleTime: 5 * 60 * 1000, // 5 minutes cache
-    });
 
     const getTypeColor = (type) => {
         switch (type) {
@@ -53,8 +34,7 @@ export default function ReviewList({ movieId, movieType, onReviewsLoad }) {
 
         if (result.success) {
             showAlert("Review deleted successfully!", "success");
-            // Cache invalidate - fresh data fetch
-            queryClient.invalidateQueries(['reviews', movieId]);
+            onReviewUpdated();
         } else {
             showAlert(result.error || "Failed to delete review", "error");
         }
@@ -66,8 +46,7 @@ export default function ReviewList({ movieId, movieType, onReviewsLoad }) {
         if (result.success) {
             setEditedReview(null);
             showAlert("Review updated successfully!", "success");
-            // Cache invalidate
-            queryClient.invalidateQueries(['reviews', movieId]);
+            onReviewUpdated();
         } else {
             showAlert(result.error || "Failed to update review", "error");
         }

@@ -28,7 +28,6 @@ export default function Home() {
     const { selectedCategory, setSelectedCategory, filteredMovies: categoryFiltered } = useMovieFilter(movies);
     const { searchQuery, setSearchQuery, filteredItems } = useSearch(categoryFiltered);
 
-    // Show combined skeleton with loading spinner overlay
     if (isLoading) {
         return <HomePageSkeleton />;
     }
@@ -42,7 +41,7 @@ export default function Home() {
                             <Film className="w-10 h-10 text-red-500" />
                         </div>
                         <h2 className="text-2xl font-bold text-white mb-2">Oops! Something went wrong</h2>
-                        <p className="text-red-400 text-lg mb-6">{error.message}</p>
+                        <p className="text-red-400 text-lg mb-6">{error.message.replace("movies", "data")}</p>
                     </div>
                     <button
                         onClick={() => window.location.reload()}

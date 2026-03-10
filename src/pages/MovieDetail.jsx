@@ -1,12 +1,12 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getMovieByIdWithAPI } from "../services/movieService";
+import { getReviewsByMovieWithAPI } from "../services/reviewService";
 import { ArrowLeft, Calendar, Film } from "lucide-react";
 import ReviewGauge from "../components/movie/ReviewGauge";
 import { formatGenres } from "../utils/formatters";
 import ReviewForm from "../components/movie/ReviewForm";
 import ReviewList from "../components/movie/ReviewList";
-import { useState, useCallback } from 'react';
 import MovieDetailSkeleton from "../components/Skeleton/MovieDetailSkeleton";
 
 export default function MovieDetail() {
@@ -14,9 +14,7 @@ export default function MovieDetail() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
-    const [reviews, setReviews] = useState([]);
-
-    const { data: movie, isLoading, error } = useQuery({
+    const { data: movie, isLoading: movieLoading, error } = useQuery({
         queryKey: ['movie', id],
         queryFn: async () => {
             const cachedMovies = queryClient.getQueryData(['movies']);
@@ -37,15 +35,24 @@ export default function MovieDetail() {
         staleTime: 10 * 60 * 1000,
     });
 
+    const { data: reviews = [], isLoading: reviewsLoading } = useQuery({
+        queryKey: ['reviews', parseInt(id)],
+        queryFn: async () => {
+            const result = await getReviewsByMovieWithAPI(parseInt(id));
+            if (!result.success) {
+                throw new Error(result.error);
+            }
+            return result.reviews;
+        },
+        staleTime: 5 * 60 * 1000,
+        enabled: !!movie,
+    });
+
     const handleReviewAdded = () => {
         queryClient.invalidateQueries(['reviews', parseInt(id)]);
     };
 
-    const handleReviewsLoad = useCallback((loadedReviews) => {
-        setReviews(loadedReviews);
-    }, []);
-
-    if (isLoading) {
+    if (movieLoading) {
         return <MovieDetailSkeleton />;
     }
 
@@ -141,7 +148,9 @@ export default function MovieDetail() {
                             <ReviewList
                                 movieId={movie.id}
                                 movieType={movie.type}
-                                onReviewsLoad={handleReviewsLoad}
+                                reviews={reviews}
+                                isLoading={reviewsLoading}
+                                onReviewUpdated={handleReviewAdded}
                             />
                         </div>
                     </div>
