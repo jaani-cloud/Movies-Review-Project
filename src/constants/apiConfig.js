@@ -12,7 +12,10 @@ export const API_ENDPOINTS = {
     },
     USER: {
         PROFILE: '/user/profile',
-        CHANGE_PASSWORD: '/user/change-password'
+        CHANGE_PASSWORD: '/user/change-password',
+        GET_ALL: '/user/all',
+        DELETE: '/user/:userId',
+        UPDATE_ROLE: '/user/:userId/role'
     },
     MOVIE: {
         GET_ALL: '/movie',
